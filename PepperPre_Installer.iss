@@ -17,9 +17,6 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
-; Si tenés un icono, descomentá la siguiente línea y asegurate de que icono.ico esté en la carpeta:
-; SetupIconFile=icono.ico
-; UninstallDisplayIcon={app}\icono.ico
 
 [Languages]
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.msg"
