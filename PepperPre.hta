@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cotizador de Libritos</title>
+<!-- Etiquetas HTA para comportamiento de app de escritorio -->
+<HTA:APPLICATION 
+    ID="CotizadorApp"
+    APPLICATIONNAME="Cotizador de Libritos"
+    BORDER="thick"
+    BORDERSTYLE="normal"
+    ICON=""
+    INNERBORDER="no"
+    MAXIMIZEBUTTON="yes"
+    MINIMIZEBUTTON="yes"
+    NAVIGABLE="no"
+    SCROLL="no"
+    SELECTION="no"
+    SHOWINTASKBAR="yes"
+    SINGLEINSTANCE="yes"
+    SYSMENU="yes"
+    VERSION="1.0"
+    WINDOWSTATE="normal"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding: 10px; color: #333; overflow: auto; }
+    
+    .app { max-width: 1600px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); overflow: hidden; }
+    
+    .header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 1.6em; }
+    .header .subtitle { font-size: 0.85em; opacity: 0.9; margin-top: 4px; }
+    .header .plancha-info { background: rgba(255,255,255,0.2); padding: 10px 16px; border-radius: 6px; text-align: right; }
+    .header .plancha-info .label { font-size: 0.75em; opacity: 0.85; }
+    .header .plancha-info .valor { font-size: 1.2em; font-weight: 600; }
+    
+    .tabs { display: flex; background: #f3f4f6; border-bottom: 2px solid #e5e7eb; }
+    .tab { padding: 14px 28px; cursor: pointer; font-weight: 600; color: #6b7280; border: none; background: none; font-size: 0.95em; transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+    .tab:hover { color: #1e3a8a; background: #e5e7eb; }
+    .tab.activo { color: #1e3a8a; border-bottom-color: #1e3a8a; background: white; }
+    
+    .tab-content { display: none; }
+    .tab-content.activo { display: block; }
+    
+    .grid-principal { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .panel { padding: 25px; }
+    .panel-config { border-right: 2px solid #e5e7eb; background: #fafbfc; }
+    .panel-resultados { background: white; }
+    
+    .seccion { margin-bottom: 25px; }
+    .seccion-titulo { font-size: 1em; font-weight: 600; color: #1e3a8a; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; display: flex; align-items: center; gap: 8px; }
+    
+    .campo { margin-bottom: 12px; }
+    .campo label { display: block; font-size: 0.85em; color: #4b5563; margin-bottom: 5px; font-weight: 500; }
+    .campo input, .campo select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.95em; font-family: inherit; background: white; }
+    .campo input:focus, .campo select:focus { border-color: #3b82f6; outline: none; }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    
+    .sub-seccion { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin-bottom: 12px; }
+    .sub-seccion-titulo { font-size: 0.9em; font-weight: 600; color: #3b82f6; margin-bottom: 10px; }
+    
+    .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+    .checkbox-item { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; cursor: pointer; }
+    .checkbox-item:hover { border-color: #3b82f6; }
+    .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+    .checkbox-item label { flex: 1; cursor: pointer; font-size: 0.9em; }
+    .checkbox-item .precio-check { font-size: 0.85em; color: #059669; font-weight: 600; }
+    
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .stat-box { background: #f9fafb; padding: 12px; border-radius: 6px; border-left: 4px solid #3b82f6; }
+    .stat-box .stat-label { font-size: 0.75em; color: #6b7280; text-transform: uppercase; font-weight: 600; }
+    .stat-box .stat-value { font-size: 1.2em; font-weight: 700; color: #1e3a8a; margin-top: 4px; }
+    .stat-box.destacado { border-left-color: #059669; background: #ecfdf5; }
+    .stat-box.destacado .stat-value { color: #059669; }
+    
+    .desglose { background: #f9fafb; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+    .desglose-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb; font-size: 0.9em; }
+    .desglose-row:last-child { border-bottom: none; }
+    .desglose-row .label { color: #4b5563; }
+    .desglose-row .valor { font-weight: 600; color: #1f2937; }
+    .desglose-row.total { font-size: 1.1em; font-weight: 700; color: #1e3a8a; border-top: 2px solid #d1d5db; padding-top: 12px; margin-top: 8px; }
+    
+    .precio-final-box { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; }
+    .precio-final-box .label { font-size: 0.9em; opacity: 0.9; }
+    .precio-final-box .precio { font-size: 2.2em; font-weight: 700; margin: 8px 0; }
+    
+    .btn-accion { width: 100%; padding: 14px; background: #1e3a8a; color: white; border: none; border-radius: 6px; font-size: 1em; font-weight: 600; cursor: pointer; margin-top: 15px; transition: all 0.2s; }
+    .btn-accion:hover { background: #1e40af; }
+    
+    .alerta { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 6px; font-size: 0.85em; color: #92400e; margin-bottom: 15px; display: none; }
+    .alerta.visible { display: block; }
+    .alerta.error { background: #fee2e2; border-left-color: #ef4444; color: #991b1b; }
+    .alerta.success { background: #d1fae5; border-left-color: #10b981; color: #065f46; }
+    .alerta.info { background: #dbeafe; border-left-color: #3b82f6; color: #1e40af; }
+    
+    .imposicion-preview { background: #f3f4f6; border: 2px dashed #9ca3af; border-radius: 8px; padding: 20px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; min-height: 300px; position: relative; }
+    .plancha-viz { background: white; border: 2px solid #1e3a8a; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .pagina-viz { position: absolute; border: 1px dashed #3b82f6; background: rgba(59,130,246,0.08); display: flex; align-items: center; justify-content: center; font-size: 0.7em; color: #1e3a8a; font-weight: 600; }
+    .linea-doblez-v { position: absolute; top: 0; bottom: 0; width: 3px; background: repeating-linear-gradient(to bottom, #ef4444 0px, #ef4444 6px, transparent 6px, transparent 12px); z-index: 10; pointer-events: none; }
+    .linea-doblez-h { position: absolute; left: 0; right: 0; height: 3px; background: repeating-linear-gradient(to right, #ef4444 0px, #ef4444 6px, transparent 6px, transparent 12px); z-index: 10; pointer-events: none; }
+    .plancha-label { position: absolute; top: -25px; left: 0; font-size: 0.8em; color: #6b7280; }
+    .medida-open-badge { position: absolute; bottom: -30px; left: 0; width: 100%; text-align: center; font-size: 0.85em; color: #059669; font-weight: 600; }
+    
+    .leyenda-doblez { display: flex; align-items: center; gap: 8px; margin-top: 15px; padding: 8px; background: #fef2f2; border-radius: 6px; font-size: 0.8em; color: #991b1b; }
+    .leyenda-doblez .linea-muestra { width: 30px; height: 3px; background: repeating-linear-gradient(to right, #ef4444 0px, #ef4444 4px, transparent 4px, transparent 8px); }
+    
+    .editor-layout { display: grid; grid-template-columns: 220px 1fr 280px; height: calc(100vh - 180px); min-height: 600px; }
+    
+    .panel-capas { background: #f9fafb; border-right: 1px solid #e5e7eb; padding: 15px; overflow-y: auto; }
+    .panel-capas h3 { font-size: 0.9em; color: #1e3a8a; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; }
+    .capa-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 4px; margin-bottom: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
+    .capa-item:hover { border-color: #3b82f6; }
+    .capa-item.seleccionado { border-color: #1e3a8a; background: #eff6ff; }
+    .capa-item .capa-thumb { width: 30px; height: 30px; background: #f3f4f6; border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+    .capa-item .capa-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .capa-item .capa-nombre { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .capa-item .capa-acciones { display: flex; gap: 2px; }
+    .capa-item .capa-btn { background: none; border: none; cursor: pointer; font-size: 0.9em; padding: 2px 4px; border-radius: 3px; }
+    .capa-item .capa-btn:hover { background: #e5e7eb; }
+    
+    .area-trabajo { background: #d1d5db; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    .toolbar-editor { background: white; padding: 8px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; }
+    .toolbar-editor .tool-btn { padding: 6px 12px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+    .toolbar-editor .tool-btn:hover { background: #e5e7eb; }
+    .toolbar-editor .tool-btn.activo { background: #1e3a8a; color: white; border-color: #1e3a8a; }
+    .toolbar-editor .separator { width: 1px; height: 24px; background: #d1d5db; }
+    .toolbar-editor .zoom-info { font-size: 0.85em; color: #6b7280; font-weight: 600; min-width: 50px; text-align: center; }
+    
+    .canvas-container { flex: 1; position: relative; overflow: auto; display: flex; padding: 40px; cursor: default; }
+    .canvas-container.modo-mano { cursor: grab; }
+    .canvas-container.modo-mano:active { cursor: grabbing; }
+    .canvas-container.modo-mano .canvas-wrapper { pointer-events: none; }
+    .canvas-container.modo-mano .elemento { pointer-events: none; }
+    
+    .canvas-wrapper { position: relative; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.2); flex-shrink: 0; }
+    
+    .regla-horizontal { position: absolute; top: 0; left: 0; right: 0; height: 20px; background: #f3f4f6; border-bottom: 1px solid #9ca3af; overflow: hidden; }
+    .regla-vertical { position: absolute; top: 0; left: 0; bottom: 0; width: 20px; background: #f3f4f6; border-right: 1px solid #9ca3af; overflow: hidden; }
+    .regla-marca { position: absolute; font-size: 9px; color: #6b7280; transform-origin: left center; }
+    .regla-horizontal .regla-marca { bottom: 2px; transform: translateX(-50%); }
+    .regla-vertical .regla-marca { left: 2px; transform: translateY(-50%) rotate(-90deg); transform-origin: left center; }
+    
+    .artboard { position: relative; background: white; border: 1px solid #1e3a8a; overflow: hidden; }
+    .artboard-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: 
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+        background-size: 1cm 1cm;
+        pointer-events: none;
+    }
+    
+    .elemento { position: absolute; cursor: move; user-select: none; }
+    .elemento img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; display: block; }
+    .elemento.seleccionado { outline: 2px solid #3b82f6; outline-offset: 1px; }
+    .elemento.bloqueado { cursor: not-allowed; opacity: 0.7; }
+    
+    .handle { position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #3b82f6; border-radius: 2px; z-index: 100; }
+    .handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
+    .handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
+    .handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+    .handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
+    .handle.n { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+    .handle.s { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+    .handle.e { top: 50%; right: -5px; transform: translateY(-50%); cursor: e-resize; }
+    .handle.w { top: 50%; left: -5px; transform: translateY(-50%); cursor: w-resize; }
+    
+    .dim-label { position: absolute; background: rgba(30, 58, 138, 0.9); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; pointer-events: none; white-space: nowrap; z-index: 200; display: none; }
+    .elemento.seleccionado .dim-label { display: block; }
+    .dim-label.top { top: -22px; left: 50%; transform: translateX(-50%); }
+    
+    .panel-propiedades { background: #f9fafb; border-left: 1px solid #e5e7eb; padding: 15px; overflow-y: auto; }
+    .panel-propiedades h3 { font-size: 0.9em; color: #1e3a8a; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; }
+    .prop-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .prop-field { display: flex; flex-direction: column; }
+    .prop-field label { font-size: 0.75em; color: #6b7280; margin-bottom: 3px; font-weight: 600; }
+    .prop-field input { padding: 6px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.9em; }
+    .prop-field input:focus { border-color: #3b82f6; outline: none; }
+    .prop-full { grid-column: 1 / -1; }
+    
+    .btn-prop { width: 100%; padding: 8px; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 0.85em; margin-bottom: 6px; transition: all 0.2s; }
+    .btn-prop:hover { background: #f3f4f6; border-color: #3b82f6; }
+    .btn-prop.peligro { color: #ef4444; border-color: #fecaca; }
+    .btn-prop.peligro:hover { background: #fee2e2; }
+    
+    .info-elemento { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px; margin-bottom: 15px; font-size: 0.85em; }
+    .info-elemento .info-row { display: flex; justify-content: space-between; padding: 3px 0; }
+    .info-elemento .info-label { color: #6b7280; }
+    .info-elemento .info-value { font-weight: 600; color: #1e3a8a; }
+    
+    .empty-state { text-align: center; padding: 40px 20px; color: #9ca3af; }
+    .empty-state .icono { font-size: 3em; margin-bottom: 10px; }
+    
+    .upload-mini { border: 2px dashed #3b82f6; border-radius: 6px; padding: 15px; text-align: center; background: #eff6ff; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
+    .upload-mini:hover { background: #dbeafe; }
+    .upload-mini input { display: none; }
+    
+    .canvas-container::-webkit-scrollbar { width: 12px; height: 12px; }
+    .canvas-container::-webkit-scrollbar-track { background: #e5e7eb; }
+    .canvas-container::-webkit-scrollbar-thumb { background: #9ca3af; border-radius: 6px; }
+    .canvas-container::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    
+    .shortcuts-hint { position: fixed; bottom: 20px; right: 20px; background: rgba(30, 58, 138, 0.95); color: white; padding: 12px 16px; border-radius: 8px; font-size: 0.8em; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: none; }
+    .shortcuts-hint.visible { display: block; }
+    .shortcuts-hint kbd { background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+    
+    @media (max-width: 1024px) {
+        .grid-principal { grid-template-columns: 1fr; }
+        .panel-config { border-right: none; border-bottom: 2px solid #e5e7eb; }
+        .editor-layout { grid-template-columns: 1fr; height: auto; }
+        .panel-capas, .panel-propiedades { max-height: 300px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="app">
+    <div class="header">
+        <div>
+            <h1>🖨️ Sistema de Cotización</h1>
+            <div class="subtitle">Libritos (Imposición a Caballo) • Editor Visual</div>
+        </div>
+        <div class="plancha-info">
+            <div class="label">Plancha estándar</div>
+            <div class="valor">33 × 48 cm</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab activo" onclick="cambiarTab('libritos', this)">📚 Libritos (Imposición)</button>
+        <button class="tab" onclick="cambiarTab('editor', this)">🎨 Editor Visual</button>
+    </div>
+
+    <div class="tab-content activo" id="tab-libritos">
+        <div class="grid-principal">
+            <div class="panel panel-config">
+                <div class="seccion">
+                    <div class="seccion-titulo">📚 Datos del Librito</div>
+                    <div class="grid-2">
+                        <div class="campo">
+                            <label>Ancho CERRADO (cm):</label>
+                            <input type="number" id="libAnchoCerrado" value="14.8" step="0.1" onchange="calcularLibrito()">
+                        </div>
+                        <div class="campo">
+                            <label>Alto CERRADO (cm):</label>
+                            <input type="number" id="libAltoCerrado" value="21" step="0.1" onchange="calcularLibrito()">
+                        </div>
+                    </div>
+                    <div class="alerta success visible" style="margin-top: 10px; font-size: 0.9em;">
+                        💡 <strong>Tamaño ABIERTO:</strong> <span id="lblTamanoAbierto">29.6 × 21 cm</span>
+                    </div>
+                    <div class="grid-2" style="margin-top: 15px;">
+                        <div class="campo">
+                            <label>Total de PÁGINAS (caras):</label>
+                            <input type="number" id="libPaginas" value="8" min="4" step="4" onchange="calcularLibrito()">
+                            <small style="color: #6b7280; font-size: 0.8em;">Debe ser múltiplo de 4</small>
+                        </div>
+                        <div class="campo">
+                            <label>Cantidad de ejemplares:</label>
+                            <input type="number" id="libCantidad" value="100" min="1" onchange="calcularLibrito()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">🎨 Impresión</div>
+                    <div class="sub-seccion">
+                        <div class="sub-seccion-titulo">📄 FRENTE</div>
+                        <div class="campo">
+                            <select id="libImpFrente" onchange="calcularLibrito()">
+                                <option value="8000">Color A3 Ilustración (Gs. 8.000)</option>
+                                <option value="12000">Color A3 Especial 1 (Gs. 12.000)</option>
+                                <option value="13000">Color A3 Especial 2 (Gs. 13.000)</option>
+                                <option value="14000">Color A3 Especial 3 (Gs. 14.000)</option>
+                                <option value="15000">Color A3 Especial 4 (Gs. 15.000)</option>
+                                <option value="3000">ByN A3 Ilustración (Gs. 3.000)</option>
+                                <option value="7000">ByN A3 Especial 1 (Gs. 7.000)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="sub-seccion">
+                        <div class="sub-seccion-titulo">📄 DORSO</div>
+                        <div class="campo">
+                            <select id="libImpDorso" onchange="calcularLibrito()">
+                                <option value="8000">Color A3 Ilustración (Gs. 8.000)</option>
+                                <option value="12000">Color A3 Especial 1 (Gs. 12.000)</option>
+                                <option value="13000">Color A3 Especial 2 (Gs. 13.000)</option>
+                                <option value="14000">Color A3 Especial 3 (Gs. 14.000)</option>
+                                <option value="15000">Color A3 Especial 4 (Gs. 15.000)</option>
+                                <option value="3000">ByN A3 Ilustración (Gs. 3.000)</option>
+                                <option value="7000">ByN A3 Especial 1 (Gs. 7.000)</option>
+                                <option value="7000">Impresión Dorso (Gs. 7.000)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">✂️ Acabados</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="libGrapas" checked disabled>
+                            <label for="libGrapas">Presillado (grapas)</label>
+                            <span class="precio-check">Gs. 500 / ejemplar</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="libCorte" checked onchange="calcularLibrito()">
+                            <label for="libCorte">Corte recto</label>
+                            <span class="precio-check">Gs. 2.500 / plancha</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="libDoblez" checked onchange="calcularLibrito()">
+                            <label for="libDoblez">Doblez</label>
+                            <span class="precio-check">Gs. 1.000 / doblez</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="libLaminado1" onchange="calcularLibrito()">
+                            <label for="libLaminado1">Laminado Prolam (1 cara)</label>
+                            <span class="precio-check">Gs. 3.000 / plancha</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="libLaminado2" onchange="calcularLibrito()">
+                            <label for="libLaminado2">Laminado Prolam (ambas caras)</label>
+                            <span class="precio-check">Gs. 5.000 / plancha</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">💰 Margen de Utilidad (%)</div>
+                    <input type="number" id="libMargen" value="40" min="0" onchange="calcularLibrito()">
+                </div>
+            </div>
+
+            <div class="panel panel-resultados">
+                <div class="seccion">
+                    <div class="seccion-titulo">📐 Imposición de Preprensa</div>
+                    <div class="alerta error" id="libAlertaPaginas">⚠️ La cantidad de páginas debe ser múltiplo de 4.</div>
+                    
+                    <div class="imposicion-preview" id="imposicionPreview">
+                        <div class="plancha-viz" id="planchaViz" style="width: 264px; height: 384px;">
+                            <div class="plancha-label">Plancha 33 × 48 cm (UNA CARA)</div>
+                        </div>
+                        <div class="medida-open-badge" id="medidaOpenBadge">Abierto: 29.6 × 21 cm</div>
+                    </div>
+
+                    <div class="leyenda-doblez" id="leyendaDoblez" style="display:none;">
+                        <div class="linea-muestra"></div>
+                        <span><strong>Línea roja punteada</strong> = línea de doblez</span>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box"><div class="stat-label">Páginas por cara</div><div class="stat-value" id="libPagsPorCara">0</div></div>
+                        <div class="stat-box destacado"><div class="stat-label">Páginas por plancha física</div><div class="stat-value" id="libPagsPorPlanchaFisica">0</div></div>
+                        <div class="stat-box"><div class="stat-label">Planchas por ejemplar</div><div class="stat-value" id="libPlanchasPorEjemplar">0</div></div>
+                        <div class="stat-box"><div class="stat-label">Total planchas</div><div class="stat-value" id="libTotalPlanchas">0</div></div>
+                        <div class="stat-box destacado"><div class="stat-label">Total impresiones</div><div class="stat-value" id="libTotalImpresiones">0</div></div>
+                        <div class="stat-box"><div class="stat-label">Ejemplares</div><div class="stat-value" id="libTotalEjemplares">0</div></div>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
+                    <div class="desglose">
+                        <div class="desglose-row"><span class="label">🎨 Impresión FRENTE:</span><span class="valor" id="libCostoImpFrente">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">🎨 Impresión DORSO:</span><span class="valor" id="libCostoImpDorso">Gs. 0</span></div>
+                        <div class="desglose-row" id="libRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="libCostoCorte">Gs. 0</span></div>
+                        <div class="desglose-row" id="libRowDoblez" style="display:none;"><span class="label">📑 Doblez:</span><span class="valor" id="libCostoDoblez">Gs. 0</span></div>
+                        <div class="desglose-row" id="libRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="libCostoLaminado">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">📚 Presillado:</span><span class="valor" id="libCostoGrapas">Gs. 0</span></div>
+                        <div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor" id="libCostoTotal">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="libCostoUtilidad">Gs. 0</span></div>
+                    </div>
+                </div>
+
+                <div class="precio-final-box">
+                    <div class="label">💵 PRECIO TOTAL DE VENTA</div>
+                    <div class="precio" id="libPrecioTotal">Gs. 0</div>
+                    <div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">Precio por ejemplar: <strong id="libPrecioUnitario">Gs. 0</strong></div>
+                </div>
+
+                <button class="btn-accion" onclick="generarPDFLibrito()">📄 Generar Presupuesto PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-editor">
+        <div class="editor-layout">
+            <div class="panel-capas">
+                <h3>📑 Capas</h3>
+                <div class="upload-mini" onclick="document.getElementById('editorFileInput').click()">
+                    <div style="font-size: 1.5em;">📁</div>
+                    <div style="font-size: 0.8em; color: #1e40af; font-weight: 600;">Subir imagen</div>
+                    <div style="font-size: 0.7em; color: #6b7280;">JPG, PNG, SVG, PDF, AI</div>
+                    <input type="file" id="editorFileInput" accept="image/*,.pdf,.ai,.svg" multiple onchange="subirImagenesEditor(this.files)">
+                </div>
+                <div id="listaCapas">
+                    <div class="empty-state">
+                        <div class="icono">🖼️</div>
+                        <div style="font-size: 0.85em;">No hay elementos</div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+                    <h3 style="margin-bottom: 8px;">⚙️ Opciones</h3>
+                    <div class="checkbox-item" style="margin-bottom: 6px;">
+                        <input type="checkbox" id="snapGrid" checked>
+                        <label for="snapGrid" style="font-size: 0.85em;">Snap a grid (0.5cm)</label>
+                    </div>
+                    <div class="checkbox-item" style="margin-bottom: 6px;">
+                        <input type="checkbox" id="showGrid" checked onchange="toggleGrid()">
+                        <label for="showGrid" style="font-size: 0.85em;">Mostrar grid</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showRules" checked onchange="toggleRules()">
+                        <label for="showRules" style="font-size: 0.85em;">Mostrar reglas</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="area-trabajo">
+                <div class="toolbar-editor">
+                    <button class="tool-btn" onclick="zoomOut()">➖</button>
+                    <span class="zoom-info" id="zoomInfo">100%</span>
+                    <button class="tool-btn" onclick="zoomIn()">➕</button>
+                    <button class="tool-btn" onclick="resetZoom()">⊡</button>
+                    <div class="separator"></div>
+                    <button class="tool-btn" id="btnMano" onclick="toggleModoMano()">✋ Mano</button>
+                    <div class="separator"></div>
+                    <button class="tool-btn" onclick="cambiarTamanoArtboard()">📐 Tamaño</button>
+                    <button class="tool-btn" onclick="resetArtboard()">🔄 Reset</button>
+                    <button class="tool-btn" onclick="limpiarEditor()">🗑️</button>
+                    <div class="separator"></div>
+                    <span style="font-size: 0.85em; color: #6b7280;">Artboard: <strong id="artboardSizeLabel">33 × 48 cm</strong></span>
+                </div>
+
+                <div class="canvas-container" id="canvasContainer">
+                    <div class="canvas-wrapper" id="canvasWrapper">
+                        <div class="regla-horizontal" id="reglaH"></div>
+                        <div class="regla-vertical" id="reglaV"></div>
+                        <div class="artboard" id="artboard" style="width: 33cm; height: 48cm;">
+                            <div class="artboard-bg" id="artboardBg"></div>
+                            <div id="elementosContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-propiedades">
+                <h3>📏 Propiedades</h3>
+                <div id="propiedadesVacias" class="empty-state">
+                    <div class="icono">🖱️</div>
+                    <div style="font-size: 0.85em;">Seleccioná un elemento</div>
+                </div>
+                <div id="propiedadesElemento" style="display:none;">
+                    <div class="info-elemento">
+                        <div class="info-row"><span class="info-label">Nombre:</span><span class="info-value" id="propNombre">-</span></div>
+                        <div class="info-row"><span class="info-label">Tipo:</span><span class="info-value" id="propTipo">-</span></div>
+                    </div>
+                    <h3 style="margin-top: 15px;">📐 Posición y Tamaño</h3>
+                    <div class="prop-row">
+                        <div class="prop-field"><label>X (cm)</label><input type="number" id="propX" step="0.1" onchange="actualizarDesdePropiedades()"></div>
+                        <div class="prop-field"><label>Y (cm)</label><input type="number" id="propY" step="0.1" onchange="actualizarDesdePropiedades()"></div>
+                    </div>
+                    <div class="prop-row">
+                        <div class="prop-field"><label>Ancho (cm)</label><input type="number" id="propW" step="0.1" onchange="actualizarDesdePropiedades()"></div>
+                        <div class="prop-field"><label>Alto (cm)</label><input type="number" id="propH" step="0.1" onchange="actualizarDesdePropiedades()"></div>
+                    </div>
+                    <h3 style="margin-top: 15px;">🔄 Transformar</h3>
+                    <div class="prop-row">
+                        <div class="prop-field prop-full"><label>Rotación (grados)</label><input type="number" id="propRot" value="0" step="1" onchange="actualizarDesdePropiedades()"></div>
+                    </div>
+                    <div class="prop-row">
+                        <div class="prop-field"><label>Opacidad (%)</label><input type="number" id="propOpacidad" value="100" min="0" max="100" onchange="actualizarDesdePropiedades()"></div>
+                        <div class="prop-field"><label>Aspect ratio</label><input type="checkbox" id="propAspect" checked style="margin-top: 8px;"></div>
+                    </div>
+                    <h3 style="margin-top: 15px;">⚡ Acciones</h3>
+                    <button class="btn-prop" onclick="duplicarElemento()">📋 Duplicar</button>
+                    <button class="btn-prop" onclick="traerAlFrente()">⬆️ Traer al frente</button>
+                    <button class="btn-prop" onclick="enviarAtras()">⬇️ Enviar atrás</button>
+                    <button class="btn-prop" onclick="centrarElemento()">⊞ Centrar</button>
+                    <button class="btn-prop peligro" onclick="eliminarElemento()">🗑️ Eliminar</button>
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+                    <h3>📊 Información</h3>
+                    <div class="info-elemento" style="margin-top: 10px;">
+                        <div class="info-row"><span class="info-label">Elementos:</span><span class="info-value" id="infoTotalElementos">0</span></div>
+                        <div class="info-row"><span class="info-label">Artboard:</span><span class="info-value" id="infoArtboard">33 × 48 cm</span></div>
+                        <div class="info-row"><span class="info-label">Zoom:</span><span class="info-value" id="infoZoom">100%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="shortcuts-hint" id="shortcutsHint">
+    <strong>✋ Modo Mano activo</strong><br>
+    Arrastrá para mover la vista<br>
+    Presioná <kbd>H</kbd> o <kbd>V</kbd> para cambiar
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+function formatearPYG(num) { return "Gs. " + Math.round(num).toLocaleString('es-PY'); }
+
+function cambiarTab(tabId, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('activo'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('activo'));
+    btn.classList.add('activo');
+    document.getElementById('tab-' + tabId).classList.add('activo');
+    if (tabId === 'editor') setTimeout(inicializarEditor, 100);
+}
+
+function calcularLibrito() {
+    const anchoCerrado = parseFloat(document.getElementById('libAnchoCerrado').value) || 0;
+    const altoCerrado = parseFloat(document.getElementById('libAltoCerrado').value) || 0;
+    const totalPaginas = parseInt(document.getElementById('libPaginas').value) || 0;
+    const cantidad = parseInt(document.getElementById('libCantidad').value) || 0;
+    const costoImpFrente = parseInt(document.getElementById('libImpFrente').value) || 0;
+    const costoImpDorso = parseInt(document.getElementById('libImpDorso').value) || 0;
+    const margen = parseFloat(document.getElementById('libMargen').value) || 0;
+    const usaCorte = document.getElementById('libCorte').checked;
+    const usaDoblez = document.getElementById('libDoblez').checked;
+    const usaLaminado1 = document.getElementById('libLaminado1').checked;
+    const usaLaminado2 = document.getElementById('libLaminado2').checked;
+
+    const alertaErr = document.getElementById('libAlertaPaginas');
+    alertaErr.style.display = (totalPaginas % 4 !== 0 || totalPaginas < 4) ? 'block' : 'none';
+
+    const anchoAbierto = anchoCerrado * 2;
+    document.getElementById('lblTamanoAbierto').textContent = `${anchoAbierto} × ${altoCerrado} cm`;
+    document.getElementById('medidaOpenBadge').textContent = `Abierto: ${anchoAbierto} × ${altoCerrado} cm`;
+
+    const normal = Math.floor(33 / anchoCerrado) * Math.floor(48 / altoCerrado);
+    const rotado = Math.floor(33 / altoCerrado) * Math.floor(48 / anchoCerrado);
+    const pagsCerradasPorCara = Math.max(normal, rotado);
+    const pagsPorPlanchaFisica = pagsCerradasPorCara * 2;
+
+    if (pagsCerradasPorCara > 0 && totalPaginas > 0) {
+        const planchasFisicasPorEjemplar = Math.ceil(totalPaginas / pagsPorPlanchaFisica);
+        const totalPlanchasFisicas = planchasFisicasPorEjemplar * cantidad;
+        const totalImpresiones = totalPlanchasFisicas * 2;
+        const totalDoblez = (totalPaginas / pagsCerradasPorCara) * cantidad;
+
+        const costoImpFrenteTotal = totalPlanchasFisicas * costoImpFrente;
+        const costoImpDorsoTotal = totalPlanchasFisicas * costoImpDorso;
+        let costoCorteTotal = usaCorte ? totalPlanchasFisicas * 2500 : 0;
+        let costoDoblezTotal = usaDoblez ? totalDoblez * 1000 : 0;
+        let costoLaminadoTotal = 0;
+        if (usaLaminado1) costoLaminadoTotal = totalPlanchasFisicas * 3000;
+        else if (usaLaminado2) costoLaminadoTotal = totalPlanchasFisicas * 5000;
+        const costoGrapasTotal = cantidad * 500;
+        const costoTotalProd = costoImpFrenteTotal + costoImpDorsoTotal + costoCorteTotal + costoDoblezTotal + costoLaminadoTotal + costoGrapasTotal;
+        const utilidad = costoTotalProd * (margen / 100);
+        const precioTotal = costoTotalProd + utilidad;
+
+        document.getElementById('libPagsPorCara').textContent = pagsCerradasPorCara;
+        document.getElementById('libPagsPorPlanchaFisica').textContent = pagsPorPlanchaFisica;
+        document.getElementById('libPlanchasPorEjemplar').textContent = planchasFisicasPorEjemplar;
+        document.getElementById('libTotalPlanchas').textContent = totalPlanchasFisicas;
+        document.getElementById('libTotalImpresiones').textContent = totalImpresiones;
+        document.getElementById('libTotalEjemplares').textContent = cantidad;
+        document.getElementById('libCostoImpFrente').textContent = formatearPYG(costoImpFrenteTotal);
+        document.getElementById('libCostoImpDorso').textContent = formatearPYG(costoImpDorsoTotal);
+        document.getElementById('libCostoCorte').textContent = formatearPYG(costoCorteTotal);
+        document.getElementById('libCostoDoblez').textContent = formatearPYG(costoDoblezTotal);
+        document.getElementById('libCostoLaminado').textContent = formatearPYG(costoLaminadoTotal);
+        document.getElementById('libCostoGrapas').textContent = formatearPYG(costoGrapasTotal);
+        document.getElementById('libCostoTotal').textContent = formatearPYG(costoTotalProd);
+        document.getElementById('libCostoUtilidad').textContent = formatearPYG(utilidad);
+        document.getElementById('libPrecioTotal').textContent = formatearPYG(precioTotal);
+        document.getElementById('libPrecioUnitario').textContent = formatearPYG(precioTotal / cantidad);
+        document.getElementById('libRowCorte').style.display = usaCorte ? 'flex' : 'none';
+        document.getElementById('libRowDoblez').style.display = usaDoblez ? 'flex' : 'none';
+        document.getElementById('libRowLaminado').style.display = (usaLaminado1 || usaLaminado2) ? 'flex' : 'none';
+        renderizarImposicion(anchoCerrado, altoCerrado, pagsCerradasPorCara, usaDoblez, normal, rotado);
+    }
+}
+
+function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez, normal, rotado) {
+    const viz = document.getElementById('planchaViz');
+    viz.querySelectorAll('.pagina-viz, .linea-doblez-v, .linea-doblez-h').forEach(p => p.remove());
+    const escala = 6;
+    const usaRotado = rotado > normal;
+    const wPag = (usaRotado ? altoCerrado : anchoCerrado) * escala;
+    const hPag = (usaRotado ? anchoCerrado : altoCerrado) * escala;
+    const cols = Math.floor(33 / (usaRotado ? altoCerrado : anchoCerrado));
+    const rows = Math.floor(48 / (usaRotado ? anchoCerrado : altoCerrado));
+    let paginaCounter = 1;
+    for(let i = 0; i < rows; i++) {
+        for(let j = 0; j < cols; j++) {
+            if (paginaCounter <= pagsPorCara) {
+                const div = document.createElement('div');
+                div.className = 'pagina-viz';
+                div.style.cssText = `width:${wPag}px; height:${hPag}px; left:${j*wPag}px; top:${i*hPag}px;`;
+                div.textContent = `Pág ${paginaCounter}`;
+                viz.appendChild(div);
+                paginaCounter++;
+            }
+        }
+    }
+    if (usaDoblez && pagsPorCara >= 2) {
+        if (cols >= 2) {
+            for (let j = 1; j < cols; j += 2) {
+                const linea = document.createElement('div');
+                linea.className = 'linea-doblez-v';
+                linea.style.left = (j * wPag - 1.5) + 'px';
+                linea.style.height = (rows * hPag) + 'px';
+                viz.appendChild(linea);
+            }
+        } else if (rows >= 2) {
+            for (let i = 1; i < rows; i += 2) {
+                const linea = document.createElement('div');
+                linea.className = 'linea-doblez-h';
+                linea.style.top = (i * hPag - 1.5) + 'px';
+                linea.style.width = (cols * wPag) + 'px';
+                viz.appendChild(linea);
+            }
+        }
+        document.getElementById('leyendaDoblez').style.display = 'flex';
+    } else {
+        document.getElementById('leyendaDoblez').style.display = 'none';
+    }
+}
+
+function generarPDFLibrito() {
+    const anchoC = document.getElementById('libAnchoCerrado').value;
+    const altoC = document.getElementById('libAltoCerrado').value;
+    const paginas = document.getElementById('libPaginas').value;
+    const cantidad = document.getElementById('libCantidad').value;
+    const precioTotal = document.getElementById('libPrecioTotal').textContent;
+    const fecha = new Date().toLocaleDateString('es-PY');
+    const contenido = `
+        <div style="padding: 40px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
+            <h1 style="color: #1e3a8a; border-bottom: 3px solid #1e3a8a; padding-bottom: 10px;">📚 PRESUPUESTO DE LIBRITO</h1>
+            <p style="color: #6b7280;">Fecha: ${fecha}</p>
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #d1d5db;">
+                <tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Tamaño CERRADO:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${anchoC} × ${altoC} cm</td></tr>
+                <tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Total de Páginas:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${paginas} caras</td></tr>
+                <tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Cantidad:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${cantidad} ejemplares</td></tr>
+                <tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Encuadernación:</td><td style="padding: 10px; border: 1px solid #d1d5db;">A caballo (presillado)</td></tr>
+            </table>
+            <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #059669;">
+                <div style="display: flex; justify-content: space-between; font-size: 1.8em; color: #059669;">
+                    <span><strong>TOTAL:</strong></span><strong>${precioTotal}</strong>
+                </div>
+            </div>
+        </div>
+    `;
+    const ventana = window.open('', '_blank');
+    ventana.document.write(contenido);
+    ventana.document.close();
+    setTimeout(() => ventana.print(), 500);
+}
+
+let editorState = {
+    artboardAncho: 33, artboardAlto: 48, zoom: 1, elementos: [], seleccionado: null, nextId: 1,
+    dragging: false, resizing: false, dragStart: { x: 0, y: 0 }, dragElement: null, dragHandle: null, dragOriginal: null,
+    modoMano: false, panning: false, panStart: { x: 0, y: 0 }, scrollStart: { x: 0, y: 0 }, espacioPresionado: false
+};
+const CM_TO_PX = 37.795275591;
+
+function inicializarEditor() { actualizarReglas(); renderizarElementos(); actualizarInfoEditor(); configurarModoMano(); }
+
+function toggleModoMano() {
+    editorState.modoMano = !editorState.modoMano;
+    const btn = document.getElementById('btnMano');
+    if (editorState.modoMano) btn.classList.add('activo-manual'); else btn.classList.remove('activo-manual');
+    actualizarUIMano();
+}
+function activarModoMano() { editorState.modoMano = true; actualizarUIMano(); }
+function desactivarModoMano() { editorState.modoMano = false; actualizarUIMano(); }
+function actualizarUIMano() {
+    const container = document.getElementById('canvasContainer');
+    const btn = document.getElementById('btnMano');
+    const hint = document.getElementById('shortcutsHint');
+    if (editorState.modoMano) {
+        container.classList.add('modo-mano'); btn.classList.add('activo');
+        hint.classList.add('visible'); setTimeout(() => hint.classList.remove('visible'), 3000);
+    } else {
+        container.classList.remove('modo-mano'); btn.classList.remove('activo'); hint.classList.remove('visible');
+    }
+}
+function configurarModoMano() {
+    const container = document.getElementById('canvasContainer');
+    container.addEventListener('mousedown', (e) => {
+        if (!editorState.modoMano) return;
+        if (e.target.closest('.elemento')) return;
+        editorState.panning = true;
+        editorState.panStart = { x: e.clientX, y: e.clientY };
+        editorState.scrollStart = { x: container.scrollLeft, y: container.scrollTop };
+        e.preventDefault();
+    });
+    document.getElementById('artboard').addEventListener('mousedown', (e) => {
+        if (!editorState.modoMano) {
+            if (e.target.id === 'artboard' || e.target.id === 'artboardBg') {
+                editorState.seleccionado = null;
+                renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel();
+            }
+            return;
+        }
+        if (e.target.id === 'artboard' || e.target.id === 'artboardBg' || e.target.id === 'elementosContainer') {
+            editorState.panning = true;
+            editorState.panStart = { x: e.clientX, y: e.clientY };
+            editorState.scrollStart = { x: container.scrollLeft, y: container.scrollTop };
+            e.preventDefault(); e.stopPropagation();
+        }
+    });
+}
+document.addEventListener('mousemove', (e) => {
+    if (editorState.panning) {
+        const container = document.getElementById('canvasContainer');
+        container.scrollLeft = editorState.scrollStart.x - (e.clientX - editorState.panStart.x);
+        container.scrollTop = editorState.scrollStart.y - (e.clientY - editorState.panStart.y);
+        e.preventDefault();
+    }
+});
+document.addEventListener('mouseup', () => { editorState.panning = false; });
+document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('tab-editor').classList.contains('activo')) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'h' || e.key === 'H') toggleModoMano();
+    else if (e.key === 'v' || e.key === 'V') desactivarModoMano();
+    else if (e.key === ' ') { if (!editorState.espacioPresionado) { editorState.espacioPresionado = true; activarModoMano(); e.preventDefault(); } }
+    else if (e.key === '+' || e.key === '=') zoomIn();
+    else if (e.key === '-') zoomOut();
+    else if (e.key === 'Escape') { desactivarModoMano(); editorState.seleccionado = null; renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); }
+});
+document.addEventListener('keyup', (e) => {
+    if (e.key === ' ') { editorState.espacioPresionado = false; if (editorState.modoMano && !document.getElementById('btnMano').classList.contains('activo-manual')) desactivarModoMano(); }
+});
+
+function cambiarTamanoArtboard() {
+    const nuevoAncho = prompt('Ancho del artboard (cm):', editorState.artboardAncho);
+    const nuevoAlto = prompt('Alto del artboard (cm):', editorState.artboardAlto);
+    if (nuevoAncho && nuevoAlto) {
+        const a = parseFloat(nuevoAncho); const h = parseFloat(nuevoAlto);
+        if (a > 0 && h > 0) ajustarArtboard(a, h);
+    }
+}
+function resetArtboard() { ajustarArtboard(33, 48); }
+function ajustarArtboard(ancho, alto) {
+    editorState.artboardAncho = ancho; editorState.artboardAlto = alto;
+    const artboard = document.getElementById('artboard');
+    artboard.style.width = (ancho * CM_TO_PX) + 'px';
+    artboard.style.height = (alto * CM_TO_PX) + 'px';
+    document.getElementById('artboardSizeLabel').textContent = `${ancho} × ${alto} cm`;
+    document.getElementById('infoArtboard').textContent = `${ancho} × ${alto} cm`;
+    actualizarReglas();
+}
+function actualizarReglas() {
+    const reglaH = document.getElementById('reglaH'); const reglaV = document.getElementById('reglaV');
+    reglaH.innerHTML = ''; reglaV.innerHTML = '';
+    for (let i = 1; i <= editorState.artboardAncho; i++) {
+        const marca = document.createElement('div'); marca.className = 'regla-marca';
+        marca.style.left = (i * CM_TO_PX) + 'px'; marca.textContent = i; reglaH.appendChild(marca);
+    }
+    for (let i = 1; i <= editorState.artboardAlto; i++) {
+        const marca = document.createElement('div'); marca.className = 'regla-marca';
+        marca.style.top = (i * CM_TO_PX) + 'px'; marca.textContent = i; reglaV.appendChild(marca);
+    }
+}
+function toggleGrid() { document.getElementById('artboardBg').style.display = document.getElementById('showGrid').checked ? 'block' : 'none'; }
+function toggleRules() {
+    const show = document.getElementById('showRules').checked;
+    document.getElementById('reglaH').style.display = show ? 'block' : 'none';
+    document.getElementById('reglaV').style.display = show ? 'block' : 'none';
+}
+function zoomIn() { editorState.zoom = Math.min(3, editorState.zoom + 0.1); aplicarZoom(); }
+function zoomOut() { editorState.zoom = Math.max(0.3, editorState.zoom - 0.1); aplicarZoom(); }
+function resetZoom() { editorState.zoom = 1; aplicarZoom(); }
+function aplicarZoom() {
+    const wrapper = document.getElementById('canvasWrapper');
+    wrapper.style.transform = `scale(${editorState.zoom})`;
+    wrapper.style.transformOrigin = 'top left';
+    document.getElementById('zoomInfo').textContent = Math.round(editorState.zoom * 100) + '%';
+    document.getElementById('infoZoom').textContent = Math.round(editorState.zoom * 100) + '%';
+}
+
+async function subirImagenesEditor(files) {
+    for (let file of files) {
+        try {
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (ext === 'ai' || ext === 'pdf') await procesarArchivoMultipagina(file, ext);
+            else if (ext === 'svg') await procesarSVG(file);
+            else await procesarImagenRaster(file);
+        } catch (e) { console.error('Error:', e); alert('Error al procesar: ' + file.name); }
+    }
+    document.getElementById('editorFileInput').value = '';
+}
+
+async function procesarArchivoMultipagina(file, ext) {
+    const arrayBuffer = await file.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    const header = String.fromCharCode(...bytes.slice(0, 5));
+    if (header !== '%PDF-' && ext === 'ai') throw new Error('AI sin PDF embebido');
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const numPaginas = pdf.numPages;
+    const primeraPagina = await pdf.getPage(1);
+    const viewport1 = primeraPagina.getViewport({ scale: 1 });
+    const anchoPagina = viewport1.width * 0.0352778;
+    const altoPagina = viewport1.height * 0.0352778;
+    const elementosCreados = [];
+    for (let i = 1; i <= numPaginas; i++) {
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 2 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width; canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+        elementosCreados.push({ dataUrl: canvas.toDataURL(), ancho: anchoPagina, alto: altoPagina });
+    }
+    const separacion = 1;
+    const anchoTotal = (anchoPagina * numPaginas) + (separacion * (numPaginas - 1));
+    ajustarArtboard(anchoTotal, altoPagina);
+    elementosCreados.forEach((elem, index) => {
+        editorState.elementos.push({
+            id: editorState.nextId++,
+            nombre: `${file.name.substring(0, 15)} - Pág ${index + 1}`,
+            tipo: ext === 'ai' ? 'AI (PDF)' : 'PDF',
+            x: index * (anchoPagina + separacion), y: 0,
+            ancho: elem.ancho, alto: elem.alto, rotacion: 0, opacidad: 100,
+            dataUrl: elem.dataUrl, bloqueado: false, z: editorState.elementos.length
+        });
+    });
+    renderizarElementos(); actualizarListaCapas(); actualizarInfoEditor(); resetZoom();
+    mostrarAlertaEditor(`📄 ${numPaginas} artboard${numPaginas > 1 ? 's' : ''} detectado${numPaginas > 1 ? 's' : ''}: ${anchoPagina.toFixed(1)} × ${altoPagina.toFixed(1)} cm`, 'info');
+}
+
+async function procesarSVG(file) {
+    const texto = await file.text();
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(texto, 'image/svg+xml');
+    const svgElement = svgDoc.querySelector('svg');
+    if (!svgElement) throw new Error('SVG inválido');
+    const viewBox = svgElement.getAttribute('viewBox');
+    let w, h;
+    if (viewBox) { const parts = viewBox.split(/[\s,]+/); w = parseFloat(parts[2]); h = parseFloat(parts[3]); }
+    else { w = parseFloat(svgElement.getAttribute('width')) || 100; h = parseFloat(svgElement.getAttribute('height')) || 100; }
+    const factor = 0.0264583;
+    const anchoCm = w * factor; const altoCm = h * factor;
+    const blob = new Blob([texto], { type: 'image/svg+xml' });
+    const dataUrl = URL.createObjectURL(blob);
+    ajustarArtboard(anchoCm, altoCm);
+    editorState.elementos.push({
+        id: editorState.nextId++, nombre: file.name.substring(0, 20), tipo: 'SVG',
+        x: 0, y: 0, ancho: anchoCm, alto: altoCm, rotacion: 0, opacidad: 100,
+        dataUrl: dataUrl, bloqueado: false, z: editorState.elementos.length
+    });
+    renderizarElementos(); actualizarListaCapas(); actualizarInfoEditor(); resetZoom();
+    mostrarAlertaEditor(`📐 SVG cargado: ${anchoCm.toFixed(1)} × ${altoCm.toFixed(1)} cm`, 'info');
+}
+
+async function procesarImagenRaster(file) {
+    const dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+    });
+    const img = new Image();
+    img.onload = () => {
+        const anchoCm = 5; const altoCm = (img.height / img.width) * anchoCm;
+        editorState.elementos.push({
+            id: editorState.nextId++, nombre: file.name.substring(0, 20),
+            tipo: file.name.split('.').pop().toUpperCase(),
+            x: (editorState.artboardAncho / 2) - (anchoCm / 2),
+            y: (editorState.artboardAlto / 2) - (altoCm / 2),
+            ancho: anchoCm, alto: altoCm, rotacion: 0, opacidad: 100,
+            dataUrl: dataUrl, bloqueado: false, z: editorState.elementos.length
+        });
+        renderizarElementos(); actualizarListaCapas(); seleccionarElemento(editorState.nextId - 1); actualizarInfoEditor();
+    };
+    img.src = dataUrl;
+}
+
+function mostrarAlertaEditor(mensaje, tipo) {
+    const alerta = document.createElement('div');
+    alerta.className = `alerta visible ${tipo}`;
+    alerta.textContent = mensaje;
+    alerta.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999;max-width:400px;';
+    document.body.appendChild(alerta);
+    setTimeout(() => alerta.remove(), 4000);
+}
+
+function renderizarElementos() {
+    const container = document.getElementById('elementosContainer');
+    container.innerHTML = '';
+    editorState.elementos.forEach(el => {
+        const div = document.createElement('div');
+        div.className = 'elemento' + (editorState.seleccionado === el.id ? ' seleccionado' : '') + (el.bloqueado ? ' bloqueado' : '');
+        div.style.left = (el.x * CM_TO_PX) + 'px';
+        div.style.top = (el.y * CM_TO_PX) + 'px';
+        div.style.width = (el.ancho * CM_TO_PX) + 'px';
+        div.style.height = (el.alto * CM_TO_PX) + 'px';
+        div.style.zIndex = el.z;
+        div.style.opacity = el.opacidad / 100;
+        div.style.transform = `rotate(${el.rotacion}deg)`;
+        div.dataset.id = el.id;
+        const img = document.createElement('img'); img.src = el.dataUrl; div.appendChild(img);
+        const dimLabel = document.createElement('div');
+        dimLabel.className = 'dim-label top';
+        dimLabel.textContent = `${el.ancho.toFixed(1)} × ${el.alto.toFixed(1)} cm`;
+        div.appendChild(dimLabel);
+        if (editorState.seleccionado === el.id && !el.bloqueado) {
+            ['nw','n','ne','e','se','s','sw','w'].forEach(pos => {
+                const handle = document.createElement('div');
+                handle.className = `handle ${pos}`; handle.dataset.handle = pos; div.appendChild(handle);
+            });
+        }
+        div.addEventListener('mousedown', (e) => iniciarDrag(e, el));
+        container.appendChild(div);
+    });
+}
+
+function iniciarDrag(e, elemento) {
+    if (elemento.bloqueado || editorState.modoMano) return;
+    e.stopPropagation(); seleccionarElemento(elemento.id);
+    const handle = e.target.dataset.handle;
+    if (handle) { editorState.resizing = true; editorState.dragHandle = handle; }
+    else editorState.dragging = true;
+    editorState.dragElement = elemento;
+    editorState.dragStart = { x: e.clientX, y: e.clientY };
+    editorState.dragOriginal = { x: elemento.x, y: elemento.y, ancho: elemento.ancho, alto: elemento.alto };
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('mouseup', endDrag);
+}
+
+function onDrag(e) {
+    if (!editorState.dragElement) return;
+    const dx = (e.clientX - editorState.dragStart.x) / CM_TO_PX / editorState.zoom;
+    const dy = (e.clientY - editorState.dragStart.y) / CM_TO_PX / editorState.zoom;
+    const el = editorState.dragElement; const orig = editorState.dragOriginal;
+    if (editorState.dragging) {
+        let newX = orig.x + dx; let newY = orig.y + dy;
+        if (document.getElementById('snapGrid').checked) { newX = Math.round(newX * 2) / 2; newY = Math.round(newY * 2) / 2; }
+        el.x = Math.max(0, newX); el.y = Math.max(0, newY);
+    } else if (editorState.resizing) {
+        const handle = editorState.dragHandle;
+        let newW = orig.ancho; let newH = orig.alto; let newX = orig.x; let newY = orig.y;
+        if (handle.includes('e')) newW = Math.max(0.5, orig.ancho + dx);
+        if (handle.includes('w')) { newW = Math.max(0.5, orig.ancho - dx); newX = orig.x + (orig.ancho - newW); }
+        if (handle.includes('s')) newH = Math.max(0.5, orig.alto + dy);
+        if (handle.includes('n')) { newH = Math.max(0.5, orig.alto - dy); newY = orig.y + (orig.alto - newH); }
+        if (document.getElementById('propAspect').checked) {
+            const ratio = orig.ancho / orig.alto;
+            if (handle.includes('e') || handle.includes('w')) { newH = newW / ratio; if (handle.includes('n')) newY = orig.y + (orig.alto - newH); }
+            else { newW = newH * ratio; if (handle.includes('w')) newX = orig.x + (orig.ancho - newW); }
+        }
+        el.x = newX; el.y = newY; el.ancho = newW; el.alto = newH;
+    }
+    renderizarElementos(); actualizarPropiedadesPanel();
+}
+
+function endDrag() {
+    editorState.dragging = false; editorState.resizing = false;
+    editorState.dragElement = null; editorState.dragHandle = null;
+    document.removeEventListener('mousemove', onDrag);
+    document.removeEventListener('mouseup', endDrag);
+}
+
+function seleccionarElemento(id) {
+    editorState.seleccionado = id;
+    renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel();
+}
+
+function actualizarListaCapas() {
+    const lista = document.getElementById('listaCapas');
+    if (editorState.elementos.length === 0) {
+        lista.innerHTML = '<div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div>';
+        return;
+    }
+    lista.innerHTML = '';
+    [...editorState.elementos].reverse().forEach(el => {
+        const item = document.createElement('div');
+        item.className = 'capa-item' + (editorState.seleccionado === el.id ? ' seleccionado' : '');
+        item.onclick = () => seleccionarElemento(el.id);
+        item.innerHTML = `
+            <div class="capa-thumb">${el.tipo.startsWith('AI') || el.tipo === 'PDF' ? '📄' : '<img src="' + el.dataUrl + '">'}</div>
+            <div class="capa-nombre" title="${el.nombre}">${el.nombre}</div>
+            <div class="capa-acciones">
+                <button class="capa-btn" onclick="event.stopPropagation(); toggleBloqueo(${el.id})">${el.bloqueado ? '🔒' : '🔓'}</button>
+                <button class="capa-btn" onclick="event.stopPropagation(); eliminarElementoId(${el.id})">🗑️</button>
+            </div>
+        `;
+        lista.appendChild(item);
+    });
+}
+
+function actualizarPropiedadesPanel() {
+    const vacio = document.getElementById('propiedadesVacias');
+    const props = document.getElementById('propiedadesElemento');
+    if (!editorState.seleccionado) { vacio.style.display = 'block'; props.style.display = 'none'; return; }
+    const el = editorState.elementos.find(e => e.id === editorState.seleccionado);
+    if (!el) return;
+    vacio.style.display = 'none'; props.style.display = 'block';
+    document.getElementById('propNombre').textContent = el.nombre;
+    document.getElementById('propTipo').textContent = el.tipo;
+    document.getElementById('propX').value = el.x.toFixed(2);
+    document.getElementById('propY').value = el.y.toFixed(2);
+    document.getElementById('propW').value = el.ancho.toFixed(2);
+    document.getElementById('propH').value = el.alto.toFixed(2);
+    document.getElementById('propRot').value = el.rotacion;
+    document.getElementById('propOpacidad').value = el.opacidad;
+}
+
+function actualizarDesdePropiedades() {
+    if (!editorState.seleccionado) return;
+    const el = editorState.elementos.find(e => e.id === editorState.seleccionado);
+    if (!el) return;
+    el.x = parseFloat(document.getElementById('propX').value) || 0;
+    el.y = parseFloat(document.getElementById('propY').value) || 0;
+    el.ancho = parseFloat(document.getElementById('propW').value) || 0.5;
+    el.alto = parseFloat(document.getElementById('propH').value) || 0.5;
+    el.rotacion = parseFloat(document.getElementById('propRot').value) || 0;
+    el.opacidad = parseFloat(document.getElementById('propOpacidad').value) || 100;
+    renderizarElementos();
+}
+
+function toggleBloqueo(id) {
+    const el = editorState.elementos.find(e => e.id === id);
+    if (el) { el.bloqueado = !el.bloqueado; renderizarElementos(); actualizarListaCapas(); }
+}
+function eliminarElemento() { if (editorState.seleccionado) eliminarElementoId(editorState.seleccionado); }
+function eliminarElementoId(id) {
+    editorState.elementos = editorState.elementos.filter(e => e.id !== id);
+    if (editorState.seleccionado === id) editorState.seleccionado = null;
+    renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); actualizarInfoEditor();
+}
+function duplicarElemento() {
+    if (!editorState.seleccionado) return;
+    const original = editorState.elementos.find(e => e.id === editorState.seleccionado);
+    if (!original) return;
+    const copia = { ...original, id: editorState.nextId++, x: original.x + 1, y: original.y + 1, nombre: original.nombre + ' (copia)', z: editorState.elementos.length };
+    editorState.elementos.push(copia); seleccionarElemento(copia.id); actualizarInfoEditor();
+}
+function traerAlFrente() {
+    if (!editorState.seleccionado) return;
+    const el = editorState.elementos.find(e => e.id === editorState.seleccionado);
+    if (el) { el.z = Math.max(...editorState.elementos.map(e => e.z)) + 1; renderizarElementos(); }
+}
+function enviarAtras() {
+    if (!editorState.seleccionado) return;
+    const el = editorState.elementos.find(e => e.id === editorState.seleccionado);
+    if (el) { el.z = Math.min(...editorState.elementos.map(e => e.z)) - 1; renderizarElementos(); }
+}
+function centrarElemento() {
+    if (!editorState.seleccionado) return;
+    const el = editorState.elementos.find(e => e.id === editorState.seleccionado);
+    if (el) {
+        el.x = (editorState.artboardAncho - el.ancho) / 2;
+        el.y = (editorState.artboardAlto - el.alto) / 2;
+        renderizarElementos(); actualizarPropiedadesPanel();
+    }
+}
+function limpiarEditor() {
+    if (editorState.elementos.length === 0) return;
+    if (confirm('¿Eliminar todos los elementos?')) {
+        editorState.elementos = []; editorState.seleccionado = null;
+        renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); actualizarInfoEditor(); resetArtboard();
+    }
+}
+function actualizarInfoEditor() { document.getElementById('infoTotalElementos').textContent = editorState.elementos.length; }
+
+calcularLibrito();
+</script>
+</body>
+</html>
