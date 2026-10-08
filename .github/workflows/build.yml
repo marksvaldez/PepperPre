@@ -2,7 +2,7 @@ name: Build PepperPre Installer
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -10,19 +10,36 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
       
+    - name: List files (debug)
+      run: |
+        dir
+        dir .github\workflows
+        
     - name: Install Inno Setup
       run: |
-        choco install innosetup -y
+        choco install innosetup -y --no-progress
+        
+    - name: Find ISCC.exe
+      run: |
+        Get-ChildItem -Path "C:\Program Files (x86)" -Filter "ISCC.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+        Get-ChildItem -Path "C:\Program Files" -Filter "ISCC.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
         
     - name: Compile installer
       run: |
-        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" PepperPre_Installer.iss
+        $iscc = Get-ChildItem -Path "C:\Program Files (x86)", "C:\Program Files" -Filter "ISCC.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+        if (-not $iscc) { throw "ISCC.exe not found" }
+        Write-Host "Using: $iscc"
+        & $iscc PepperPre_Installer.iss
         
-    - name: Upload installer
-      uses: actions/upload-artifact@v3
+    - name: List output
+      run: dir Output
+      
+    - name: Upload installer artifact
+      uses: actions/upload-artifact@v4
       with:
         name: PepperPre-Installer
         path: Output/PepperPre_Setup.exe
+        if-no-files-found: error
