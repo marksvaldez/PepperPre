@@ -39,7 +39,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
 .checkbox-item { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; cursor: pointer; }
 .checkbox-item:hover { border-color: #3b82f6; }
-.checkbox-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+.checkbox-item input[type="checkbox"], .checkbox-item input[type="radio"] { width: 18px; height: 18px; cursor: pointer; }
 .checkbox-item label { flex: 1; cursor: pointer; font-size: 0.9em; }
 .checkbox-item .precio-check { font-size: 0.85em; color: #059669; font-weight: 600; }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
@@ -179,6 +179,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .plancha-visualizador { background: #f3f4f6; border: 2px dashed #9ca3af; border-radius: 8px; padding: 30px 20px 40px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; min-height: 300px; position: relative; overflow: auto; }
 .plancha-base { background: white; border: 2px solid #1e3a8a; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; }
 .diseno-item { position: absolute; border: 1px dashed #3b82f6; background: rgba(59,130,246,0.08); display: flex; align-items: center; justify-content: center; font-size: 0.7em; color: #1e3a8a; font-weight: 600; box-sizing: border-box; }
+.diseno-item.circular { border-radius: 50%; }
+.foil-area { position: absolute; background: rgba(251, 191, 36, 0.3); border: 2px solid #f59e0b; }
+.foil-area.circular { border-radius: 50%; }
 .plancha-dimensiones { margin-top: 15px; font-size: 0.85em; color: #6b7280; font-weight: 600; }
 .precios-container { padding: 30px; max-width: 1400px; margin: 0 auto; }
 .precios-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 25px; border-radius: 8px; margin-bottom: 25px; }
@@ -223,16 +226,17 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
     <div class="tabs">
         <button class="tab activo" onclick="cambiarTab('libritos', this)">📚 Libritos</button>
         <button class="tab" onclick="cambiarTab('planchas', this)">📐 Calc. Planchas</button>
+        <button class="tab" onclick="cambiarTab('impresion-foil', this)">🎯 Impresión + Foil</button>
         <button class="tab" onclick="cambiarTab('editor', this)">🎨 Editor</button>
         <button class="tab" onclick="cambiarTab('foil', this)">✨ Foil/PVC/Plotter</button>
-        <button class="tab" onclick="cambiarTab('precios', this)"> Lista de Precios</button>
+        <button class="tab" onclick="cambiarTab('precios', this)">💰 Lista de Precios</button>
     </div>
 
     <div class="tab-content activo" id="tab-libritos">
         <div class="grid-principal">
             <div class="panel panel-config">
                 <div class="seccion">
-                    <div class="seccion-titulo"> Datos del Librito</div>
+                    <div class="seccion-titulo">📚 Datos del Librito</div>
                     <div class="grid-2">
                         <div class="campo"><label>Ancho CERRADO (cm):</label><input type="number" id="libAnchoCerrado" value="14.8" step="0.1" onchange="calcularLibrito()"></div>
                         <div class="campo"><label>Alto CERRADO (cm):</label><input type="number" id="libAltoCerrado" value="21" step="0.1" onchange="calcularLibrito()"></div>
@@ -244,9 +248,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo">🎨 Impresión</div>
-                    <div class="sub-seccion"><div class="sub-seccion-titulo"> FRENTE</div><div class="campo"><select id="libImpFrente" onchange="calcularLibrito()"><option value="6000">A3 Papel Historias Ricoh (Gs. 6.000)</option><option value="7000">A3 Papel Historias Canon (Gs. 7.000)</option><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option></select></div></div>
-                    <div class="sub-seccion"><div class="sub-seccion-titulo"> DORSO</div><div class="campo"><select id="libImpDorso" onchange="calcularLibrito()"><option value="6000">A3 Papel Historias Ricoh (Gs. 6.000)</option><option value="7000">A3 Papel Historias Canon (Gs. 7.000)</option><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option><option value="7000">Impresión Dorso (Gs. 7.000)</option></select></div></div>
+                    <div class="seccion-titulo"> Impresión</div>
+                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 FRENTE</div><div class="campo"><select id="libImpFrente" onchange="calcularLibrito()"><option value="6000">A3 Papel Historias Ricoh (Gs. 6.000)</option><option value="7000">A3 Papel Historias Canon (Gs. 7.000)</option><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option></select></div></div>
+                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 DORSO</div><div class="campo"><select id="libImpDorso" onchange="calcularLibrito()"><option value="6000">A3 Papel Historias Ricoh (Gs. 6.000)</option><option value="7000">A3 Papel Historias Canon (Gs. 7.000)</option><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option><option value="7000">Impresión Dorso (Gs. 7.000)</option></select></div></div>
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">✂️ Acabados</div>
@@ -308,15 +312,15 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 <div class="seccion">
                     <div class="seccion-titulo">🧾 Desglose de Costos</div>
                     <div class="desglose">
-                        <div class="desglose-row"><span class="label"> Impresión FRENTE:</span><span class="valor" id="libCostoImpFrente">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label">🎨 Impresión DORSO:</span><span class="valor" id="libCostoImpDorso">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">🎨 Impresión FRENTE:</span><span class="valor" id="libCostoImpFrente">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label"> Impresión DORSO:</span><span class="valor" id="libCostoImpDorso">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="libCostoCorte">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowDoblez" style="display:none;"><span class="label">📑 Doblez:</span><span class="valor" id="libCostoDoblez">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowLaminado" style="display:none;"><span class="label">✨ Laminado (todas las hojas):</span><span class="valor" id="libCostoLaminado">Gs. 0</span></div>
                         <div class="desglose-row sub-total" id="libRowLaminadoTapa" style="display:none;"><span class="label">📕 Laminado TAPA/CONTRATAPA:</span><span class="valor" id="libCostoLaminadoTapa">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label"> Presillado:</span><span class="valor" id="libCostoGrapas">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">📚 Presillado:</span><span class="valor" id="libCostoGrapas">Gs. 0</span></div>
                         <div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor" id="libCostoTotal">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label"> Utilidad:</span><span class="valor" id="libCostoUtilidad">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="libCostoUtilidad">Gs. 0</span></div>
                     </div>
                 </div>
                 <div class="precio-final-box"><div class="label">💵 PRECIO TOTAL DE VENTA</div><div class="precio" id="libPrecioTotal">Gs. 0</div><div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">Precio por ejemplar: <strong id="libPrecioUnitario">Gs. 0</strong></div></div>
@@ -408,7 +412,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             <div class="panel panel-resultados">
                 <div class="seccion">
                     <div class="seccion-titulo">📐 Imposición Visual</div>
-                    <div class="alerta error" id="calcAlerta" style="display:none;">️ El diseño es más grande que la plancha.</div>
+                    <div class="alerta error" id="calcAlerta" style="display:none;">⚠️ El diseño es más grande que la plancha.</div>
                     <div class="plancha-visualizador">
                         <div class="plancha-base" id="calcPlanchaBase" style="width: 330px; height: 480px;"></div>
                         <div class="plancha-dimensiones" id="calcPlanchaDimensiones">Plancha: 33 × 48 cm | Diseño: 10 × 15 cm</div>
@@ -423,18 +427,178 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 <div class="seccion">
                     <div class="seccion-titulo">🧾 Desglose de Costos</div>
                     <div class="desglose">
-                        <div class="desglose-row"><span class="label">🎨 Impresión / Material:</span><span class="valor" id="calcCostoImpresion">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label"> Impresión / Material:</span><span class="valor" id="calcCostoImpresion">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="calcCostoCorte">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="calcCostoLaminado">Gs. 0</span></div>
-                        <div class="desglose-row" id="calcRowPlastificado" style="display:none;"><span class="label">🔲 Plastificado Rígido:</span><span class="valor" id="calcCostoPlastificado">Gs. 0</span></div>
+                        <div class="desglose-row" id="calcRowPlastificado" style="display:none;"><span class="label"> Plastificado Rígido:</span><span class="valor" id="calcCostoPlastificado">Gs. 0</span></div>
                         <div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor" id="calcCostoTotal">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="calcCostoUtilidad">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label"> Utilidad:</span><span class="valor" id="calcCostoUtilidad">Gs. 0</span></div>
                     </div>
                 </div>
                 <div class="precio-final-box">
                     <div class="label">💵 PRECIO TOTAL DE VENTA</div>
                     <div class="precio" id="calcPrecioTotal">Gs. 0</div>
                     <div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">Precio por unidad: <strong id="calcPrecioUnitario">Gs. 0</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-impresion-foil">
+        <div class="grid-principal">
+            <div class="panel panel-config">
+                <div class="seccion">
+                    <div class="seccion-titulo">🎯 Diseño y Foil</div>
+                    <div class="sub-seccion">
+                        <div class="sub-seccion-titulo">Forma del Diseño</div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" name="formaDiseno" id="disenoRect" value="rect" checked onchange="calcularImpresionFoil()">
+                                <label for="disenoRect">Rectangular</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="formaDiseno" id="disenoCirc" value="circ" onchange="calcularImpresionFoil()">
+                                <label for="disenoCirc">Circular (usa troquel circular)</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sub-seccion">
+                        <div class="sub-seccion-titulo">Tamaño del Diseño</div>
+                        <div class="grid-2" id="disenoRectDims">
+                            <div class="campo"><label>Ancho (cm):</label><input type="number" id="ifDisenoAncho" value="9" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
+                            <div class="campo"><label>Alto (cm):</label><input type="number" id="ifDisenoAlto" value="20" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
+                        </div>
+                        <div class="campo" id="disenoCircDim" style="display:none;">
+                            <label>Diámetro (cm):</label>
+                            <input type="number" id="ifDisenoDiametro" value="10" step="0.1" min="0.1" onchange="calcularImpresionFoil()">
+                        </div>
+                    </div>
+                    <div class="sub-seccion">
+                        <div class="sub-seccion-titulo">Forma del Foil</div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" name="formaFoil" id="foilRect" value="rect" checked onchange="calcularImpresionFoil()">
+                                <label for="foilRect">Rectangular</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="formaFoil" id="foilCirc" value="circ" onchange="calcularImpresionFoil()">
+                                <label for="foilCirc">Circular</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sub-seccion">
+                        <div class="sub-seccion-titulo">Tamaño del Foil</div>
+                        <div class="grid-2" id="foilRectDims">
+                            <div class="campo"><label>Ancho (cm):</label><input type="number" id="ifFoilAncho" value="8.5" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
+                            <div class="campo"><label>Alto (cm):</label><input type="number" id="ifFoilAlto" value="5" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
+                        </div>
+                        <div class="campo" id="foilCircDim" style="display:none;">
+                            <label>Diámetro (cm):</label>
+                            <input type="number" id="ifFoilDiametro" value="5" step="0.1" min="0.1" onchange="calcularImpresionFoil()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">🎨 Tipo de Producción</div>
+                    <div class="campo">
+                        <label>Seleccioná el flujo de producción:</label>
+                        <select id="ifTipoProduccion" onchange="calcularImpresionFoil()">
+                            <option value="1pasada-sinlam">1 pasada sin laminado (Sin fondo de color)</option>
+                            <option value="1pasada-conlam">1 pasada CON laminado</option>
+                            <option value="2pasadas-sinlam">2 pasadas sin laminado</option>
+                            <option value="2pasadas-conlam" selected>2 pasadas CON laminado (Con fondo de color)</option>
+                        </select>
+                    </div>
+                    <div class="alerta info visible" style="margin-top: 10px;" id="alertaFlujo">
+                        💡 <strong>Flujo D:</strong> 2 pasadas de impresión + laminado entre pasadas
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">📄 Tipo de Impresión</div>
+                    <div class="campo">
+                        <label>Material (ambas pasadas usan el mismo):</label>
+                        <select id="ifTipoImpresion" onchange="calcularImpresionFoil()">
+                            <option value="8000">Color A3 Ilustración (Gs. 8.000/plancha)</option>
+                            <option value="13000">Color A3 Especial 1 (Gs. 13.000/plancha)</option>
+                            <option value="14000">Color A3 Especial 2 (Gs. 14.000/plancha)</option>
+                            <option value="15000">Color A3 Especial 3 (Gs. 15.000/plancha)</option>
+                            <option value="16000">Color A3 Especial 4 (Gs. 16.000/plancha)</option>
+                            <option value="4000">ByN A3 Ilustración (Gs. 4.000/plancha)</option>
+                            <option value="8000">ByN A3 Especial 1 (Gs. 8.000/plancha)</option>
+                            <option value="15000">Papel Fotográfico A3 (Gs. 15.000/plancha)</option>
+                            <option value="9000">Opalina Lisa 240 grs (Gs. 9.000/plancha)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">✨ Laminado al Dorso</div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ifLaminadoDorso" onchange="calcularImpresionFoil()">
+                        <label for="ifLaminadoDorso"><strong>Laminado Prolam al dorso</strong><br><small style="color: #6b7280;">Se calcula por plancha completa</small></label>
+                        <span class="precio-check">Gs. 3.000 / plancha</span>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">✂️ Corte / Troquel</div>
+                    <div class="campo">
+                        <label>Tipo de corte:</label>
+                        <select id="ifTipoCorte" onchange="calcularImpresionFoil()">
+                            <option value="0">Sin corte</option>
+                            <option value="1000">Corte Recto A (Gs. 1.000/plancha)</option>
+                            <option value="2500">Corte Recto B (Gs. 2.500/plancha)</option>
+                            <option value="5500">Corte Recto C (Gs. 5.500/plancha)</option>
+                            <option value="10000">Corte D (Gs. 10.000/plancha)</option>
+                            <option value="800">Troquel Circular (Gs. 800/plancha)</option>
+                            <option value="1000">Troquel Simple (Gs. 1.000/plancha)</option>
+                            <option value="1500">Troquel Complejo (Gs. 1.500/plancha)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="campo">
+                        <label>Cantidad total a producir:</label>
+                        <input type="number" id="ifCantidad" value="100" min="1" onchange="calcularImpresionFoil()">
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">💰 Margen de Utilidad (%)</div>
+                    <input type="number" id="ifMargen" value="40" min="0" onchange="calcularImpresionFoil()">
+                </div>
+            </div>
+
+            <div class="panel panel-resultados">
+                <div class="seccion">
+                    <div class="seccion-titulo">📐 Imposición Visual</div>
+                    <div class="alerta error" id="ifAlerta" style="display:none;">️ El diseño es más grande que la plancha.</div>
+                    <div class="plancha-visualizador">
+                        <div class="plancha-base" id="ifPlanchaBase" style="width: 330px; height: 480px;"></div>
+                        <div class="plancha-dimensiones" id="ifPlanchaDimensiones">Plancha: 33 × 48 cm</div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box destacado"><div class="stat-label">Diseños por plancha</div><div class="stat-value" id="ifDisenosPorPlancha">0</div></div>
+                        <div class="stat-box"><div class="stat-label">Planchas totales</div><div class="stat-value" id="ifPlanchasTotales">0</div></div>
+                        <div class="stat-box destacado"><div class="stat-label">Total impresiones</div><div class="stat-value" id="ifTotalImpresiones">0</div></div>
+                        <div class="stat-box"><div class="stat-label">Total foils</div><div class="stat-value" id="ifTotalFoils">0</div></div>
+                        <div class="stat-box"><div class="stat-label">Área foil total</div><div class="stat-value" id="ifAreaFoilTotal">0 cm²</div></div>
+                        <div class="stat-box tapa"><div class="stat-label">Tipo foil aplicado</div><div class="stat-value" id="ifTipoFoil">-</div></div>
+                    </div>
+                </div>
+
+                <div class="seccion">
+                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
+                    <div class="desglose" id="ifDesgloseCostos"></div>
+                </div>
+
+                <div class="precio-final-box">
+                    <div class="label">💵 PRECIO TOTAL DE VENTA</div>
+                    <div class="precio" id="ifPrecioTotal">Gs. 0</div>
+                    <div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">Precio por unidad: <strong id="ifPrecioUnitario">Gs. 0</strong></div>
                 </div>
             </div>
         </div>
@@ -447,7 +611,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 <div class="upload-mini" onclick="document.getElementById('editorFileInput').click()"><div style="font-size: 1.5em;">📁</div><div style="font-size: 0.8em; color: #1e40af; font-weight: 600;">Subir imagen</div><div style="font-size: 0.7em; color: #6b7280;">JPG, PNG, SVG, PDF, AI</div><input type="file" id="editorFileInput" accept="image/*,.pdf,.ai,.svg" multiple onchange="subirImagenesEditor(this.files)"></div>
                 <div id="listaCapas"><div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div></div>
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
-                    <h3 style="margin-bottom: 8px;">️ Opciones</h3>
+                    <h3 style="margin-bottom: 8px;">⚙️ Opciones</h3>
                     <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="snapGrid" checked><label for="snapGrid" style="font-size: 0.85em;">Snap a grid (0.5cm)</label></div>
                     <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="showGrid" checked onchange="toggleGrid()"><label for="showGrid" style="font-size: 0.85em;">Mostrar grid</label></div>
                     <div class="checkbox-item"><input type="checkbox" id="showRules" checked onchange="toggleRules()"><label for="showRules" style="font-size: 0.85em;">Mostrar reglas</label></div>
@@ -455,11 +619,11 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             </div>
             <div class="area-trabajo">
                 <div class="toolbar-editor">
-                    <button class="tool-btn" onclick="zoomOut()">➖</button><span class="zoom-info" id="zoomInfo">100%</span><button class="tool-btn" onclick="zoomIn()">➕</button><button class="tool-btn" onclick="resetZoom()"></button>
+                    <button class="tool-btn" onclick="zoomOut()">➖</button><span class="zoom-info" id="zoomInfo">100%</span><button class="tool-btn" onclick="zoomIn()">➕</button><button class="tool-btn" onclick="resetZoom()">⊡</button>
                     <div class="separator"></div>
                     <button class="tool-btn" id="btnMano" onclick="toggleModoMano()">✋ Mano</button>
                     <div class="separator"></div>
-                    <button class="tool-btn" onclick="cambiarTamanoArtboard()">📐 Tamaño</button><button class="tool-btn" onclick="resetArtboard()">🔄 Reset</button><button class="tool-btn" onclick="limpiarEditor()">🗑️</button>
+                    <button class="tool-btn" onclick="cambiarTamanoArtboard()">📐 Tamaño</button><button class="tool-btn" onclick="resetArtboard()"> Reset</button><button class="tool-btn" onclick="limpiarEditor()">🗑️</button>
                     <div class="separator"></div>
                     <span style="font-size: 0.85em; color: #6b7280;">Artboard: <strong id="artboardSizeLabel">33 × 48 cm</strong></span>
                 </div>
@@ -471,11 +635,11 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 </div>
             </div>
             <div class="panel-propiedades">
-                <h3>📏 Propiedades</h3>
+                <h3> Propiedades</h3>
                 <div id="propiedadesVacias" class="empty-state"><div class="icono">🖱️</div><div style="font-size: 0.85em;">Seleccioná un elemento</div></div>
                 <div id="propiedadesElemento" style="display:none;">
                     <div class="info-elemento"><div class="info-row"><span class="info-label">Nombre:</span><span class="info-value" id="propNombre">-</span></div><div class="info-row"><span class="info-label">Tipo:</span><span class="info-value" id="propTipo">-</span></div></div>
-                    <h3 style="margin-top: 15px;">📐 Posición y Tamaño</h3>
+                    <h3 style="margin-top: 15px;"> Posición y Tamaño</h3>
                     <div class="prop-row"><div class="prop-field"><label>X (cm)</label><input type="number" id="propX" step="0.1" onchange="actualizarDesdePropiedades()"></div><div class="prop-field"><label>Y (cm)</label><input type="number" id="propY" step="0.1" onchange="actualizarDesdePropiedades()"></div></div>
                     <div class="prop-row"><div class="prop-field"><label>Ancho (cm)</label><input type="number" id="propW" step="0.1" onchange="actualizarDesdePropiedades()"></div><div class="prop-field"><label>Alto (cm)</label><input type="number" id="propH" step="0.1" onchange="actualizarDesdePropiedades()"></div></div>
                     <h3 style="margin-top: 15px;">🔄 Transformar</h3>
@@ -531,7 +695,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                     <div class="campo"><label>Descripción (opcional):</label><input type="text" id="foilDescripcion" placeholder="Ej: Logo dorado"></div>
                     <div class="alerta info visible" style="margin: 10px 0;">
-                         Área unitaria: <strong id="foilAreaPreview">25 cm²</strong> | Área total con cantidad: <strong id="foilAreaTotalPreview">25 cm²</strong>
+                        💡 Área unitaria: <strong id="foilAreaPreview">25 cm²</strong> | Área total con cantidad: <strong id="foilAreaTotalPreview">25 cm²</strong>
                     </div>
                     <button class="btn-agregar" onclick="agregarItemFoil()">➕ Agregar Foil</button>
                     <div id="foilItemsList" style="margin-top: 15px;"></div>
@@ -608,7 +772,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 function formatearPYG(num) { return "Gs. " + Math.round(num).toLocaleString('es-PY'); }
-function cambiarTab(tabId, btn) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('activo')); document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('activo')); btn.classList.add('activo'); document.getElementById('tab-' + tabId).classList.add('activo'); if (tabId === 'editor') setTimeout(inicializarEditor, 100); if (tabId === 'planchas') setTimeout(calcularPlanchas, 100); if (tabId === 'precios') renderizarListaPrecios(); }
+function cambiarTab(tabId, btn) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('activo')); document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('activo')); btn.classList.add('activo'); document.getElementById('tab-' + tabId).classList.add('activo'); if (tabId === 'editor') setTimeout(inicializarEditor, 100); if (tabId === 'planchas') setTimeout(calcularPlanchas, 100); if (tabId === 'impresion-foil') setTimeout(calcularImpresionFoil, 100); if (tabId === 'precios') renderizarListaPrecios(); }
 
 function calcularLibrito() {
     const anchoCerrado = parseFloat(document.getElementById('libAnchoCerrado').value) || 0;
@@ -740,7 +904,7 @@ function generarPDFLibrito() {
     const cantidad = document.getElementById('libCantidad').value;
     const precioTotal = document.getElementById('libPrecioTotal').textContent;
     const fecha = new Date().toLocaleDateString('es-PY');
-    const contenido = `<div style="padding: 40px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;"><h1 style="color: #1e3a8a; border-bottom: 3px solid #1e3a8a; padding-bottom: 10px;">🖨️ Pepper Pre - Presupuesto</h1><p style="color: #6b7280;">Fecha: ${fecha}</p><table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #d1d5db;"><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Tamaño CERRADO:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${anchoC} × ${altoC} cm</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Total de Páginas:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${paginas} caras</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Cantidad:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${cantidad} ejemplares</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Encuadernación:</td><td style="padding: 10px; border: 1px solid #d1d5db;">A caballo (presillado)</td></tr></table><div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #059669;"><div style="display: flex; justify-content: space-between; font-size: 1.8em; color: #059669;"><span><strong>TOTAL:</strong></span><strong>${precioTotal}</strong></div></div></div>`;
+    const contenido = `<div style="padding: 40px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;"><h1 style="color: #1e3a8a; border-bottom: 3px solid #1e3a8a; padding-bottom: 10px;">️ Pepper Pre - Presupuesto</h1><p style="color: #6b7280;">Fecha: ${fecha}</p><table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #d1d5db;"><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Tamaño CERRADO:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${anchoC} × ${altoC} cm</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Total de Páginas:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${paginas} caras</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Cantidad:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${cantidad} ejemplares</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Encuadernación:</td><td style="padding: 10px; border: 1px solid #d1d5db;">A caballo (presillado)</td></tr></table><div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #059669;"><div style="display: flex; justify-content: space-between; font-size: 1.8em; color: #059669;"><span><strong>TOTAL:</strong></span><strong>${precioTotal}</strong></div></div></div>`;
     const ventana = window.open('', '_blank');
     ventana.document.write(contenido);
     ventana.document.close();
@@ -888,6 +1052,199 @@ function calcularPlanchas() {
     document.getElementById('calcPrecioUnitario').textContent = formatearPYG(precioUnitario);
 }
 
+function calcularImpresionFoil() {
+    const formaDiseno = document.querySelector('input[name="formaDiseno"]:checked').value;
+    const formaFoil = document.querySelector('input[name="formaFoil"]:checked').value;
+    const tipoProduccion = document.getElementById('ifTipoProduccion').value;
+    
+    document.getElementById('disenoRectDims').style.display = formaDiseno === 'rect' ? 'grid' : 'none';
+    document.getElementById('disenoCircDim').style.display = formaDiseno === 'circ' ? 'block' : 'none';
+    document.getElementById('foilRectDims').style.display = formaFoil === 'rect' ? 'grid' : 'none';
+    document.getElementById('foilCircDim').style.display = formaFoil === 'circ' ? 'block' : 'none';
+    
+    let pasadas, conLaminado, descripcionFlujo;
+    switch(tipoProduccion) {
+        case '1pasada-sinlam':
+            pasadas = 1;
+            conLaminado = false;
+            descripcionFlujo = '💡 <strong>Flujo A:</strong> 1 pasada de impresión, sin laminado';
+            break;
+        case '1pasada-conlam':
+            pasadas = 1;
+            conLaminado = true;
+            descripcionFlujo = '💡 <strong>Flujo B:</strong> 1 pasada de impresión + laminado';
+            break;
+        case '2pasadas-sinlam':
+            pasadas = 2;
+            conLaminado = false;
+            descripcionFlujo = '💡 <strong>Flujo C:</strong> 2 pasadas de impresión, sin laminado';
+            break;
+        case '2pasadas-conlam':
+        default:
+            pasadas = 2;
+            conLaminado = true;
+            descripcionFlujo = '💡 <strong>Flujo D:</strong> 2 pasadas de impresión + laminado entre pasadas';
+            break;
+    }
+    
+    document.getElementById('alertaFlujo').innerHTML = descripcionFlujo;
+    
+    let disenoAncho, disenoAlto, foilAncho, foilAlto;
+    if (formaDiseno === 'rect') {
+        disenoAncho = parseFloat(document.getElementById('ifDisenoAncho').value) || 0;
+        disenoAlto = parseFloat(document.getElementById('ifDisenoAlto').value) || 0;
+    } else {
+        const diametro = parseFloat(document.getElementById('ifDisenoDiametro').value) || 0;
+        disenoAncho = diametro;
+        disenoAlto = diametro;
+    }
+    if (formaFoil === 'rect') {
+        foilAncho = parseFloat(document.getElementById('ifFoilAncho').value) || 0;
+        foilAlto = parseFloat(document.getElementById('ifFoilAlto').value) || 0;
+    } else {
+        const diametro = parseFloat(document.getElementById('ifFoilDiametro').value) || 0;
+        foilAncho = diametro;
+        foilAlto = diametro;
+    }
+    
+    const precioImpresion = parseInt(document.getElementById('ifTipoImpresion').value) || 0;
+    const usaLaminadoDorso = document.getElementById('ifLaminadoDorso').checked;
+    const precioCorte = parseInt(document.getElementById('ifTipoCorte').value) || 0;
+    const cantidad = parseInt(document.getElementById('ifCantidad').value) || 1;
+    const margen = parseFloat(document.getElementById('ifMargen').value) || 0;
+    
+    const pAncho = 33;
+    const pAlto = 48;
+    const diseñosPorPlancha = Math.floor(pAncho / disenoAncho) * Math.floor(pAlto / disenoAlto);
+    
+    const alerta = document.getElementById('ifAlerta');
+    const base = document.getElementById('ifPlanchaBase');
+    
+    if (diseñosPorPlancha === 0) {
+        alerta.style.display = 'block';
+        base.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444;">⚠️ El diseño es más grande que la plancha</div>';
+        return;
+    } else {
+        alerta.style.display = 'none';
+    }
+    
+    const planchasTotales = Math.ceil(cantidad / diseñosPorPlancha);
+    const totalImpresiones = planchasTotales * pasadas;
+    const totalFoils = planchasTotales * diseñosPorPlancha;
+    
+    const areaFoilUnit = foilAncho * foilAlto;
+    const areaFoilTotal = totalFoils * areaFoilUnit;
+    
+    const PRECIO_FOIL_CHICO = 200;
+    const PRECIO_FOIL_GRANDE = 100;
+    const UMBRAL_FOIL = 1000;
+    let precioFoilCm2, tipoFoil;
+    if (areaFoilTotal >= UMBRAL_FOIL) {
+        precioFoilCm2 = PRECIO_FOIL_GRANDE;
+        tipoFoil = 'Foil Grande';
+    } else {
+        precioFoilCm2 = PRECIO_FOIL_CHICO;
+        tipoFoil = 'Foil Chico';
+    }
+    
+    const costoFoil = areaFoilTotal * precioFoilCm2;
+    
+    document.getElementById('ifDisenosPorPlancha').textContent = diseñosPorPlancha;
+    document.getElementById('ifPlanchasTotales').textContent = planchasTotales;
+    document.getElementById('ifTotalImpresiones').textContent = totalImpresiones;
+    document.getElementById('ifTotalFoils').textContent = totalFoils;
+    document.getElementById('ifAreaFoilTotal').textContent = areaFoilTotal.toFixed(2) + ' cm²';
+    document.getElementById('ifTipoFoil').textContent = tipoFoil;
+    
+    base.innerHTML = '';
+    const escala = 8;
+    base.style.width = (pAncho * escala) + 'px';
+    base.style.height = (pAlto * escala) + 'px';
+    
+    const cols = Math.floor(pAncho / disenoAncho);
+    const rows = Math.floor(pAlto / disenoAlto);
+    const itemW = disenoAncho * escala;
+    const itemH = disenoAlto * escala;
+    const foilW = foilAncho * escala;
+    const foilH = foilAlto * escala;
+    
+    let contador = 0;
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (contador >= diseñosPorPlancha) break;
+            
+            const div = document.createElement('div');
+            div.className = 'diseno-item' + (formaDiseno === 'circ' ? ' circular' : '');
+            div.style.width = itemW + 'px';
+            div.style.height = itemH + 'px';
+            div.style.left = (c * itemW) + 'px';
+            div.style.top = (r * itemH) + 'px';
+            div.textContent = `${disenoAncho}×${disenoAlto}`;
+            base.appendChild(div);
+            
+            const foilDiv = document.createElement('div');
+            foilDiv.className = 'foil-area' + (formaFoil === 'circ' ? ' circular' : '');
+            foilDiv.style.width = foilW + 'px';
+            foilDiv.style.height = foilH + 'px';
+            foilDiv.style.left = (c * itemW + (itemW - foilW) / 2) + 'px';
+            foilDiv.style.top = (r * itemH + (itemH - foilH) / 2) + 'px';
+            base.appendChild(foilDiv);
+            
+            contador++;
+        }
+    }
+    
+    let html = '';
+    let costoTotal = 0;
+    
+    if (pasadas === 2) {
+        const costoImpresion1 = planchasTotales * precioImpresion;
+        const costoImpresion2 = planchasTotales * precioImpresion;
+        
+        html += `<div class="desglose-row"><span class="label">🎨 Impresión 1ª pasada:</span><span class="valor">${formatearPYG(costoImpresion1)}</span></div>`;
+        html += `<div class="desglose-row"><span class="label">🎨 Impresión 2ª pasada:</span><span class="valor">${formatearPYG(costoImpresion2)}</span></div>`;
+        
+        costoTotal += costoImpresion1 + costoImpresion2;
+    } else {
+        const costoImpresion = planchasTotales * precioImpresion;
+        html += `<div class="desglose-row"><span class="label"> Impresión (1 pasada):</span><span class="valor">${formatearPYG(costoImpresion)}</span></div>`;
+        costoTotal += costoImpresion;
+    }
+    
+    if (conLaminado) {
+        const costoLaminado = planchasTotales * 3000;
+        html += `<div class="desglose-row"><span class="label">✨ Laminado entre pasadas:</span><span class="valor">${formatearPYG(costoLaminado)}</span></div>`;
+        costoTotal += costoLaminado;
+    }
+    
+    html += `<div class="desglose-row"><span class="label">✨ Foil (${areaFoilTotal.toFixed(2)} cm² × ${formatearPYG(precioFoilCm2)}):</span><span class="valor">${formatearPYG(costoFoil)}</span></div>`;
+    costoTotal += costoFoil;
+    
+    if (usaLaminadoDorso) {
+        const costoLaminadoDorso = planchasTotales * 3000;
+        html += `<div class="desglose-row"><span class="label"> Laminado dorso (plancha completa):</span><span class="valor">${formatearPYG(costoLaminadoDorso)}</span></div>`;
+        costoTotal += costoLaminadoDorso;
+    }
+    
+    if (precioCorte > 0) {
+        const costoCorte = planchasTotales * precioCorte;
+        const corteNombre = document.getElementById('ifTipoCorte').options[document.getElementById('ifTipoCorte').selectedIndex].text;
+        html += `<div class="desglose-row"><span class="label">✂️ ${corteNombre}:</span><span class="valor">${formatearPYG(costoCorte)}</span></div>`;
+        costoTotal += costoCorte;
+    }
+    
+    const utilidad = costoTotal * (margen / 100);
+    const precioTotal = costoTotal + utilidad;
+    const precioUnitario = precioTotal / cantidad;
+    
+    html += `<div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor">${formatearPYG(costoTotal)}</span></div>`;
+    html += `<div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor">${formatearPYG(utilidad)}</span></div>`;
+    
+    document.getElementById('ifDesgloseCostos').innerHTML = html;
+    document.getElementById('ifPrecioTotal').textContent = formatearPYG(precioTotal);
+    document.getElementById('ifPrecioUnitario').textContent = formatearPYG(precioUnitario);
+}
+
 let editorState = { artboardAncho: 33, artboardAlto: 48, zoom: 1, elementos: [], seleccionado: null, nextId: 1, dragging: false, resizing: false, dragStart: { x: 0, y: 0 }, dragElement: null, dragHandle: null, dragOriginal: null, modoMano: false, panning: false, panStart: { x: 0, y: 0 }, scrollStart: { x: 0, y: 0 }, espacioPresionado: false };
 const CM_TO_PX = 37.795275591;
 function inicializarEditor() { actualizarReglas(); renderizarElementos(); actualizarInfoEditor(); configurarModoMano(); }
@@ -919,7 +1276,7 @@ function renderizarElementos() { const container = document.getElementById('elem
 function onDrag(e) { if (!editorState.dragElement) return; const dx = (e.clientX - editorState.dragStart.x) / CM_TO_PX / editorState.zoom; const dy = (e.clientY - editorState.dragStart.y) / CM_TO_PX / editorState.zoom; const el = editorState.dragElement; const orig = editorState.dragOriginal; if (editorState.dragging) { let newX = orig.x + dx; let newY = orig.y + dy; if (document.getElementById('snapGrid').checked) { newX = Math.round(newX * 2) / 2; newY = Math.round(newY * 2) / 2; } el.x = Math.max(0, newX); el.y = Math.max(0, newY); } else if (editorState.resizing) { const handle = editorState.dragHandle; let newW = orig.ancho; let newH = orig.alto; let newX = orig.x; let newY = orig.y; if (handle.includes('e')) newW = Math.max(0.5, orig.ancho + dx); if (handle.includes('w')) { newW = Math.max(0.5, orig.ancho - dx); newX = orig.x + (orig.ancho - newW); } if (handle.includes('s')) newH = Math.max(0.5, orig.alto + dy); if (handle.includes('n')) { newH = Math.max(0.5, orig.alto - dy); newY = orig.y + (orig.alto - newH); } if (document.getElementById('propAspect').checked) { const ratio = orig.ancho / orig.alto; if (handle.includes('e') || handle.includes('w')) { newH = newW / ratio; if (handle.includes('n')) newY = orig.y + (orig.alto - newH); } else { newW = newH * ratio; if (handle.includes('w')) newX = orig.x + (orig.ancho - newW); } } el.x = newX; el.y = newY; el.ancho = newW; el.alto = newH; } renderizarElementos(); actualizarPropiedadesPanel(); }
 function endDrag() { editorState.dragging = false; editorState.resizing = false; editorState.dragElement = null; editorState.dragHandle = null; document.removeEventListener('mousemove', onDrag); document.removeEventListener('mouseup', endDrag); }
 function seleccionarElemento(id) { editorState.seleccionado = id; renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); }
-function actualizarListaCapas() { const lista = document.getElementById('listaCapas'); if (editorState.elementos.length === 0) { lista.innerHTML = '<div class="empty-state"><div class="icono">️</div><div style="font-size: 0.85em;">No hay elementos</div></div>'; return; } lista.innerHTML = ''; [...editorState.elementos].reverse().forEach(el => { const item = document.createElement('div'); item.className = 'capa-item' + (editorState.seleccionado === el.id ? ' seleccionado' : ''); item.onclick = () => seleccionarElemento(el.id); item.innerHTML = `<div class="capa-thumb">${el.tipo.startsWith('AI') || el.tipo === 'PDF' ? '📄' : '<img src="' + el.dataUrl + '">'}</div><div class="capa-nombre" title="${el.nombre}">${el.nombre}</div><div class="capa-acciones"><button class="capa-btn" onclick="event.stopPropagation(); toggleBloqueo(${el.id})">${el.bloqueado ? '🔒' : '🔓'}</button><button class="capa-btn" onclick="event.stopPropagation(); eliminarElementoId(${el.id})">🗑️</button></div>`; lista.appendChild(item); }); }
+function actualizarListaCapas() { const lista = document.getElementById('listaCapas'); if (editorState.elementos.length === 0) { lista.innerHTML = '<div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div>'; return; } lista.innerHTML = ''; [...editorState.elementos].reverse().forEach(el => { const item = document.createElement('div'); item.className = 'capa-item' + (editorState.seleccionado === el.id ? ' seleccionado' : ''); item.onclick = () => seleccionarElemento(el.id); item.innerHTML = `<div class="capa-thumb">${el.tipo.startsWith('AI') || el.tipo === 'PDF' ? '📄' : '<img src="' + el.dataUrl + '">'}</div><div class="capa-nombre" title="${el.nombre}">${el.nombre}</div><div class="capa-acciones"><button class="capa-btn" onclick="event.stopPropagation(); toggleBloqueo(${el.id})">${el.bloqueado ? '🔒' : ''}</button><button class="capa-btn" onclick="event.stopPropagation(); eliminarElementoId(${el.id})">🗑️</button></div>`; lista.appendChild(item); }); }
 function actualizarPropiedadesPanel() { const vacio = document.getElementById('propiedadesVacias'); const props = document.getElementById('propiedadesElemento'); if (!editorState.seleccionado) { vacio.style.display = 'block'; props.style.display = 'none'; return; } const el = editorState.elementos.find(e => e.id === editorState.seleccionado); if (!el) return; vacio.style.display = 'none'; props.style.display = 'block'; document.getElementById('propNombre').textContent = el.nombre; document.getElementById('propTipo').textContent = el.tipo; document.getElementById('propX').value = el.x.toFixed(2); document.getElementById('propY').value = el.y.toFixed(2); document.getElementById('propW').value = el.ancho.toFixed(2); document.getElementById('propH').value = el.alto.toFixed(2); document.getElementById('propRot').value = el.rotacion; document.getElementById('propOpacidad').value = el.opacidad; }
 function actualizarDesdePropiedades() { if (!editorState.seleccionado) return; const el = editorState.elementos.find(e => e.id === editorState.seleccionado); if (!el) return; el.x = parseFloat(document.getElementById('propX').value) || 0; el.y = parseFloat(document.getElementById('propY').value) || 0; el.ancho = parseFloat(document.getElementById('propW').value) || 0.5; el.alto = parseFloat(document.getElementById('propH').value) || 0.5; el.rotacion = parseFloat(document.getElementById('propRot').value) || 0; el.opacidad = parseFloat(document.getElementById('propOpacidad').value) || 100; renderizarElementos(); }
 function toggleBloqueo(id) { const el = editorState.elementos.find(e => e.id === id); if (el) { el.bloqueado = !el.bloqueado; renderizarElementos(); actualizarListaCapas(); } }
