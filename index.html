@@ -223,9 +223,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         </div>
     </div>
     <div class="tabs">
-        <button class="tab activo" onclick="cambiarTab('libritos', this)"> Libritos</button>
+        <button class="tab activo" onclick="cambiarTab('libritos', this)">📚 Libritos</button>
         <button class="tab" onclick="cambiarTab('planchas', this)">📐 Calc. Planchas</button>
-        <button class="tab" onclick="cambiarTab('estampas', this)">✉️ Estampas</button>
+        <button class="tab" onclick="cambiarTab('estampas', this)">️ Estampas</button>
         <button class="tab" onclick="cambiarTab('impresion-foil', this)">🎯 Impresión + Foil</button>
         <button class="tab" onclick="cambiarTab('editor', this)">🖌️ Editor</button>
         <button class="tab" onclick="cambiarTab('foil', this)">✨ Foil/PVC/Plotter</button>
@@ -250,7 +250,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">🎨 Impresión</div>
-                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 FRENTE</div><div class="campo"><select id="libImpFrente" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option></select></div></div>
+                    <div class="sub-seccion"><div class="sub-seccion-titulo"> FRENTE</div><div class="campo"><select id="libImpFrente" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option></select></div></div>
                     <div class="sub-seccion"><div class="sub-seccion-titulo">📄 DORSO</div><div class="campo"><select id="libImpDorso" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option><option value="7000">Impresión Dorso (Gs. 7.000)</option></select></div></div>
                 </div>
                 <div class="seccion">
@@ -270,7 +270,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             </div>
             <div class="panel panel-resultados">
                 <div class="seccion">
-                    <div class="seccion-titulo">📐 Imposición de Preprensa</div>
+                    <div class="seccion-titulo"> Imposición de Preprensa</div>
                     <div class="alerta error" id="libAlertaPaginas">⚠️ La cantidad de páginas debe ser múltiplo de 4.</div>
                     <div class="imposicion-preview"><div class="plancha-viz" id="planchaViz" style="width: 264px; height: 384px;"><div class="plancha-label">Plancha 33 × 48 cm (UNA CARA)</div></div><div class="medida-open-badge" id="medidaOpenBadge">Abierto: 29.6 × 21 cm</div></div>
                     <div class="stats-grid">
@@ -346,30 +346,45 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <label>Tipo de impresión / Material:</label>
                         <select id="calcMaterial" onchange="calcularPlanchas()">
                             <optgroup label="📄 Materiales A3 (33×48 cm)" id="grupoA3">
+                                <option value="6000">A3 Papel Historias Ricoh (Gs. 6.000)</option>
+                                <option value="7000">A3 Papel Historias Canon (Gs. 7.000)</option>
                                 <option value="8000">Color A3 Ilustración (Gs. 8.000)</option>
+                                <option value="11000">Color A3 Grueso (Gs. 11.000)</option>
                                 <option value="13000">Color A3 Especial 1 (Gs. 13.000)</option>
                                 <option value="14000">Color A3 Especial 2 (Gs. 14.000)</option>
                                 <option value="15000">Color A3 Especial 3 (Gs. 15.000)</option>
                                 <option value="16000">Color A3 Especial 4 (Gs. 16.000)</option>
                                 <option value="4000">ByN A3 Ilustración (Gs. 4.000)</option>
+                                <option value="7000">ByN A3 Grueso (Gs. 7.000)</option>
                                 <option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option>
+                                <option value="9000">ByN A3 Especial 2 (Gs. 9.000)</option>
+                                <option value="10000">ByN A3 Especial 3 (Gs. 10.000)</option>
+                                <option value="11000">ByN A3 Especial 4 (Gs. 11.000)</option>
                                 <option value="15000">Papel Fotográfico A3 (Gs. 15.000)</option>
                                 <option value="9000">Opalina Lisa 240 grs (Gs. 9.000)</option>
                                 <option value="10000">Color A3 Adhesivo (Gs. 10.000)</option>
+                                <option value="6000">ByN A3 Adhesivo (Gs. 6.000)</option>
                                 <option value="20000">Adhesivo con Medio Corte Circular A3 (Gs. 20.000)</option>
                                 <option value="35000">Adhesivo Vinílico con Medio Corte Circular A3 (Gs. 35.000)</option>
                                 <option value="15000">Impresión Digital Adhesivo Holográfico A3 (Gs. 15.000)</option>
+                                <option value="12000">Color Largo Ilustración (Gs. 12.000)</option>
+                                <option value="13000">Color Largo Triplex (Gs. 13.000)</option>
                             </optgroup>
                             <optgroup label="📄 Materiales A4 (21×29.7 cm)" id="grupoA4" style="display:none;">
                                 <option value="5000">Color A4 Ilustración (Gs. 5.000)</option>
+                                <option value="7000">Color A4 Grueso (Gs. 7.000)</option>
                                 <option value="8000">Color A4 Especial 1 (Gs. 8.000)</option>
                                 <option value="9000">Color A4 Especial 2 (Gs. 9.000)</option>
                                 <option value="10000">Color A4 Especial 3 (Gs. 10.000)</option>
                                 <option value="11000">Color A4 Especial 4 (Gs. 11.000)</option>
-                                <option value="7000">Color A4 Grueso (Gs. 7.000)</option>
                                 <option value="6000">Color A4 Adhesivo (Gs. 6.000)</option>
                                 <option value="2500">ByN A4 Ilustración (Gs. 2.500)</option>
+                                <option value="4000">ByN A4 Grueso (Gs. 4.000)</option>
                                 <option value="5000">ByN A4 Especial 1 (Gs. 5.000)</option>
+                                <option value="6000">ByN A4 Especial 2 (Gs. 6.000)</option>
+                                <option value="7000">ByN A4 Especial 3 (Gs. 7.000)</option>
+                                <option value="8000">ByN A4 Especial 4 (Gs. 8.000)</option>
+                                <option value="3000">ByN A4 Adhesivo (Gs. 3.000)</option>
                                 <option value="9000">Papel Fotográfico A4 (Gs. 9.000)</option>
                                 <option value="8000">Plancha Adhesivo Holográfico A4 (Gs. 8.000)</option>
                             </optgroup>
@@ -438,8 +453,8 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             </div>
             <div class="panel panel-resultados">
                 <div class="seccion">
-                    <div class="seccion-titulo">📐 Imposición Visual</div>
-                    <div class="alerta error" id="calcAlerta" style="display:none;">️ El diseño es más grande que la plancha.</div>
+                    <div class="seccion-titulo"> Imposición Visual</div>
+                    <div class="alerta error" id="calcAlerta" style="display:none;">⚠️ El diseño es más grande que la plancha.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="calcPlanchaBase" style="width: 330px; height: 480px;"></div>
                         <div class="medida-open-badge" id="calcPlanchaDimensiones">Plancha: 33 × 48 cm | Diseño: 10 × 15 cm</div>
@@ -461,9 +476,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="desglose-row" id="calcRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="calcCostoLaminado">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCintaPlancha" style="display:none;"><span class="label">🔗 Cinta Doble Faz (plancha):</span><span class="valor" id="calcCostoCintaPlancha">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCintaUnidad" style="display:none;"><span class="label">🔗 Cinta Doble Faz (unidad):</span><span class="valor" id="calcCostoCintaUnidad">Gs. 0</span></div>
-                        <div class="desglose-row" id="calcRowTroquel" style="display:none;"><span class="label">🎯 Troquel:</span><span class="valor" id="calcCostoTroquel">Gs. 0</span></div>
+                        <div class="desglose-row" id="calcRowTroquel" style="display:none;"><span class="label"> Troquel:</span><span class="valor" id="calcCostoTroquel">Gs. 0</span></div>
                         <div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor" id="calcCostoTotal">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="calcCostoUtilidad">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label"> Utilidad:</span><span class="valor" id="calcCostoUtilidad">Gs. 0</span></div>
                     </div>
                 </div>
                 <div class="precio-final-box">
@@ -480,7 +495,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="grid-principal">
             <div class="panel panel-config">
                 <div class="seccion">
-                    <div class="seccion-titulo">📦 CUERPO BASE (Estampa Principal)</div>
+                    <div class="seccion-titulo"> CUERPO BASE (Estampa Principal)</div>
                     <p style="font-size: 0.85em; color: #6b7280; margin-bottom: 12px;">Define el tamaño, material y acabados de la estampa. Los cuerpos adicionales se pegan encima.</p>
                     <div class="cuerpo-base-card">
                         <div class="cuerpo-titulo">🎯 Cuerpo Base</div>
@@ -492,11 +507,13 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                                 <option value="5000">Cartulina de Color Lisa (Gs. 5.000/plancha)</option>
                                 <option value="15000">Papel Fotográfico A3 (Gs. 15.000/plancha)</option>
                                 <option value="8000">Color A3 Ilustración (Gs. 8.000/plancha)</option>
+                                <option value="11000">Color A3 Grueso (Gs. 11.000/plancha)</option>
                                 <option value="13000">Color A3 Especial 1 (Gs. 13.000/plancha)</option>
                                 <option value="14000">Color A3 Especial 2 (Gs. 14.000/plancha)</option>
                                 <option value="15000">Color A3 Especial 3 (Gs. 15.000/plancha)</option>
                                 <option value="16000">Color A3 Especial 4 (Gs. 16.000/plancha)</option>
                                 <option value="4000">ByN A3 Ilustración (Gs. 4.000/plancha)</option>
+                                <option value="7000">ByN A3 Grueso (Gs. 7.000/plancha)</option>
                                 <option value="8000">ByN A3 Especial 1 (Gs. 8.000/plancha)</option>
                                 <option value="10000">Color A3 Adhesivo (Gs. 10.000/plancha)</option>
                                 <option value="20000">Adhesivo con Medio Corte Circular A3 (Gs. 20.000/plancha)</option>
@@ -561,7 +578,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo" style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>📚 Cuerpos Adicionales</span>
+                        <span> Cuerpos Adicionales</span>
                         <button class="btn-secundario" style="width: auto; padding: 6px 12px; margin: 0;" onclick="agregarCuerpoAdicional()">➕ Agregar</button>
                     </div>
                     <p style="font-size: 0.85em; color: #6b7280; margin-bottom: 12px;">Capas que se pegan encima del cuerpo base. Pueden habilitarse/deshabilitarse individualmente.</p>
@@ -588,7 +605,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
+                    <div class="seccion-titulo"> Desglose de Costos</div>
                     <div class="desglose" id="estDesgloseCostos"></div>
                 </div>
                 <div class="precio-final-box">
@@ -646,11 +663,13 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     <div class="campo">
                         <select id="ifTipoImpresion" onchange="calcularImpresionFoil()">
                             <option value="8000">Color A3 Ilustración (Gs. 8.000/plancha)</option>
+                            <option value="11000">Color A3 Grueso (Gs. 11.000/plancha)</option>
                             <option value="13000">Color A3 Especial 1 (Gs. 13.000/plancha)</option>
                             <option value="14000">Color A3 Especial 2 (Gs. 14.000/plancha)</option>
                             <option value="15000">Color A3 Especial 3 (Gs. 15.000/plancha)</option>
                             <option value="16000">Color A3 Especial 4 (Gs. 16.000/plancha)</option>
                             <option value="4000">ByN A3 Ilustración (Gs. 4.000/plancha)</option>
+                            <option value="7000">ByN A3 Grueso (Gs. 7.000/plancha)</option>
                             <option value="8000">ByN A3 Especial 1 (Gs. 8.000/plancha)</option>
                             <option value="15000">Papel Fotográfico A3 (Gs. 15.000/plancha)</option>
                             <option value="9000">Opalina Lisa 240 grs (Gs. 9.000/plancha)</option>
@@ -679,7 +698,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             </div>
             <div class="panel panel-resultados">
                 <div class="seccion">
-                    <div class="seccion-titulo">📐 Imposición Visual</div>
+                    <div class="seccion-titulo"> Imposición Visual</div>
                     <div class="alerta error" id="ifAlerta" style="display:none;">⚠️ El diseño es más grande que la plancha.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="ifPlanchaBase" style="width: 330px; height: 480px;"></div>
@@ -709,7 +728,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
     <div class="tab-content" id="tab-editor">
         <div class="editor-layout">
             <div class="panel-capas">
-                <h3>📑 Capas</h3>
+                <h3> Capas</h3>
                 <div class="upload-mini" onclick="document.getElementById('editorFileInput').click()"><div style="font-size: 1.5em;">📁</div><div style="font-size: 0.8em; color: #1e40af; font-weight: 600;">Subir imagen</div><div style="font-size: 0.7em; color: #6b7280;">JPG, PNG, SVG, PDF, AI</div><input type="file" id="editorFileInput" accept="image/*,.pdf,.ai,.svg" multiple onchange="subirImagenesEditor(this.files)"></div>
                 <div id="listaCapas"><div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div></div>
             </div>
@@ -729,15 +748,15 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 </div>
             </div>
             <div class="panel-propiedades">
-                <h3>📏 Propiedades</h3>
+                <h3> Propiedades</h3>
                 <div id="propiedadesVacias" class="empty-state"><div class="icono">🖱️</div><div style="font-size: 0.85em;">Seleccioná un elemento</div></div>
                 <div id="propiedadesElemento" style="display:none;">
                     <div class="info-elemento"><div class="info-row"><span class="info-label">Nombre:</span><span class="info-value" id="propNombre">-</span></div><div class="info-row"><span class="info-label">Tipo:</span><span class="info-value" id="propTipo">-</span></div></div>
-                    <h3 style="margin-top: 15px;">📐 Posición y Tamaño</h3>
+                    <h3 style="margin-top: 15px;"> Posición y Tamaño</h3>
                     <div class="prop-row"><div class="prop-field"><label>X (cm)</label><input type="number" id="propX" step="0.1" onchange="actualizarDesdePropiedades()"></div><div class="prop-field"><label>Y (cm)</label><input type="number" id="propY" step="0.1" onchange="actualizarDesdePropiedades()"></div></div>
                     <div class="prop-row"><div class="prop-field"><label>Ancho (cm)</label><input type="number" id="propW" step="0.1" onchange="actualizarDesdePropiedades()"></div><div class="prop-field"><label>Alto (cm)</label><input type="number" id="propH" step="0.1" onchange="actualizarDesdePropiedades()"></div></div>
                     <h3 style="margin-top: 15px;">⚡ Acciones</h3>
-                    <button class="btn-prop" onclick="duplicarElemento()">📋 Duplicar</button><button class="btn-prop peligro" onclick="eliminarElemento()">🗑️ Eliminar</button>
+                    <button class="btn-prop" onclick="duplicarElemento()"> Duplicar</button><button class="btn-prop peligro" onclick="eliminarElemento()">🗑️ Eliminar</button>
                 </div>
             </div>
         </div>
@@ -787,7 +806,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
     <div class="tab-content" id="tab-precios">
         <div class="precios-container">
             <div class="precios-header">
-                <h2>💰 Lista de Precios - Pepper Pre</h2>
+                <h2> Lista de Precios - Pepper Pre</h2>
                 <p>Todos los precios vigentes de impresión, terminación y UV</p>
             </div>
             <div class="precios-buscador">
@@ -882,7 +901,7 @@ function calcularLibrito() {
 function generarPDFLibrito() { alert('Función de PDF simplificada para esta demo.'); }
 
 // ==========================================
-// CALCULADORA DE PLANCHAS (CON CINTA DOBLE FAZ)
+// CALCULADORA DE PLANCHAS
 // ==========================================
 function actualizarPlanchaCustom() {
     const val = document.getElementById('calcPlanchaFormato').value;
@@ -913,7 +932,6 @@ function actualizarPlanchaCustom() {
     }
     calcularPlanchas();
 }
-
 function calcularPlanchas() {
     const pAncho = parseFloat(document.getElementById('calcPlanchaAncho').value) || 33;
     const pAlto = parseFloat(document.getElementById('calcPlanchaAlto').value) || 48;
@@ -925,14 +943,11 @@ function calcularPlanchas() {
     const margenUtil = parseFloat(document.getElementById('calcMargenUtilidad').value) || 0;
     const precioTroquel = parseInt(document.getElementById('calcTroquel').value) || 0;
     const usaCortePuntas = document.getElementById('calcCortePuntas').checked;
-    
-    // NUEVO: Cinta Doble Faz
     const usaCintaPlancha = document.getElementById('calcCintaPlancha').checked;
     const precioCintaPlancha = usaCintaPlancha ? (parseInt(document.getElementById('calcCintaPlanchaTipo').value) || 0) : 0;
     const usaCintaUnidad = document.getElementById('calcCintaUnidad').checked;
     const precioCintaUnidad = usaCintaUnidad ? (parseInt(document.getElementById('calcCintaUnidadTipo').value) || 0) : 0;
     
-    // Mostrar/ocultar selectores de tipo de cinta
     document.getElementById('calcCintaPlanchaTipoCampo').style.display = usaCintaPlancha ? 'block' : 'none';
     document.getElementById('calcCintaUnidadTipoCampo').style.display = usaCintaUnidad ? 'block' : 'none';
     
@@ -1011,18 +1026,15 @@ function calcularPlanchas() {
     if (document.getElementById('calcLaminado1').checked) costoLaminado = planchasTotales * 3000;
     else if (document.getElementById('calcLaminado2').checked) costoLaminado = planchasTotales * 5000;
     
-    // NUEVO: Costos de Cinta Doble Faz
     let costoCintaPlancha = 0;
     if (usaCintaPlancha) {
         costoCintaPlancha = planchasTotales * precioCintaPlancha;
         document.getElementById('calcRowCintaPlancha').style.display = 'flex';
         const cintaPlanchaSelect = document.getElementById('calcCintaPlanchaTipo');
         const cintaPlanchaNombre = cintaPlanchaSelect.options[cintaPlanchaSelect.selectedIndex].text;
-        document.getElementById('calcRowCintaPlancha').querySelector('.label').textContent = ` ${cintaPlanchaNombre.split('(')[0]} (plancha):`;
+        document.getElementById('calcRowCintaPlancha').querySelector('.label').textContent = `🔗 ${cintaPlanchaNombre.split('(')[0]} (plancha):`;
         document.getElementById('calcCostoCintaPlancha').innerHTML = `${formatearPYG(costoCintaPlancha)} <small style="color: #6b7280;">(${planchasTotales} planchas × ${formatearPYG(precioCintaPlancha)})</small>`;
-    } else { 
-        document.getElementById('calcRowCintaPlancha').style.display = 'none'; 
-    }
+    } else { document.getElementById('calcRowCintaPlancha').style.display = 'none'; }
     
     let costoCintaUnidad = 0;
     if (usaCintaUnidad) {
@@ -1032,9 +1044,7 @@ function calcularPlanchas() {
         const cintaUnidadNombre = cintaUnidadSelect.options[cintaUnidadSelect.selectedIndex].text;
         document.getElementById('calcRowCintaUnidad').querySelector('.label').textContent = `🔗 ${cintaUnidadNombre.split('(')[0]} (unidad):`;
         document.getElementById('calcCostoCintaUnidad').innerHTML = `${formatearPYG(costoCintaUnidad)} <small style="color: #6b7280;">(${totalUnidades} un. × ${formatearPYG(precioCintaUnidad)})</small>`;
-    } else { 
-        document.getElementById('calcRowCintaUnidad').style.display = 'none'; 
-    }
+    } else { document.getElementById('calcRowCintaUnidad').style.display = 'none'; }
     
     let costoCortePuntas = 0;
     if (usaCortePuntas) {
@@ -1086,11 +1096,13 @@ const MATERIALES_ESTAMPA = [
     { value: '5000', label: 'Cartulina de Color Lisa', precio: 5000 },
     { value: '15000', label: 'Papel Fotográfico A3', precio: 15000 },
     { value: '8000', label: 'Color A3 Ilustración', precio: 8000 },
+    { value: '11000', label: 'Color A3 Grueso', precio: 11000 },
     { value: '13000', label: 'Color A3 Especial 1', precio: 13000 },
     { value: '14000', label: 'Color A3 Especial 2', precio: 14000 },
     { value: '15000', label: 'Color A3 Especial 3', precio: 15000 },
     { value: '16000', label: 'Color A3 Especial 4', precio: 16000 },
     { value: '4000', label: 'ByN A3 Ilustración', precio: 4000 },
+    { value: '7000', label: 'ByN A3 Grueso', precio: 7000 },
     { value: '8000', label: 'ByN A3 Especial 1', precio: 8000 },
     { value: '10000', label: 'Color A3 Adhesivo', precio: 10000 },
     { value: '20000', label: 'Adhesivo con Medio Corte Circular A3', precio: 20000 },
@@ -1156,9 +1168,9 @@ function renderizarCuerposAdicionales() {
         let unionOptions = UNIONES.map(u => `<option value="${u.value}" ${cuerpo.union === u.value ? 'selected' : ''}>${u.label} (Gs. ${u.precio})</option>`).join('');
         div.innerHTML = `
             <div class="cuerpo-titulo">
-                <span> Cuerpo ${index + 1}</span>
+                <span>📄 Cuerpo ${index + 1}</span>
                 <div class="cuerpo-acciones-top">
-                    <label class="toggle-habilitar"><input type="checkbox" ${cuerpo.habilitado ? 'checked' : ''} onchange="toggleCuerpoAdicional(${cuerpo.id})">${cuerpo.habilitado ? '✅ Activo' : '⏸️ Inactivo'}</label>
+                    <label class="toggle-habilitar"><input type="checkbox" ${cuerpo.habilitado ? 'checked' : ''} onchange="toggleCuerpoAdicional(${cuerpo.id})">${cuerpo.habilitado ? '✅ Activo' : '️ Inactivo'}</label>
                     <button class="cuerpo-btn-small eliminar" onclick="eliminarCuerpoAdicional(${cuerpo.id})">🗑️</button>
                 </div>
             </div>
@@ -1220,7 +1232,7 @@ function calcularEstampas() {
         document.getElementById('estPlanchasTotales').textContent = '0';
         document.getElementById('estDesperdicio').textContent = '100%';
         document.getElementById('estCuerposActivos').textContent = '1';
-        document.getElementById('estDesgloseCostos').innerHTML = '<div style="text-align: center; color: #ef4444; padding: 20px;">️ Ajustá las dimensiones del cuerpo base</div>';
+        document.getElementById('estDesgloseCostos').innerHTML = '<div style="text-align: center; color: #ef4444; padding: 20px;">⚠️ Ajustá las dimensiones del cuerpo base</div>';
         document.getElementById('estPrecioTotal').textContent = 'Gs. 0';
         document.getElementById('estPrecioUnitario').textContent = 'Gs. 0';
         return;
@@ -1410,7 +1422,7 @@ function calcularEstampas() {
     const utilidad = costoTotal * (margen / 100);
     const precioTotal = costoTotal + utilidad;
     const precioUnitario = precioTotal / cantidad;
-    html += `<div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor">${formatearPYG(costoTotal)}</span></div>`;
+    html += `<div class="desglose-row total"><span class="label"> COSTO TOTAL:</span><span class="valor">${formatearPYG(costoTotal)}</span></div>`;
     html += `<div class="desglose-row"><span class="label">📈 Utilidad (${margen}%):</span><span class="valor">${formatearPYG(utilidad)}</span></div>`;
     document.getElementById('estDesgloseCostos').innerHTML = html;
     document.getElementById('estPrecioTotal').textContent = formatearPYG(precioTotal);
@@ -1504,7 +1516,7 @@ function calcularImpresionFoil() {
     let html = ''; let costoTotal = 0;
     if (pasadas === 2) {
         const c1 = planchasTotales * precioImpresion; const c2 = planchasTotales * precioImpresion;
-        html += `<div class="desglose-row"><span class="label">🎨 Impresión 1ª pasada:</span><span class="valor">${formatearPYG(c1)}</span></div>`;
+        html += `<div class="desglose-row"><span class="label"> Impresión 1ª pasada:</span><span class="valor">${formatearPYG(c1)}</span></div>`;
         html += `<div class="desglose-row"><span class="label">🎨 Impresión 2ª pasada:</span><span class="valor">${formatearPYG(c2)}</span></div>`;
         costoTotal += c1 + c2;
     } else {
@@ -1578,39 +1590,37 @@ function calcularTotalFoil() { let area = foilItems.reduce((sum, i) => sum + i.a
 function limpiarTodoFoil() { pvcItems = []; foilItems = []; document.getElementById('pvcItemsList').innerHTML = ''; document.getElementById('foilItemsList').innerHTML = ''; document.getElementById('granTotal').textContent = 'Gs. 0'; }
 
 // ==========================================
-// LISTA DE PRECIOS
+// LISTA DE PRECIOS (COMPLETA CON TATUAJES A 25.000)
 // ==========================================
 const LISTA_PRECIOS = {
     impresion: [
         { nombre: 'A3 Papel Historias Proveedor Ricoh', precio: 6000 },
         { nombre: 'A3 Papel Historias Proveedor Canon', precio: 7000 },
         { nombre: 'Color A3 Ilustración', precio: 8000 },
+        { nombre: 'Color A3 Grueso', precio: 11000 },
         { nombre: 'Color A3 Especial 1', precio: 13000 },
         { nombre: 'Color A3 Especial 2', precio: 14000 },
         { nombre: 'Color A3 Especial 3', precio: 15000 },
         { nombre: 'Color A3 Especial 4', precio: 16000 },
-        { nombre: 'Color A3 Grueso', precio: 11000 },
-        { nombre: 'Color A3 Adhesivo', precio: 10000 },
         { nombre: 'ByN A3 Ilustración', precio: 4000 },
+        { nombre: 'ByN A3 Grueso', precio: 7000 },
         { nombre: 'ByN A3 Especial 1', precio: 8000 },
         { nombre: 'ByN A3 Especial 2', precio: 9000 },
         { nombre: 'ByN A3 Especial 3', precio: 10000 },
         { nombre: 'ByN A3 Especial 4', precio: 11000 },
-        { nombre: 'ByN A3 Grueso', precio: 7000 },
-        { nombre: 'ByN A3 Adhesivo', precio: 6000 },
         { nombre: 'Color A4 Ilustración', precio: 5000 },
+        { nombre: 'Color A4 Grueso', precio: 7000 },
         { nombre: 'Color A4 Especial 1', precio: 8000 },
         { nombre: 'Color A4 Especial 2', precio: 9000 },
         { nombre: 'Color A4 Especial 3', precio: 10000 },
         { nombre: 'Color A4 Especial 4', precio: 11000 },
-        { nombre: 'Color A4 Grueso', precio: 7000 },
         { nombre: 'Color A4 Adhesivo', precio: 6000 },
         { nombre: 'ByN A4 Ilustración', precio: 2500 },
+        { nombre: 'ByN A4 Grueso', precio: 4000 },
         { nombre: 'ByN A4 Especial 1', precio: 5000 },
         { nombre: 'ByN A4 Especial 2', precio: 6000 },
         { nombre: 'ByN A4 Especial 3', precio: 7000 },
         { nombre: 'ByN A4 Especial 4', precio: 8000 },
-        { nombre: 'ByN A4 Grueso', precio: 4000 },
         { nombre: 'ByN A4 Adhesivo', precio: 3000 },
         { nombre: 'Color Largo Ilustración', precio: 12000 },
         { nombre: 'Color Largo Triplex', precio: 13000 },
@@ -1623,7 +1633,7 @@ const LISTA_PRECIOS = {
         { nombre: 'Adhesivo Vinílico con Medio Corte Circular', precio: 35000 },
         { nombre: 'Impresión Dorso', precio: 7000 },
         { nombre: 'Individual A4 Color', precio: 5000 },
-        { nombre: 'Tatuajes Temporales A4', precio: 20000 },
+        { nombre: 'Tatuajes Temporales A4', precio: 25000 },
         { nombre: 'Color A4 Obra (hasta 100)', precio: 3000 },
         { nombre: 'Color A4 Obra (más de 100)', precio: 2000 },
         { nombre: 'ByN A4 Obra (hasta 100)', precio: 1000 },
