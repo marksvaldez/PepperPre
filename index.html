@@ -93,9 +93,14 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .toolbar-editor { background: white; padding: 8px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; }
 .toolbar-editor .tool-btn { padding: 6px 12px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.2s; }
 .toolbar-editor .tool-btn:hover { background: #e5e7eb; }
+.toolbar-editor .tool-btn.activo { background: #1e3a8a; color: white; border-color: #1e3a8a; }
 .toolbar-editor .separator { width: 1px; height: 24px; background: #d1d5db; }
 .toolbar-editor .zoom-info { font-size: 0.85em; color: #6b7280; font-weight: 600; min-width: 50px; text-align: center; }
 .canvas-container { flex: 1; position: relative; overflow: auto; display: flex; padding: 40px; cursor: default; }
+.canvas-container.modo-mano { cursor: grab; }
+.canvas-container.modo-mano:active { cursor: grabbing; }
+.canvas-container.modo-mano .canvas-wrapper { pointer-events: none; }
+.canvas-container.modo-mano .elemento { pointer-events: none; }
 .canvas-wrapper { position: relative; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.2); flex-shrink: 0; }
 .regla-horizontal { position: absolute; top: 0; left: 0; right: 0; height: 20px; background: #f3f4f6; border-bottom: 1px solid #9ca3af; overflow: hidden; }
 .regla-vertical { position: absolute; top: 0; left: 0; bottom: 0; width: 20px; background: #f3f4f6; border-right: 1px solid #9ca3af; overflow: hidden; }
@@ -106,17 +111,8 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .artboard-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 1cm 1cm; pointer-events: none; }
 .elemento { position: absolute; cursor: move; user-select: none; }
 .elemento img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; display: block; }
-.elemento.seleccionado { outline: 2px solid #3b82f6; outline-offset: 1px; }
+.elemento.seleccionado { outline: 3px solid #3b82f6; outline-offset: 2px; }
 .elemento.bloqueado { cursor: not-allowed; opacity: 0.7; }
-.handle { position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #3b82f6; border-radius: 2px; z-index: 100; }
-.handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
-.handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
-.handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
-.handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
-.handle.n { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-.handle.s { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-.handle.e { top: 50%; right: -5px; transform: translateY(-50%); cursor: e-resize; }
-.handle.w { top: 50%; left: -5px; transform: translateY(-50%); cursor: w-resize; }
 .dim-label { position: absolute; background: rgba(30, 58, 138, 0.9); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; pointer-events: none; white-space: nowrap; z-index: 200; display: none; }
 .elemento.seleccionado .dim-label { display: block; }
 .dim-label.top { top: -22px; left: 50%; transform: translateX(-50%); }
@@ -212,7 +208,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 <div class="app">
     <div class="header">
         <div>
-            <h1>🖨️ Pepper Pre</h1>
+            <h1>️ Pepper Pre</h1>
             <div class="subtitle">Sistema de Cotización e Impresión</div>
         </div>
         <div class="plancha-info">
@@ -227,7 +223,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <button class="tab" onclick="cambiarTab('impresion-foil', this)">🎯 Impresión + Foil</button>
         <button class="tab" onclick="cambiarTab('editor', this)">🖌️ Editor</button>
         <button class="tab" onclick="cambiarTab('foil', this)">✨ Foil/PVC/Plotter</button>
-        <button class="tab" onclick="cambiarTab('precios', this)">💰 Lista de Precios</button>
+        <button class="tab" onclick="cambiarTab('precios', this)"> Lista de Precios</button>
     </div>
 
     <!-- TAB 1: LIBRITOS -->
@@ -235,7 +231,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="grid-principal">
             <div class="panel panel-config">
                 <div class="seccion">
-                    <div class="seccion-titulo"> Datos del Librito</div>
+                    <div class="seccion-titulo">📚 Datos del Librito</div>
                     <div class="grid-2">
                         <div class="campo"><label>Ancho CERRADO (cm):</label><input type="number" id="libAnchoCerrado" value="14.8" step="0.1" onchange="calcularLibrito()"></div>
                         <div class="campo"><label>Alto CERRADO (cm):</label><input type="number" id="libAltoCerrado" value="21" step="0.1" onchange="calcularLibrito()"></div>
@@ -249,7 +245,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 <div class="seccion">
                     <div class="seccion-titulo">🎨 Impresión</div>
                     <div class="sub-seccion"><div class="sub-seccion-titulo">📄 FRENTE</div><div class="campo"><select id="libImpFrente" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="11000">Color A3 Grueso (Gs. 11.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="7000">ByN A3 Grueso (Gs. 7.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option></select></div></div>
-                    <div class="sub-seccion"><div class="sub-seccion-titulo"> DORSO</div><div class="campo"><select id="libImpDorso" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="11000">Color A3 Grueso (Gs. 11.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="7000">ByN A3 Grueso (Gs. 7.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option><option value="7000">Impresión Dorso (Gs. 7.000)</option></select></div></div>
+                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 DORSO</div><div class="campo"><select id="libImpDorso" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="11000">Color A3 Grueso (Gs. 11.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="7000">ByN A3 Grueso (Gs. 7.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option><option value="7000">Impresión Dorso (Gs. 7.000)</option></select></div></div>
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">✂️ Acabados</div>
@@ -268,7 +264,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             </div>
             <div class="panel panel-resultados">
                 <div class="seccion">
-                    <div class="seccion-titulo"> Imposición de Preprensa</div>
+                    <div class="seccion-titulo">📐 Imposición de Preprensa</div>
                     <div class="alerta error" id="libAlertaPaginas">⚠️ La cantidad de páginas debe ser múltiplo de 4.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="planchaViz" style="width: 264px; height: 384px;"><div class="plancha-label">Plancha 33 × 48 cm (UNA CARA)</div></div>
@@ -290,9 +286,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="desglose-row"><span class="label">🎨 Impresión FRENTE:</span><span class="valor" id="libCostoImpFrente">Gs. 0</span></div>
                         <div class="desglose-row"><span class="label"> Impresión DORSO:</span><span class="valor" id="libCostoImpDorso">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="libCostoCorte">Gs. 0</span></div>
-                        <div class="desglose-row" id="libRowDoblez" style="display:none;"><span class="label"> Doblez:</span><span class="valor" id="libCostoDoblez">Gs. 0</span></div>
+                        <div class="desglose-row" id="libRowDoblez" style="display:none;"><span class="label">📑 Doblez:</span><span class="valor" id="libCostoDoblez">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="libCostoLaminado">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label"> Presillado:</span><span class="valor" id="libCostoGrapas">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">📚 Presillado:</span><span class="valor" id="libCostoGrapas">Gs. 0</span></div>
                         <div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor" id="libCostoTotal">Gs. 0</span></div>
                         <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="libCostoUtilidad">Gs. 0</span></div>
                     </div>
@@ -449,14 +445,14 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo"> Margen de Utilidad (%)</div>
+                    <div class="seccion-titulo">💰 Margen de Utilidad (%)</div>
                     <input type="number" id="calcMargenUtilidad" value="0" min="0" oninput="calcularPlanchas()">
                 </div>
             </div>
             <div class="panel panel-resultados">
                 <div class="seccion">
                     <div class="seccion-titulo">📐 Imposición Visual</div>
-                    <div class="alerta error" id="calcAlerta" style="display:none;">⚠️ El diseño es más grande que la plancha.</div>
+                    <div class="alerta error" id="calcAlerta" style="display:none;">️ El diseño es más grande que la plancha.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="calcPlanchaBase" style="width: 330px; height: 480px;"></div>
                         <div class="medida-open-badge" id="calcPlanchaDimensiones">Plancha: 33 × 48 cm | Diseño: 10 × 15 cm</div>
@@ -470,14 +466,14 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
+                    <div class="seccion-titulo"> Desglose de Costos</div>
                     <div class="desglose">
                         <div class="desglose-row"><span class="label">🎨 Impresión Frente:</span><span class="valor" id="calcCostoImpresion">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="calcCostoCorte">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCortePuntas" style="display:none;"><span class="label">✂️ Corte de Puntas:</span><span class="valor" id="calcCostoCortePuntas">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="calcCostoLaminado">Gs. 0</span></div>
-                        <div class="desglose-row" id="calcRowCintaPlancha" style="display:none;"><span class="label"> Cinta Doble Faz (plancha):</span><span class="valor" id="calcCostoCintaPlancha">Gs. 0</span></div>
-                        <div class="desglose-row" id="calcRowCintaUnidad" style="display:none;"><span class="label"> Cinta Doble Faz (unidad):</span><span class="valor" id="calcCostoCintaUnidad">Gs. 0</span></div>
+                        <div class="desglose-row" id="calcRowCintaPlancha" style="display:none;"><span class="label">🔗 Cinta Doble Faz (plancha):</span><span class="valor" id="calcCostoCintaPlancha">Gs. 0</span></div>
+                        <div class="desglose-row" id="calcRowCintaUnidad" style="display:none;"><span class="label">🔗 Cinta Doble Faz (unidad):</span><span class="valor" id="calcCostoCintaUnidad">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowTroquel" style="display:none;"><span class="label">🎯 Troquel:</span><span class="valor" id="calcCostoTroquel">Gs. 0</span></div>
                         <div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor" id="calcCostoTotal">Gs. 0</span></div>
                         <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="calcCostoUtilidad">Gs. 0</span></div>
@@ -497,10 +493,10 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="grid-principal">
             <div class="panel panel-config">
                 <div class="seccion">
-                    <div class="seccion-titulo"> CUERPO BASE (Estampa Principal)</div>
+                    <div class="seccion-titulo">📦 CUERPO BASE (Estampa Principal)</div>
                     <p style="font-size: 0.85em; color: #6b7280; margin-bottom: 12px;">Define el tamaño, material y acabados de la estampa. Los cuerpos adicionales se pegan encima.</p>
                     <div class="cuerpo-base-card">
-                        <div class="cuerpo-titulo"> Cuerpo Base</div>
+                        <div class="cuerpo-titulo">🎯 Cuerpo Base</div>
                         <div class="campo">
                             <label>Material / Papel:</label>
                             <select id="estBaseMaterial" onchange="calcularEstampas()">
@@ -581,7 +577,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 <div class="seccion">
                     <div class="seccion-titulo" style="display: flex; justify-content: space-between; align-items: center;">
                         <span>📚 Cuerpos Adicionales</span>
-                        <button class="btn-secundario" style="width: auto; padding: 6px 12px; margin: 0;" onclick="agregarCuerpoAdicional()"> Agregar</button>
+                        <button class="btn-secundario" style="width: auto; padding: 6px 12px; margin: 0;" onclick="agregarCuerpoAdicional()">➕ Agregar</button>
                     </div>
                     <p style="font-size: 0.85em; color: #6b7280; margin-bottom: 12px;">Capas que se pegan encima del cuerpo base. Pueden habilitarse/deshabilitarse individualmente.</p>
                     <div id="estCuerposContainer"></div>
@@ -594,7 +590,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             <div class="panel panel-resultados">
                 <div class="seccion">
                     <div class="seccion-titulo">📐 Visualización en Plancha</div>
-                    <div class="alerta error" id="estAlerta" style="display:none;">️ El cuerpo base es más grande que la plancha.</div>
+                    <div class="alerta error" id="estAlerta" style="display:none;">⚠️ El cuerpo base es más grande que la plancha.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="estPlanchaBase" style="width: 330px; height: 480px;"></div>
                         <div class="medida-open-badge" id="estPlanchaDimensiones">Plancha: 33 × 48 cm | Base: 11 × 22 cm</div>
@@ -607,7 +603,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo"> Desglose de Costos</div>
+                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
                     <div class="desglose" id="estDesgloseCostos"></div>
                 </div>
                 <div class="precio-final-box">
@@ -700,10 +696,10 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             </div>
             <div class="panel panel-resultados">
                 <div class="seccion">
-                    <div class="seccion-titulo"> Imposición Visual</div>
+                    <div class="seccion-titulo">📐 Imposición Visual</div>
                     <div class="alerta error" id="ifAlerta" style="display:none;">⚠️ El diseño es más grande que la plancha.</div>
                     <div class="imposicion-preview">
-                        <div class="plancha-viz" id="ifPlanchaBase" style="width: 330px; height: 480px;"></div>
+                        <div class="plancha-viz" id="ifPlanchaBase" style="width: 330px; height: 480px; overflow: visible;"></div>
                         <div class="medida-open-badge" id="ifPlanchaDimensiones">Plancha: 33 × 48 cm</div>
                     </div>
                     <div class="stats-grid">
@@ -730,14 +726,14 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
     <div class="tab-content" id="tab-editor">
         <div class="editor-layout">
             <div class="panel-capas">
-                <h3> Capas</h3>
+                <h3>📑 Capas</h3>
                 <div class="upload-mini" onclick="document.getElementById('editorFileInput').click()">
                     <div style="font-size: 1.5em;">📁</div>
                     <div style="font-size: 0.8em; color: #1e40af; font-weight: 600;">Subir imagen</div>
                     <div style="font-size: 0.7em; color: #6b7280;">JPG, PNG, SVG, PDF, AI</div>
                     <input type="file" id="editorFileInput" accept="image/*,.pdf,.ai,.svg" multiple onchange="subirImagenesEditor(this.files)">
                 </div>
-                <div id="listaCapas"><div class="empty-state"><div class="icono">️</div><div style="font-size: 0.85em;">No hay elementos</div></div></div>
+                <div id="listaCapas"><div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div></div>
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
                     <h3 style="margin-bottom: 8px;">⚙️ Opciones</h3>
                     <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="snapGrid" checked><label for="snapGrid" style="font-size: 0.85em;">Snap a grid (0.5cm)</label></div>
@@ -747,12 +743,14 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             </div>
             <div class="area-trabajo">
                 <div class="toolbar-editor">
-                    <button class="tool-btn" onclick="zoomOut()">➖</button>
+                    <button class="tool-btn" onclick="zoomOut()"></button>
                     <span class="zoom-info" id="zoomInfo">100%</span>
                     <button class="tool-btn" onclick="zoomIn()">➕</button>
                     <button class="tool-btn" onclick="resetZoom()">⊡</button>
                     <div class="separator"></div>
-                    <button class="tool-btn" onclick="cambiarTamanoArtboard()">📐 Tamaño</button>
+                    <button class="tool-btn" id="btnMano" onclick="toggleModoMano()">✋ Mano</button>
+                    <div class="separator"></div>
+                    <button class="tool-btn" onclick="cambiarTamanoArtboard()"> Tamaño</button>
                     <button class="tool-btn" onclick="resetArtboard()">🔄 Reset</button>
                     <button class="tool-btn" onclick="limpiarEditor()">🗑️</button>
                 </div>
@@ -788,7 +786,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="prop-field"><label>Alto (cm)</label><input type="number" id="propH" step="0.1" onchange="actualizarDesdePropiedades()"></div>
                     </div>
                     <h3 style="margin-top: 15px;">⚡ Acciones</h3>
-                    <button class="btn-prop" onclick="duplicarElemento()"> Duplicar</button>
+                    <button class="btn-prop" onclick="duplicarElemento()">📋 Duplicar</button>
                     <button class="btn-prop peligro" onclick="eliminarElemento()">🗑️ Eliminar</button>
                 </div>
             </div>
@@ -901,7 +899,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 <p>Todos los precios vigentes de impresión, terminación y UV</p>
             </div>
             <div class="precios-buscador">
-                <input type="text" id="buscadorPrecios" placeholder="🔍 Buscar producto..." oninput="filtrarPrecios()">
+                <input type="text" id="buscadorPrecios" placeholder=" Buscar producto..." oninput="filtrarPrecios()">
             </div>
             <div class="no-resultados" id="noResultados">No se encontraron productos con ese nombre.</div>
             <div id="contenedorPrecios"></div>
@@ -951,9 +949,9 @@ function calcularLibrito() {
     const normal = Math.floor(33 / anchoCerrado) * Math.floor(48 / altoCerrado);
     const rotado = Math.floor(33 / altoCerrado) * Math.floor(48 / anchoCerrado);
     const pagsCerradasPorCara = Math.max(normal, rotado);
-    const pagsPorPlanchaFisica = pagsCerradasPorCara * 2;
 
     if (pagsCerradasPorCara > 0 && totalPaginas > 0) {
+        const pagsPorPlanchaFisica = pagsCerradasPorCara * 2;
         const planchasFisicasPorEjemplar = Math.ceil(totalPaginas / pagsPorPlanchaFisica);
         const totalPlanchasFisicas = planchasFisicasPorEjemplar * cantidad;
         const costoImpFrenteTotal = totalPlanchasFisicas * costoImpFrente;
@@ -1046,7 +1044,7 @@ function generarPDFLibrito() {
     const cantidad = document.getElementById('libCantidad').value;
     const precioTotal = document.getElementById('libPrecioTotal').textContent;
     const fecha = new Date().toLocaleDateString('es-PY');
-    const contenido = `<div style="padding: 40px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;"><h1 style="color: #1e3a8a; border-bottom: 3px solid #1e3a8a; padding-bottom: 10px;">️ Pepper Pre - Presupuesto</h1><p style="color: #6b7280;">Fecha: ${fecha}</p><table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #d1d5db;"><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Tamaño CERRADO:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${anchoC} × ${altoC} cm</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Total de Páginas:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${paginas} caras</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Cantidad:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${cantidad} ejemplares</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Encuadernación:</td><td style="padding: 10px; border: 1px solid #d1d5db;">A caballo (presillado)</td></tr></table><div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #059669;"><div style="display: flex; justify-content: space-between; font-size: 1.8em; color: #059669;"><span><strong>TOTAL:</strong></span><strong>${precioTotal}</strong></div></div></div>`;
+    const contenido = `<div style="padding: 40px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;"><h1 style="color: #1e3a8a; border-bottom: 3px solid #1e3a8a; padding-bottom: 10px;">🖨️ Pepper Pre - Presupuesto</h1><p style="color: #6b7280;">Fecha: ${fecha}</p><table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #d1d5db;"><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Tamaño CERRADO:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${anchoC} × ${altoC} cm</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Total de Páginas:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${paginas} caras</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Cantidad:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${cantidad} ejemplares</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Encuadernación:</td><td style="padding: 10px; border: 1px solid #d1d5db;">A caballo (presillado)</td></tr></table><div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #059669;"><div style="display: flex; justify-content: space-between; font-size: 1.8em; color: #059669;"><span><strong>TOTAL:</strong></span><strong>${precioTotal}</strong></div></div></div>`;
     const ventana = window.open('', '_blank');
     ventana.document.write(contenido);
     ventana.document.close();
@@ -1130,7 +1128,7 @@ function calcularPlanchas() {
     } else { 
         alerta.style.display = 'none'; 
         base.innerHTML = '';
-        base.style.width = (pAncho * 10) + 'px'; base.style.height = (pAlto * 10) + 'px';
+        base.style.width = '330px'; base.style.height = '480px';
         const escala = 10;
         const esRotado = total2 > total1;
         const itemW = (esRotado ? dAlto : dAncho) * escala;
@@ -1326,7 +1324,7 @@ function renderizarCuerposAdicionales() {
                 <span>📄 Cuerpo ${index + 1}</span>
                 <div class="cuerpo-acciones-top">
                     <label class="toggle-habilitar"><input type="checkbox" ${cuerpo.habilitado ? 'checked' : ''} onchange="toggleCuerpoAdicional(${cuerpo.id})">${cuerpo.habilitado ? '✅ Activo' : '⏸️ Inactivo'}</label>
-                    <button class="cuerpo-btn-small eliminar" onclick="eliminarCuerpoAdicional(${cuerpo.id})">🗑️</button>
+                    <button class="cuerpo-btn-small eliminar" onclick="eliminarCuerpoAdicional(${cuerpo.id})">️</button>
                 </div>
             </div>
             <div class="grid-2">
@@ -1388,7 +1386,7 @@ function calcularEstampas() {
         document.getElementById('estPlanchasTotales').textContent = '0';
         document.getElementById('estDesperdicio').textContent = '100%';
         document.getElementById('estCuerposActivos').textContent = '1';
-        document.getElementById('estDesgloseCostos').innerHTML = '<div style="text-align: center; color: #ef4444; padding: 20px;">️ Ajustá las dimensiones del cuerpo base</div>';
+        document.getElementById('estDesgloseCostos').innerHTML = '<div style="text-align: center; color: #ef4444; padding: 20px;">⚠️ Ajustá las dimensiones del cuerpo base</div>';
         document.getElementById('estPrecioTotal').textContent = 'Gs. 0';
         document.getElementById('estPrecioUnitario').textContent = 'Gs. 0';
         return;
@@ -1534,7 +1532,7 @@ function calcularEstampas() {
     }
     if (usaPerforado) {
         const costoPerf = cantidad * 100;
-        html += `<div class="desglose-row"><span class="label">🕳️ Perforado:</span><span class="valor">${formatearPYG(costoPerf)} <small style="color: #6b7280;">(${cantidad} un. × Gs. 100)</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label">️ Perforado:</span><span class="valor">${formatearPYG(costoPerf)} <small style="color: #6b7280;">(${cantidad} un. × Gs. 100)</small></span></div>`;
         costoTotal += costoPerf;
     }
     
@@ -1546,7 +1544,6 @@ function calcularEstampas() {
         html += `<div class="desglose-row"><span class="label" style="color: ${coloresCapas[(idx+1) % coloresCapas.length]}; font-weight: 600;">📄 Cuerpo ${idx+1} (${nombreMat}):</span><span class="valor">${formatearPYG(costoMatCuerpo)} <small style="color: #6b7280;">(${planchasTotales} planchas × ${formatearPYG(precioMat)})</small></span></div>`;
         costoTotal += costoMatCuerpo;
         
-        // ✅ CORTE DEL CUERPO ADICIONAL
         const precioCorteCuerpo = parseInt(cuerpo.tipoCorte) || 0;
         if (precioCorteCuerpo > 0) {
             const costoCorteCuerpo = planchasTotales * precioCorteCuerpo;
@@ -1598,8 +1595,6 @@ function calcularEstampas() {
 // IMPRESIÓN + FOIL (CORREGIDO)
 // ==========================================
 function calcularImpresionFoil() {
-    console.log('=== calcularImpresionFoil iniciado ===');
-    
     const formaDiseno = document.querySelector('input[name="formaDiseno"]:checked').value;
     const formaFoil = document.querySelector('input[name="formaFoil"]:checked').value;
     const tipoProduccion = document.getElementById('ifTipoProduccion').value;
@@ -1628,11 +1623,9 @@ function calcularImpresionFoil() {
     const alerta = document.getElementById('ifAlerta');
     const base = document.getElementById('ifPlanchaBase');
     
-    console.log('diseñosPorPlancha:', diseñosPorPlancha, 'disenoAncho:', disenoAncho, 'disenoAlto:', disenoAlto);
-    
     if (diseñosPorPlancha === 0) {
         alerta.style.display = 'block';
-        base.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444;">⚠️ El diseño es más grande que la plancha</div>';
+        base.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444;">️ El diseño es más grande que la plancha</div>';
         document.getElementById('ifDisenosPorPlancha').textContent = '0';
         document.getElementById('ifPlanchasTotales').textContent = '0';
         document.getElementById('ifTotalImpresiones').textContent = '0';
@@ -1657,11 +1650,12 @@ function calcularImpresionFoil() {
     document.getElementById('ifTotalImpresiones').textContent = totalImpresiones;
     document.getElementById('ifAreaFoilTotal').textContent = areaFoilTotal.toFixed(2) + ' cm²';
     
-    // ✅ PREVIEW VISUAL CORREGIDO
+    // PREVIEW VISUAL
     base.innerHTML = '';
     const escala = 10;
-    base.style.width = (pAncho * escala) + 'px';
-    base.style.height = (pAlto * escala) + 'px';
+    base.style.width = '330px';
+    base.style.height = '480px';
+    base.style.overflow = 'visible';
     const cols = Math.floor(pAncho / disenoAncho);
     const rows = Math.floor(pAlto / disenoAlto);
     const itemW = disenoAncho * escala;
@@ -1695,6 +1689,7 @@ function calcularImpresionFoil() {
             contador++;
         }
     }
+    
     let html = ''; let costoTotal = 0;
     if (pasadas === 2) {
         const c1 = planchasTotales * precioImpresion; const c2 = planchasTotales * precioImpresion;
@@ -1731,32 +1726,358 @@ function calcularImpresionFoil() {
     document.getElementById('ifDesgloseCostos').innerHTML = html;
     document.getElementById('ifPrecioTotal').textContent = formatearPYG(precioTotal);
     document.getElementById('ifPrecioUnitario').textContent = formatearPYG(precioUnitario);
-    
-    console.log('=== calcularImpresionFoil completado ===');
 }
 
 // ==========================================
-// EDITOR VISUAL
+// EDITOR VISUAL (COMPLETO)
 // ==========================================
-let editorState = { artboardAncho: 33, artboardAlto: 48, zoom: 1, elementos: [], seleccionado: null, nextId: 1 };
+let editorState = { artboardAncho: 33, artboardAlto: 48, zoom: 1, elementos: [], seleccionado: null, nextId: 1, dragging: false, dragStart: { x: 0, y: 0 }, dragElement: null, dragOriginal: null, modoMano: false, panning: false, panStart: { x: 0, y: 0 }, scrollStart: { x: 0, y: 0 }, espacioPresionado: false };
 const CM_TO_PX = 37.795275591;
-function inicializarEditor() {}
-function toggleModoMano() {}
-function cambiarTamanoArtboard() { const a = prompt('Ancho (cm):', editorState.artboardAncho); const h = prompt('Alto (cm):', editorState.artboardAlto); if (a && h) { editorState.artboardAncho = parseFloat(a); editorState.artboardAlto = parseFloat(h); document.getElementById('artboard').style.width = (editorState.artboardAncho * CM_TO_PX) + 'px'; document.getElementById('artboard').style.height = (editorState.artboardAlto * CM_TO_PX) + 'px'; } }
-function resetArtboard() { editorState.artboardAncho = 33; editorState.artboardAlto = 48; document.getElementById('artboard').style.width = (33 * CM_TO_PX) + 'px'; document.getElementById('artboard').style.height = (48 * CM_TO_PX) + 'px'; }
-function zoomIn() { editorState.zoom = Math.min(3, editorState.zoom + 0.1); document.getElementById('canvasWrapper').style.transform = `scale(${editorState.zoom})`; document.getElementById('zoomInfo').textContent = Math.round(editorState.zoom * 100) + '%'; }
-function zoomOut() { editorState.zoom = Math.max(0.3, editorState.zoom - 0.1); document.getElementById('canvasWrapper').style.transform = `scale(${editorState.zoom})`; document.getElementById('zoomInfo').textContent = Math.round(editorState.zoom * 100) + '%'; }
-function resetZoom() { editorState.zoom = 1; document.getElementById('canvasWrapper').style.transform = 'scale(1)'; document.getElementById('zoomInfo').textContent = '100%'; }
-function subirImagenesEditor() { alert('Funcionalidad de subida simplificada en esta vista.'); }
-function renderizarElementos() {}
-function actualizarListaCapas() {}
-function actualizarPropiedadesPanel() {}
-function actualizarDesdePropiedades() {}
-function duplicarElemento() {}
-function eliminarElemento() {}
-function toggleGrid() {}
-function toggleRules() {}
-function limpiarEditor() {}
+
+function inicializarEditor() { actualizarReglas(); renderizarElementos(); actualizarInfoEditor(); configurarModoMano(); }
+
+function toggleModoMano() { 
+    editorState.modoMano = !editorState.modoMano; 
+    const btn = document.getElementById('btnMano'); 
+    if (editorState.modoMano) btn.classList.add('activo'); else btn.classList.remove('activo'); 
+    actualizarUIMano(); 
+}
+function activarModoMano() { editorState.modoMano = true; actualizarUIMano(); }
+function desactivarModoMano() { editorState.modoMano = false; actualizarUIMano(); }
+function actualizarUIMano() { 
+    const container = document.getElementById('canvasContainer'); 
+    const btn = document.getElementById('btnMano'); 
+    if (editorState.modoMano) { container.classList.add('modo-mano'); btn.classList.add('activo'); } 
+    else { container.classList.remove('modo-mano'); btn.classList.remove('activo'); } 
+}
+
+function configurarModoMano() { 
+    const container = document.getElementById('canvasContainer'); 
+    container.addEventListener('mousedown', (e) => { 
+        if (!editorState.modoMano) return; 
+        if (e.target.closest('.elemento')) return; 
+        editorState.panning = true; 
+        editorState.panStart = { x: e.clientX, y: e.clientY }; 
+        editorState.scrollStart = { x: container.scrollLeft, y: container.scrollTop }; 
+        e.preventDefault(); 
+    }); 
+    document.getElementById('artboard').addEventListener('mousedown', (e) => { 
+        if (!editorState.modoMano) { 
+            if (e.target.id === 'artboard' || e.target.id === 'artboardBg') { 
+                editorState.seleccionado = null; 
+                renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); 
+            } 
+            return; 
+        } 
+        if (e.target.id === 'artboard' || e.target.id === 'artboardBg' || e.target.id === 'elementosContainer') { 
+            editorState.panning = true; 
+            editorState.panStart = { x: e.clientX, y: e.clientY }; 
+            editorState.scrollStart = { x: container.scrollLeft, y: container.scrollTop }; 
+            e.preventDefault(); e.stopPropagation(); 
+        } 
+    }); 
+}
+
+document.addEventListener('mousemove', (e) => { 
+    if (editorState.panning) { 
+        const container = document.getElementById('canvasContainer'); 
+        container.scrollLeft = editorState.scrollStart.x - (e.clientX - editorState.panStart.x); 
+        container.scrollTop = editorState.scrollStart.y - (e.clientY - editorState.panStart.y); 
+        e.preventDefault(); 
+    } 
+});
+document.addEventListener('mouseup', () => { editorState.panning = false; });
+
+document.addEventListener('keydown', (e) => { 
+    if (!document.getElementById('tab-editor').classList.contains('activo')) return; 
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; 
+    if (e.key === 'h' || e.key === 'H') toggleModoMano(); 
+    else if (e.key === 'v' || e.key === 'V') desactivarModoMano(); 
+    else if (e.key === ' ') { if (!editorState.espacioPresionado) { editorState.espacioPresionado = true; activarModoMano(); e.preventDefault(); } } 
+    else if (e.key === '+' || e.key === '=') zoomIn(); 
+    else if (e.key === '-') zoomOut(); 
+    else if (e.key === 'Escape') { desactivarModoMano(); editorState.seleccionado = null; renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); } 
+});
+document.addEventListener('keyup', (e) => { if (e.key === ' ') { editorState.espacioPresionado = false; if (editorState.modoMano) desactivarModoMano(); } });
+
+function cambiarTamanoArtboard() { 
+    const nuevoAncho = prompt('Ancho del artboard (cm):', editorState.artboardAncho); 
+    const nuevoAlto = prompt('Alto del artboard (cm):', editorState.artboardAlto); 
+    if (nuevoAncho && nuevoAlto) { 
+        const a = parseFloat(nuevoAncho); const h = parseFloat(nuevoAlto); 
+        if (a > 0 && h > 0) ajustarArtboard(a, h); 
+    } 
+}
+function resetArtboard() { ajustarArtboard(33, 48); }
+function ajustarArtboard(ancho, alto) { 
+    editorState.artboardAncho = ancho; editorState.artboardAlto = alto; 
+    const artboard = document.getElementById('artboard'); 
+    artboard.style.width = (ancho * CM_TO_PX) + 'px'; 
+    artboard.style.height = (alto * CM_TO_PX) + 'px'; 
+    actualizarReglas(); 
+}
+function actualizarReglas() { 
+    const reglaH = document.getElementById('reglaH'); const reglaV = document.getElementById('reglaV'); 
+    reglaH.innerHTML = ''; reglaV.innerHTML = ''; 
+    for (let i = 1; i <= editorState.artboardAncho; i++) { 
+        const marca = document.createElement('div'); 
+        marca.className = 'regla-marca'; 
+        marca.style.left = (i * CM_TO_PX) + 'px'; 
+        marca.textContent = i; 
+        reglaH.appendChild(marca); 
+    } 
+    for (let i = 1; i <= editorState.artboardAlto; i++) { 
+        const marca = document.createElement('div'); 
+        marca.className = 'regla-marca'; 
+        marca.style.top = (i * CM_TO_PX) + 'px'; 
+        marca.textContent = i; 
+        reglaV.appendChild(marca); 
+    } 
+}
+function toggleGrid() { document.getElementById('artboardBg').style.display = document.getElementById('showGrid').checked ? 'block' : 'none'; }
+function toggleRules() { const show = document.getElementById('showRules').checked; document.getElementById('reglaH').style.display = show ? 'block' : 'none'; document.getElementById('reglaV').style.display = show ? 'block' : 'none'; }
+function zoomIn() { editorState.zoom = Math.min(3, editorState.zoom + 0.1); aplicarZoom(); }
+function zoomOut() { editorState.zoom = Math.max(0.3, editorState.zoom - 0.1); aplicarZoom(); }
+function resetZoom() { editorState.zoom = 1; aplicarZoom(); }
+function aplicarZoom() { 
+    const wrapper = document.getElementById('canvasWrapper'); 
+    wrapper.style.transform = `scale(${editorState.zoom})`; 
+    wrapper.style.transformOrigin = 'top left'; 
+    document.getElementById('zoomInfo').textContent = Math.round(editorState.zoom * 100) + '%'; 
+}
+
+async function subirImagenesEditor(files) { 
+    for (let file of files) { 
+        try { 
+            const ext = file.name.split('.').pop().toLowerCase(); 
+            if (ext === 'ai' || ext === 'pdf') await procesarArchivoMultipagina(file, ext); 
+            else if (ext === 'svg') await procesarSVG(file); 
+            else await procesarImagenRaster(file); 
+        } catch (e) { 
+            console.error('Error:', e); 
+            alert('Error al procesar: ' + file.name); 
+        } 
+    } 
+    document.getElementById('editorFileInput').value = ''; 
+}
+
+async function procesarArchivoMultipagina(file, ext) { 
+    const arrayBuffer = await file.arrayBuffer(); 
+    const bytes = new Uint8Array(arrayBuffer); 
+    const header = String.fromCharCode(...bytes.slice(0, 5)); 
+    if (header !== '%PDF-' && ext === 'ai') throw new Error('AI sin PDF embebido'); 
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise; 
+    const numPaginas = pdf.numPages; 
+    const primeraPagina = await pdf.getPage(1); 
+    const viewport1 = primeraPagina.getViewport({ scale: 1 }); 
+    const anchoPagina = viewport1.width * 0.0352778; 
+    const altoPagina = viewport1.height * 0.0352778; 
+    const elementosCreados = []; 
+    for (let i = 1; i <= numPaginas; i++) { 
+        const page = await pdf.getPage(i); 
+        const viewport = page.getViewport({ scale: 2 }); 
+        const canvas = document.createElement('canvas'); 
+        canvas.width = viewport.width; canvas.height = viewport.height; 
+        const ctx = canvas.getContext('2d'); 
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise; 
+        elementosCreados.push({ dataUrl: canvas.toDataURL(), ancho: anchoPagina, alto: altoPagina }); 
+    } 
+    const separacion = 2; 
+    const anchoTotal = (anchoPagina * numPaginas) + (separacion * (numPaginas - 1)); 
+    ajustarArtboard(anchoTotal, altoPagina); 
+    elementosCreados.forEach((elem, index) => { 
+        editorState.elementos.push({ 
+            id: editorState.nextId++, 
+            nombre: `${file.name.substring(0, 15)} - Pág ${index + 1}`, 
+            tipo: ext === 'ai' ? 'AI (PDF)' : 'PDF', 
+            x: index * (anchoPagina + separacion), y: 0, 
+            ancho: elem.ancho, alto: elem.alto, 
+            rotacion: 0, opacidad: 100, 
+            dataUrl: elem.dataUrl, bloqueado: false, z: index 
+        }); 
+    }); 
+    renderizarElementos(); actualizarListaCapas(); actualizarInfoEditor(); resetZoom(); 
+}
+
+async function procesarSVG(file) { 
+    const texto = await file.text(); 
+    const parser = new DOMParser(); 
+    const svgDoc = parser.parseFromString(texto, 'image/svg+xml'); 
+    const svgElement = svgDoc.querySelector('svg'); 
+    if (!svgElement) throw new Error('SVG inválido'); 
+    const viewBox = svgElement.getAttribute('viewBox'); 
+    let w, h; 
+    if (viewBox) { const parts = viewBox.split(/[\s,]+/); w = parseFloat(parts[2]); h = parseFloat(parts[3]); } 
+    else { w = parseFloat(svgElement.getAttribute('width')) || 100; h = parseFloat(svgElement.getAttribute('height')) || 100; } 
+    const factor = 0.0264583; 
+    const anchoCm = w * factor; const altoCm = h * factor; 
+    const blob = new Blob([texto], { type: 'image/svg+xml' }); 
+    const dataUrl = URL.createObjectURL(blob); 
+    ajustarArtboard(anchoCm, altoCm); 
+    editorState.elementos.push({ 
+        id: editorState.nextId++, nombre: file.name.substring(0, 20), tipo: 'SVG', 
+        x: 0, y: 0, ancho: anchoCm, alto: altoCm, 
+        rotacion: 0, opacidad: 100, dataUrl: dataUrl, bloqueado: false, z: editorState.elementos.length 
+    }); 
+    renderizarElementos(); actualizarListaCapas(); actualizarInfoEditor(); resetZoom(); 
+}
+
+async function procesarImagenRaster(file) { 
+    const dataUrl = await new Promise((resolve) => { 
+        const reader = new FileReader(); 
+        reader.onload = (e) => resolve(e.target.result); 
+        reader.readAsDataURL(file); 
+    }); 
+    const img = new Image(); 
+    img.onload = () => { 
+        const anchoCm = 5; 
+        const altoCm = (img.height / img.width) * anchoCm; 
+        editorState.elementos.push({ 
+            id: editorState.nextId++, 
+            nombre: file.name.substring(0, 20), 
+            tipo: file.name.split('.').pop().toUpperCase(), 
+            x: (editorState.artboardAncho / 2) - (anchoCm / 2), 
+            y: (editorState.artboardAlto / 2) - (altoCm / 2), 
+            ancho: anchoCm, alto: altoCm, 
+            rotacion: 0, opacidad: 100, 
+            dataUrl: dataUrl, bloqueado: false, z: editorState.elementos.length 
+        }); 
+        renderizarElementos(); actualizarListaCapas(); 
+        seleccionarElemento(editorState.nextId - 1); 
+        actualizarInfoEditor(); 
+    }; 
+    img.src = dataUrl; 
+}
+
+function renderizarElementos() { 
+    const container = document.getElementById('elementosContainer'); 
+    container.innerHTML = ''; 
+    editorState.elementos.forEach((el) => { 
+        const div = document.createElement('div'); 
+        div.className = 'elemento' + (editorState.seleccionado === el.id ? ' seleccionado' : '') + (el.bloqueado ? ' bloqueado' : ''); 
+        div.style.left = (el.x * CM_TO_PX) + 'px'; 
+        div.style.top = (el.y * CM_TO_PX) + 'px'; 
+        div.style.width = (el.ancho * CM_TO_PX) + 'px'; 
+        div.style.height = (el.alto * CM_TO_PX) + 'px'; 
+        div.style.zIndex = el.z; 
+        div.style.opacity = el.opacidad / 100; 
+        div.dataset.id = el.id; 
+        const img = document.createElement('img'); 
+        img.src = el.dataUrl; 
+        img.style.pointerEvents = 'none'; 
+        div.appendChild(img); 
+        const dimLabel = document.createElement('div'); 
+        dimLabel.className = 'dim-label top'; 
+        dimLabel.textContent = `${el.ancho.toFixed(1)} × ${el.alto.toFixed(1)} cm`; 
+        dimLabel.style.pointerEvents = 'none'; 
+        div.appendChild(dimLabel); 
+        div.addEventListener('mousedown', (e) => { 
+            e.stopPropagation(); e.preventDefault(); 
+            seleccionarElemento(el.id); 
+            if (!el.bloqueado && !editorState.modoMano) { 
+                editorState.dragging = true; 
+                editorState.dragElement = el; 
+                editorState.dragStart = { x: e.clientX, y: e.clientY }; 
+                editorState.dragOriginal = { x: el.x, y: el.y }; 
+                document.addEventListener('mousemove', onDrag); 
+                document.addEventListener('mouseup', endDrag); 
+            } 
+        }); 
+        container.appendChild(div); 
+    }); 
+}
+
+function onDrag(e) { 
+    if (!editorState.dragElement) return; 
+    const dx = (e.clientX - editorState.dragStart.x) / CM_TO_PX / editorState.zoom; 
+    const dy = (e.clientY - editorState.dragStart.y) / CM_TO_PX / editorState.zoom; 
+    const el = editorState.dragElement; 
+    const orig = editorState.dragOriginal; 
+    let newX = orig.x + dx; let newY = orig.y + dy; 
+    if (document.getElementById('snapGrid').checked) { newX = Math.round(newX * 2) / 2; newY = Math.round(newY * 2) / 2; } 
+    el.x = Math.max(0, newX); el.y = Math.max(0, newY); 
+    renderizarElementos(); actualizarPropiedadesPanel(); 
+}
+
+function endDrag() { 
+    editorState.dragging = false; 
+    editorState.dragElement = null; 
+    document.removeEventListener('mousemove', onDrag); 
+    document.removeEventListener('mouseup', endDrag); 
+}
+
+function seleccionarElemento(id) { 
+    editorState.seleccionado = id; 
+    renderizarElementos(); 
+    actualizarListaCapas(); 
+    actualizarPropiedadesPanel(); 
+}
+
+function actualizarListaCapas() { 
+    const lista = document.getElementById('listaCapas'); 
+    if (editorState.elementos.length === 0) { 
+        lista.innerHTML = '<div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div>'; 
+        return; 
+    } 
+    lista.innerHTML = ''; 
+    [...editorState.elementos].reverse().forEach(el => { 
+        const item = document.createElement('div'); 
+        item.className = 'capa-item' + (editorState.seleccionado === el.id ? ' seleccionado' : ''); 
+        item.onclick = () => seleccionarElemento(el.id); 
+        item.innerHTML = `<div class="capa-thumb">${el.tipo.startsWith('AI') || el.tipo === 'PDF' ? '📄' : '🖼️'}</div><div class="capa-nombre" title="${el.nombre}">${el.nombre}</div><div class="capa-acciones"><button class="capa-btn" onclick="event.stopPropagation(); eliminarElementoId(${el.id})">️</button></div>`; 
+        lista.appendChild(item); 
+    }); 
+}
+
+function actualizarPropiedadesPanel() { 
+    const vacio = document.getElementById('propiedadesVacias'); 
+    const props = document.getElementById('propiedadesElemento'); 
+    if (!editorState.seleccionado) { vacio.style.display = 'block'; props.style.display = 'none'; return; } 
+    const el = editorState.elementos.find(e => e.id === editorState.seleccionado); 
+    if (!el) return; 
+    vacio.style.display = 'none'; props.style.display = 'block'; 
+    document.getElementById('propNombre').textContent = el.nombre; 
+    document.getElementById('propTipo').textContent = el.tipo; 
+    document.getElementById('propX').value = el.x.toFixed(2); 
+    document.getElementById('propY').value = el.y.toFixed(2); 
+    document.getElementById('propW').value = el.ancho.toFixed(2); 
+    document.getElementById('propH').value = el.alto.toFixed(2); 
+}
+
+function actualizarDesdePropiedades() { 
+    if (!editorState.seleccionado) return; 
+    const el = editorState.elementos.find(e => e.id === editorState.seleccionado); 
+    if (!el) return; 
+    el.x = parseFloat(document.getElementById('propX').value) || 0; 
+    el.y = parseFloat(document.getElementById('propY').value) || 0; 
+    el.ancho = parseFloat(document.getElementById('propW').value) || 0.5; 
+    el.alto = parseFloat(document.getElementById('propH').value) || 0.5; 
+    renderizarElementos(); 
+}
+
+function eliminarElemento() { if (editorState.seleccionado) eliminarElementoId(editorState.seleccionado); }
+function eliminarElementoId(id) { 
+    editorState.elementos = editorState.elementos.filter(e => e.id !== id); 
+    if (editorState.seleccionado === id) editorState.seleccionado = null; 
+    renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); actualizarInfoEditor(); 
+}
+function duplicarElemento() { 
+    if (!editorState.seleccionado) return; 
+    const original = editorState.elementos.find(e => e.id === editorState.seleccionado); 
+    if (!original) return; 
+    const copia = { ...original, id: editorState.nextId++, x: original.x + 1, y: original.y + 1, nombre: original.nombre + ' (copia)', z: editorState.elementos.length }; 
+    editorState.elementos.push(copia); 
+    seleccionarElemento(copia.id); actualizarInfoEditor(); 
+}
+function limpiarEditor() { 
+    if (editorState.elementos.length === 0) return; 
+    if (confirm('¿Eliminar todos los elementos?')) { 
+        editorState.elementos = []; editorState.seleccionado = null; 
+        renderizarElementos(); actualizarListaCapas(); actualizarPropiedadesPanel(); actualizarInfoEditor(); 
+        resetArtboard(); 
+    } 
+}
+function actualizarInfoEditor() { }
 
 // ==========================================
 // FOIL/PVC/PLOTTER
