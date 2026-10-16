@@ -80,77 +80,64 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .editor-layout { display: grid; grid-template-columns: 220px 1fr 280px; height: calc(100vh - 180px); min-height: 600px; }
 .panel-capas { background: #f9fafb; border-right: 1px solid #e5e7eb; padding: 15px; overflow-y: auto; }
 .panel-capas h3 { font-size: 0.9em; color: #1e3a8a; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; }
-.capa-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 4px; margin-bottom: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
+.capa-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 4px; margin-bottom: 6px; cursor: pointer; font-size: 0.85em; }
 .capa-item:hover { border-color: #3b82f6; }
 .capa-item.seleccionado { border-color: #1e3a8a; background: #eff6ff; }
-.capa-item .capa-thumb { width: 30px; height: 30px; background: #f3f4f6; border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
-.capa-item .capa-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.capa-item .capa-thumb { width: 30px; height: 30px; background: #f3f4f6; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
 .capa-item .capa-nombre { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .capa-item .capa-acciones { display: flex; gap: 2px; }
-.capa-item .capa-btn { background: none; border: none; cursor: pointer; font-size: 0.9em; padding: 2px 4px; border-radius: 3px; }
+.capa-item .capa-btn { background: none; border: none; cursor: pointer; font-size: 0.9em; padding: 2px 4px; }
 .capa-item .capa-btn:hover { background: #e5e7eb; }
 .area-trabajo { background: #d1d5db; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-.toolbar-editor { background: white; padding: 8px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; }
-.toolbar-editor .tool-btn { padding: 6px 12px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.2s; }
+.toolbar-editor { background: white; padding: 8px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e5e7eb; }
+.toolbar-editor .tool-btn { padding: 6px 12px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 0.85em; }
 .toolbar-editor .tool-btn:hover { background: #e5e7eb; }
-.toolbar-editor .tool-btn.activo { background: #1e3a8a; color: white; border-color: #1e3a8a; }
+.toolbar-editor .tool-btn.activo { background: #1e3a8a; color: white; }
 .toolbar-editor .separator { width: 1px; height: 24px; background: #d1d5db; }
 .toolbar-editor .zoom-info { font-size: 0.85em; color: #6b7280; font-weight: 600; min-width: 50px; text-align: center; }
-.canvas-container { flex: 1; position: relative; overflow: auto; display: flex; padding: 40px; cursor: default; }
+.canvas-container { flex: 1; position: relative; overflow: auto; display: flex; padding: 40px; }
 .canvas-container.modo-mano { cursor: grab; }
-.canvas-container.modo-mano:active { cursor: grabbing; }
-.canvas-container.modo-mano .canvas-wrapper { pointer-events: none; }
-.canvas-container.modo-mano .elemento { pointer-events: none; }
 .canvas-wrapper { position: relative; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.2); flex-shrink: 0; }
 .regla-horizontal { position: absolute; top: 0; left: 0; right: 0; height: 20px; background: #f3f4f6; border-bottom: 1px solid #9ca3af; overflow: hidden; }
 .regla-vertical { position: absolute; top: 0; left: 0; bottom: 0; width: 20px; background: #f3f4f6; border-right: 1px solid #9ca3af; overflow: hidden; }
 .regla-marca { position: absolute; font-size: 9px; color: #6b7280; }
 .regla-horizontal .regla-marca { bottom: 2px; transform: translateX(-50%); }
 .regla-vertical .regla-marca { left: 2px; transform: translateY(-50%) rotate(-90deg); transform-origin: left center; }
-.artboard { position: relative; background: white; border: 1px solid #1e3a8a; overflow: hidden; }
+.artboard { position: relative; background: white; border: 1px solid #1e3a8a; }
 .artboard-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 1cm 1cm; pointer-events: none; }
-.elemento { position: absolute; cursor: move; user-select: none; }
-.elemento img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; display: block; }
+.elemento { position: absolute; cursor: move; }
+.elemento img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 .elemento.seleccionado { outline: 3px solid #3b82f6; outline-offset: 2px; }
 .elemento.bloqueado { cursor: not-allowed; opacity: 0.7; }
-.dim-label { position: absolute; background: rgba(30, 58, 138, 0.9); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; pointer-events: none; white-space: nowrap; z-index: 200; display: none; }
-.elemento.seleccionado .dim-label { display: block; }
-.dim-label.top { top: -22px; left: 50%; transform: translateX(-50%); }
+.dim-label { position: absolute; background: rgba(30, 58, 138, 0.9); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; pointer-events: none; top: -22px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
 .panel-propiedades { background: #f9fafb; border-left: 1px solid #e5e7eb; padding: 15px; overflow-y: auto; }
 .panel-propiedades h3 { font-size: 0.9em; color: #1e3a8a; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; }
 .prop-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
 .prop-field { display: flex; flex-direction: column; }
 .prop-field label { font-size: 0.75em; color: #6b7280; margin-bottom: 3px; font-weight: 600; }
 .prop-field input { padding: 6px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.9em; }
-.prop-field input:focus { border-color: #3b82f6; outline: none; }
-.prop-full { grid-column: 1 / -1; }
-.btn-prop { width: 100%; padding: 8px; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 0.85em; margin-bottom: 6px; transition: all 0.2s; }
-.btn-prop:hover { background: #f3f4f6; border-color: #3b82f6; }
+.btn-prop { width: 100%; padding: 8px; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 0.85em; margin-bottom: 6px; }
+.btn-prop:hover { background: #f3f4f6; }
 .btn-prop.peligro { color: #ef4444; border-color: #fecaca; }
-.btn-prop.peligro:hover { background: #fee2e2; }
 .info-elemento { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px; margin-bottom: 15px; font-size: 0.85em; }
 .info-elemento .info-row { display: flex; justify-content: space-between; padding: 3px 0; }
 .info-elemento .info-label { color: #6b7280; }
 .info-elemento .info-value { font-weight: 600; color: #1e3a8a; }
 .empty-state { text-align: center; padding: 40px 20px; color: #9ca3af; }
 .empty-state .icono { font-size: 3em; margin-bottom: 10px; }
-.upload-mini { border: 2px dashed #3b82f6; border-radius: 6px; padding: 15px; text-align: center; background: #eff6ff; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
+.upload-mini { border: 2px dashed #3b82f6; border-radius: 6px; padding: 15px; text-align: center; background: #eff6ff; cursor: pointer; margin-bottom: 10px; }
 .upload-mini:hover { background: #dbeafe; }
 .upload-mini input { display: none; }
 .foil-seccion { background: white; border: 2px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-.foil-seccion h3 { color: #1e3a8a; margin-bottom: 15px; font-size: 1.1em; display: flex; align-items: center; gap: 8px; }
+.foil-seccion h3 { color: #1e3a8a; margin-bottom: 15px; font-size: 1.1em; }
 .foil-seccion .info-precio { background: #f3f4f6; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; color: #4b5563; margin-bottom: 15px; }
 .foil-seccion .info-precio strong { color: #1e3a8a; }
 .foil-item { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 .foil-item-info { flex: 1; }
 .foil-item-info .nombre { font-weight: 600; color: #1e3a8a; }
-.foil-item-info .detalle { font-size: 0.85em; color: #6b7280; margin-top: 2px; }
+.foil-item-info .detalle { font-size: 0.85em; color: #6b7280; }
 .foil-item-total { font-weight: 700; color: #059669; margin-right: 15px; font-size: 1.1em; }
 .btn-eliminar-item { background: #ef4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.85em; }
-.btn-eliminar-item:hover { background: #dc2626; }
-.foil-resumen { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; padding: 15px; border-radius: 8px; margin-top: 15px; }
-.foil-resumen .resumen-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.9em; }
-.foil-resumen .resumen-total { font-size: 1.3em; font-weight: 700; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px; margin-top: 8px; }
 .btn-agregar { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 1em; font-weight: 600; cursor: pointer; margin-top: 10px; }
 .btn-agregar:hover { background: #2563eb; }
 .gran-total-box { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 25px; border-radius: 8px; text-align: center; margin-top: 25px; }
@@ -161,46 +148,38 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .tipo-badge.foil-grande { background: #fef3c7; color: #92400e; }
 .tipo-badge.plotter-a { background: #dbeafe; color: #1e40af; }
 .tipo-badge.plotter-b { background: #fef3c7; color: #92400e; }
-.tipo-badge.minimo { background: #fee2e2; color: #991b1b; }
 .precios-container { padding: 30px; max-width: 1400px; margin: 0 auto; }
 .precios-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 25px; border-radius: 8px; margin-bottom: 25px; }
 .precios-header h2 { font-size: 1.8em; margin-bottom: 8px; }
-.precios-header p { opacity: 0.9; }
-.precios-buscador { background: white; padding: 15px; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.precios-buscador { background: white; padding: 15px; border-radius: 8px; margin-bottom: 25px; }
 .precios-buscador input { width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 6px; font-size: 1em; }
-.precios-buscador input:focus { border-color: #3b82f6; outline: none; }
-.categoria-precios { background: white; border-radius: 8px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.categoria-header { padding: 15px 20px; font-weight: 700; font-size: 1.1em; color: white; display: flex; align-items: center; gap: 10px; }
+.categoria-precios { background: white; border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+.categoria-header { padding: 15px 20px; font-weight: 700; font-size: 1.1em; color: white; }
 .categoria-header.impresion { background: #3b82f6; }
 .categoria-header.terminacion { background: #059669; }
 .categoria-header.uv { background: #7c3aed; }
 .tabla-precios { width: 100%; border-collapse: collapse; }
-.tabla-precios tr { border-bottom: 1px solid #f3f4f6; transition: background 0.2s; }
-.tabla-precios tr:hover { background: #f9fafb; }
+.tabla-precios tr { border-bottom: 1px solid #f3f4f6; }
 .tabla-precios td { padding: 12px 20px; }
-.tabla-precios td:first-child { font-weight: 500; color: #1f2937; }
-.tabla-precios td:last-child { text-align: right; font-weight: 700; color: #059669; font-size: 1.05em; }
+.tabla-precios td:first-child { font-weight: 500; }
+.tabla-precios td:last-child { text-align: right; font-weight: 700; color: #059669; }
 .tabla-precios tr.oculto { display: none; }
-.no-resultados { text-align: center; padding: 40px; color: #6b7280; font-size: 1.1em; display: none; }
+.no-resultados { text-align: center; padding: 40px; color: #6b7280; display: none; }
 .cuerpo-base-card { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 2px solid #3b82f6; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
-.cuerpo-base-card .cuerpo-titulo { font-weight: 700; color: #1e3a8a; font-size: 1.1em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-.cuerpo-adicional-card { background: white; border: 2px solid #e5e7eb; border-radius: 8px; padding: 15px; margin-bottom: 12px; position: relative; transition: all 0.2s; }
+.cuerpo-base-card .cuerpo-titulo { font-weight: 700; color: #1e3a8a; font-size: 1.1em; margin-bottom: 10px; }
+.cuerpo-adicional-card { background: white; border: 2px solid #e5e7eb; border-radius: 8px; padding: 15px; margin-bottom: 12px; }
 .cuerpo-adicional-card.deshabilitado { opacity: 0.5; background: #f9fafb; }
-.cuerpo-adicional-card .cuerpo-titulo { font-weight: 700; color: #1e3a8a; font-size: 1em; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-.cuerpo-adicional-card .cuerpo-titulo .toggle-habilitar { display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #6b7280; font-weight: 500; }
+.cuerpo-adicional-card .cuerpo-titulo { font-weight: 700; color: #1e3a8a; font-size: 1em; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 .cuerpo-acciones-top { display: flex; gap: 5px; }
 .cuerpo-btn-small { background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.85em; }
-.cuerpo-btn-small:hover { background: #e5e7eb; }
 .cuerpo-btn-small.eliminar { color: #ef4444; border-color: #fecaca; }
-.cuerpo-btn-small.eliminar:hover { background: #fee2e2; }
-.foil-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; background: #fef3c7; border: 1px solid #fbbf24; border-radius: 6px; margin-top: 8px; }
-.foil-toggle-row label { display: flex; align-items: center; gap: 8px; font-weight: 600; color: #92400e; cursor: pointer; }
+.foil-toggle-row { display: flex; align-items: center; padding: 8px; background: #fef3c7; border: 1px solid #fbbf24; border-radius: 6px; margin-top: 8px; }
+.foil-toggle-row label { display: flex; align-items: center; gap: 8px; font-weight: 600; color: #92400e; cursor: pointer; margin: 0; }
 .foil-dims-box { background: #fffbeb; border: 1px solid #fbbf24; border-radius: 6px; padding: 12px; margin-top: 8px; }
 @media (max-width: 1024px) {
     .grid-principal { grid-template-columns: 1fr; }
     .panel-config { border-right: none; border-bottom: 2px solid #e5e7eb; }
     .editor-layout { grid-template-columns: 1fr; height: auto; }
-    .panel-capas, .panel-propiedades { max-height: 300px; }
 }
 </style>
 </head>
@@ -208,7 +187,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 <div class="app">
     <div class="header">
         <div>
-            <h1>️ Pepper Pre</h1>
+            <h1>🖨️ Pepper Pre</h1>
             <div class="subtitle">Sistema de Cotización e Impresión</div>
         </div>
         <div class="plancha-info">
@@ -231,14 +210,13 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="grid-principal">
             <div class="panel panel-config">
                 <div class="seccion">
-                    <div class="seccion-titulo">📚 Datos del Librito</div>
+                    <div class="seccion-titulo"> Datos del Librito</div>
                     <div class="grid-2">
                         <div class="campo"><label>Ancho CERRADO (cm):</label><input type="number" id="libAnchoCerrado" value="14.8" step="0.1" onchange="calcularLibrito()"></div>
                         <div class="campo"><label>Alto CERRADO (cm):</label><input type="number" id="libAltoCerrado" value="21" step="0.1" onchange="calcularLibrito()"></div>
                     </div>
-                    <div class="alerta success visible" style="margin-top: 10px; font-size: 0.9em;">💡 <strong>Tamaño ABIERTO:</strong> <span id="lblTamanoAbierto">29.6 × 21 cm</span></div>
                     <div class="grid-2" style="margin-top: 15px;">
-                        <div class="campo"><label>Total de PÁGINAS (caras):</label><input type="number" id="libPaginas" value="12" min="4" step="4" onchange="calcularLibrito()"><small style="color: #6b7280; font-size: 0.8em;">Debe ser múltiplo de 4</small></div>
+                        <div class="campo"><label>Total de PÁGINAS (caras):</label><input type="number" id="libPaginas" value="12" min="4" step="4" onchange="calcularLibrito()"></div>
                         <div class="campo"><label>Cantidad de ejemplares:</label><input type="number" id="libCantidad" value="100" min="1" onchange="calcularLibrito()"></div>
                     </div>
                 </div>
@@ -265,12 +243,10 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             <div class="panel panel-resultados">
                 <div class="seccion">
                     <div class="seccion-titulo">📐 Imposición de Preprensa</div>
-                    <div class="alerta error" id="libAlertaPaginas">⚠️ La cantidad de páginas debe ser múltiplo de 4.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="planchaViz" style="width: 264px; height: 384px;"><div class="plancha-label">Plancha 33 × 48 cm (UNA CARA)</div></div>
                         <div class="medida-open-badge" id="medidaOpenBadge">Abierto: 29.6 × 21 cm</div>
                     </div>
-                    <div class="leyenda-doblez" id="leyendaDoblez" style="display:none;"><div class="linea-muestra"></div><span><strong>Línea roja punteada</strong> = línea de doblez</span></div>
                     <div class="stats-grid">
                         <div class="stat-box"><div class="stat-label">Páginas por cara</div><div class="stat-value" id="libPagsPorCara">0</div></div>
                         <div class="stat-box destacado"><div class="stat-label">Páginas por plancha física</div><div class="stat-value" id="libPagsPorPlanchaFisica">0</div></div>
@@ -281,10 +257,10 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
+                    <div class="seccion-titulo"> Desglose de Costos</div>
                     <div class="desglose">
                         <div class="desglose-row"><span class="label">🎨 Impresión FRENTE:</span><span class="valor" id="libCostoImpFrente">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label"> Impresión DORSO:</span><span class="valor" id="libCostoImpDorso">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label">🎨 Impresión DORSO:</span><span class="valor" id="libCostoImpDorso">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="libCostoCorte">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowDoblez" style="display:none;"><span class="label">📑 Doblez:</span><span class="valor" id="libCostoDoblez">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="libCostoLaminado">Gs. 0</span></div>
@@ -293,8 +269,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="libCostoUtilidad">Gs. 0</span></div>
                     </div>
                 </div>
-                <div class="precio-final-box"><div class="label">💵 PRECIO TOTAL DE VENTA</div><div class="precio" id="libPrecioTotal">Gs. 0</div><div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">Precio por ejemplar: <strong id="libPrecioUnitario">Gs. 0</strong></div></div>
-                <button class="btn-accion" onclick="generarPDFLibrito()">📄 Generar Presupuesto PDF</button>
+                <div class="precio-final-box"><div class="label"> PRECIO TOTAL DE VENTA</div><div class="precio" id="libPrecioTotal">Gs. 0</div><div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">Precio por ejemplar: <strong id="libPrecioUnitario">Gs. 0</strong></div></div>
             </div>
         </div>
     </div>
@@ -304,7 +279,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="grid-principal">
             <div class="panel panel-config">
                 <div class="seccion">
-                    <div class="seccion-titulo">📐 Dimensiones</div>
+                    <div class="seccion-titulo"> Dimensiones</div>
                     <div class="sub-seccion">
                         <div class="sub-seccion-titulo">Tamaño de la Plancha</div>
                         <div class="campo">
@@ -396,18 +371,14 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="checkbox-item"><input type="checkbox" id="calcCorteB" onchange="calcularPlanchas()"><label for="calcCorteB">Corte Recto B</label><span class="precio-check">Gs. 2.500 / plancha</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="calcCorteC" onchange="calcularPlanchas()"><label for="calcCorteC">Corte Recto C</label><span class="precio-check">Gs. 5.500 / plancha</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="calcCorteD" onchange="calcularPlanchas()"><label for="calcCorteD">Corte D</label><span class="precio-check">Gs. 10.000 / plancha</span></div>
-                        <div class="checkbox-item" style="background: #fef3c7; border-color: #fbbf24;">
-                            <input type="checkbox" id="calcCortePuntas" onchange="calcularPlanchas()">
-                            <label for="calcCortePuntas"><strong>Corte de Puntas</strong><br><small style="color: #6b7280;">Se calcula por unidad final</small></label>
-                            <span class="precio-check">Gs. 500 / unidad</span>
-                        </div>
+                        <div class="checkbox-item"><input type="checkbox" id="calcCortePuntas" onchange="calcularPlanchas()"><label for="calcCortePuntas">Corte de Puntas</label><span class="precio-check">Gs. 500 / unidad</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="calcLaminado1" onchange="calcularPlanchas()"><label for="calcLaminado1">Laminado Prolam (1 cara)</label><span class="precio-check">Gs. 3.000 / plancha</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="calcLaminado2" onchange="calcularPlanchas()"><label for="calcLaminado2">Laminado Prolam (ambas caras)</label><span class="precio-check">Gs. 5.000 / plancha</span></div>
                     </div>
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">🔗 Cinta Doble Faz</div>
-                    <div class="checkbox-item" style="background: #f0fdf4; border-color: #86efac; margin-bottom: 8px;">
+                    <div class="checkbox-item" style="margin-bottom: 8px;">
                         <input type="checkbox" id="calcCintaPlancha" onchange="calcularPlanchas()">
                         <label for="calcCintaPlancha"><strong>Cinta Doble Faz (por plancha)</strong></label>
                     </div>
@@ -419,7 +390,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                             <option value="3000">Cinta Doble Faz 3 (Gs. 3.000/plancha)</option>
                         </select>
                     </div>
-                    <div class="checkbox-item" style="background: #fef3c7; border-color: #fbbf24; margin-top: 8px;">
+                    <div class="checkbox-item" style="margin-top: 8px;">
                         <input type="checkbox" id="calcCintaUnidad" onchange="calcularPlanchas()">
                         <label for="calcCintaUnidad"><strong>Cinta Doble Faz (por unidad)</strong></label>
                     </div>
@@ -452,7 +423,6 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             <div class="panel panel-resultados">
                 <div class="seccion">
                     <div class="seccion-titulo">📐 Imposición Visual</div>
-                    <div class="alerta error" id="calcAlerta" style="display:none;">️ El diseño es más grande que la plancha.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="calcPlanchaBase" style="width: 330px; height: 480px;"></div>
                         <div class="medida-open-badge" id="calcPlanchaDimensiones">Plancha: 33 × 48 cm | Diseño: 10 × 15 cm</div>
@@ -466,11 +436,11 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo"> Desglose de Costos</div>
+                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
                     <div class="desglose">
-                        <div class="desglose-row"><span class="label">🎨 Impresión Frente:</span><span class="valor" id="calcCostoImpresion">Gs. 0</span></div>
+                        <div class="desglose-row"><span class="label"> Impresión Frente:</span><span class="valor" id="calcCostoImpresion">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="calcCostoCorte">Gs. 0</span></div>
-                        <div class="desglose-row" id="calcRowCortePuntas" style="display:none;"><span class="label">✂️ Corte de Puntas:</span><span class="valor" id="calcCostoCortePuntas">Gs. 0</span></div>
+                        <div class="desglose-row" id="calcRowCortePuntas" style="display:none;"><span class="label">️ Corte de Puntas:</span><span class="valor" id="calcCostoCortePuntas">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="calcCostoLaminado">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCintaPlancha" style="display:none;"><span class="label">🔗 Cinta Doble Faz (plancha):</span><span class="valor" id="calcCostoCintaPlancha">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCintaUnidad" style="display:none;"><span class="label">🔗 Cinta Doble Faz (unidad):</span><span class="valor" id="calcCostoCintaUnidad">Gs. 0</span></div>
@@ -494,7 +464,6 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             <div class="panel panel-config">
                 <div class="seccion">
                     <div class="seccion-titulo">📦 CUERPO BASE (Estampa Principal)</div>
-                    <p style="font-size: 0.85em; color: #6b7280; margin-bottom: 12px;">Define el tamaño, material y acabados de la estampa. Los cuerpos adicionales se pegan encima.</p>
                     <div class="cuerpo-base-card">
                         <div class="cuerpo-titulo">🎯 Cuerpo Base</div>
                         <div class="campo">
@@ -524,44 +493,18 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                             <div class="campo"><label>Alto (cm):</label><input type="number" id="estBaseAlto" value="22" step="0.1" min="0.1" onchange="calcularEstampas()"></div>
                         </div>
                         <div class="grid-2">
-                            <div class="campo">
-                                <label>Forma:</label>
-                                <select id="estBaseForma" onchange="calcularEstampas()">
-                                    <option value="rect">Rectangular</option>
-                                    <option value="circ">Circular</option>
-                                </select>
-                            </div>
-                            <div class="campo">
-                                <label>Troquel:</label>
-                                <select id="estBaseTroquel" onchange="calcularEstampas()">
-                                    <option value="0">Sin troquel</option>
-                                    <option value="800">Troquel Circular (Gs. 800/un)</option>
-                                    <option value="1000">Troquel Simple (Gs. 1.000/un)</option>
-                                    <option value="1500">Troquel Complejo (Gs. 1.500/un)</option>
-                                </select>
-                            </div>
+                            <div class="campo"><label>Forma:</label><select id="estBaseForma" onchange="calcularEstampas()"><option value="rect">Rectangular</option><option value="circ">Circular</option></select></div>
+                            <div class="campo"><label>Troquel:</label><select id="estBaseTroquel" onchange="calcularEstampas()"><option value="0">Sin troquel</option><option value="800">Troquel Circular (Gs. 800/un)</option><option value="1000">Troquel Simple (Gs. 1.000/un)</option><option value="1500">Troquel Complejo (Gs. 1.500/un)</option></select></div>
                         </div>
                         <div class="grid-2">
-                            <div class="campo">
-                                <label>Corte:</label>
-                                <select id="estBaseCorte" onchange="calcularEstampas()">
-                                    <option value="0">Sin corte</option>
-                                    <option value="1000">Corte Recto A (Gs. 1.000/plancha)</option>
-                                    <option value="2500">Corte Recto B (Gs. 2.500/plancha)</option>
-                                    <option value="5500">Corte Recto C (Gs. 5.500/plancha)</option>
-                                    <option value="10000">Corte D (Gs. 10.000/plancha)</option>
-                                </select>
-                            </div>
-                            <div class="campo">
-                                <label>Cantidad:</label>
-                                <input type="number" id="estCantidad" value="100" min="1" onchange="calcularEstampas()">
-                            </div>
+                            <div class="campo"><label>Corte:</label><select id="estBaseCorte" onchange="calcularEstampas()"><option value="0">Sin corte</option><option value="1000">Corte Recto A (Gs. 1.000/plancha)</option><option value="2500">Corte Recto B (Gs. 2.500/plancha)</option><option value="5500">Corte Recto C (Gs. 5.500/plancha)</option><option value="10000">Corte D (Gs. 10.000/plancha)</option></select></div>
+                            <div class="campo"><label>Cantidad:</label><input type="number" id="estCantidad" value="100" min="1" onchange="calcularEstampas()"></div>
                         </div>
                         <div style="margin-top: 10px;">
                             <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="estBasePuntas" onchange="calcularEstampas()"><label for="estBasePuntas">Puntas redondeadas</label><span class="precio-check">Gs. 500 / unidad</span></div>
                             <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="estBaseOjal" onchange="calcularEstampas()"><label for="estBaseOjal">Ojal</label><span class="precio-check">Gs. 800 / unidad</span></div>
                             <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="estBasePerforado" onchange="calcularEstampas()"><label for="estBasePerforado">Perforado</label><span class="precio-check">Gs. 100 / unidad</span></div>
-                            <div class="checkbox-item" style="margin-bottom: 6px; background: #eff6ff; border-color: #3b82f6;"><input type="checkbox" id="estBaseDobleImpresion" onchange="calcularEstampas()"><label for="estBaseDobleImpresion"><strong>Doble Impresión (Dorso)</strong></label><span class="precio-check">Gs. 7.000 / plancha</span></div>
+                            <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="estBaseDobleImpresion" onchange="calcularEstampas()"><label for="estBaseDobleImpresion"><strong>Doble Impresión (Dorso)</strong></label><span class="precio-check">Gs. 7.000 / plancha</span></div>
                         </div>
                         <div class="foil-toggle-row">
                             <label><input type="checkbox" id="estBaseFoil" onchange="toggleFoilBase()"><span>✨ Aplicar Foil al Cuerpo Base</span></label>
@@ -576,10 +519,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo" style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>📚 Cuerpos Adicionales</span>
+                        <span> Cuerpos Adicionales</span>
                         <button class="btn-secundario" style="width: auto; padding: 6px 12px; margin: 0;" onclick="agregarCuerpoAdicional()">➕ Agregar</button>
                     </div>
-                    <p style="font-size: 0.85em; color: #6b7280; margin-bottom: 12px;">Capas que se pegan encima del cuerpo base. Pueden habilitarse/deshabilitarse individualmente.</p>
                     <div id="estCuerposContainer"></div>
                 </div>
                 <div class="seccion">
@@ -590,7 +532,6 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
             <div class="panel panel-resultados">
                 <div class="seccion">
                     <div class="seccion-titulo">📐 Visualización en Plancha</div>
-                    <div class="alerta error" id="estAlerta" style="display:none;">⚠️ El cuerpo base es más grande que la plancha.</div>
                     <div class="imposicion-preview">
                         <div class="plancha-viz" id="estPlanchaBase" style="width: 330px; height: 480px;"></div>
                         <div class="medida-open-badge" id="estPlanchaDimensiones">Plancha: 33 × 48 cm | Base: 11 × 22 cm</div>
@@ -637,6 +578,13 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="campo" id="disenoCircDim" style="display:none;"><label>Diámetro (cm):</label><input type="number" id="ifDisenoDiametro" value="10" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
                     </div>
                     <div class="sub-seccion">
+                        <div class="sub-seccion-titulo">Forma del Foil</div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="radio" name="formaFoil" id="foilRect" value="rect" checked onchange="calcularImpresionFoil()"><label for="foilRect">Rectangular</label></div>
+                            <div class="checkbox-item"><input type="radio" name="formaFoil" id="foilCirc" value="circ" onchange="calcularImpresionFoil()"><label for="foilCirc">Circular</label></div>
+                        </div>
+                    </div>
+                    <div class="sub-seccion">
                         <div class="sub-seccion-titulo">Tamaño del Foil</div>
                         <div class="grid-2" id="foilRectDims">
                             <div class="campo"><label>Ancho (cm):</label><input type="number" id="ifFoilAncho" value="8.5" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
@@ -675,7 +623,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo">✂️ Corte / Troquel</div>
+                    <div class="seccion-titulo">️ Corte / Troquel</div>
                     <div class="campo">
                         <select id="ifTipoCorte" onchange="calcularImpresionFoil()">
                             <option value="0">Sin corte</option>
@@ -699,7 +647,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     <div class="seccion-titulo">📐 Imposición Visual</div>
                     <div class="alerta error" id="ifAlerta" style="display:none;">⚠️ El diseño es más grande que la plancha.</div>
                     <div class="imposicion-preview">
-                        <div class="plancha-viz" id="ifPlanchaBase" style="width: 330px; height: 480px; overflow: visible;"></div>
+                        <div class="plancha-viz" id="ifPlanchaBase" style="width: 330px; height: 480px;"></div>
                         <div class="medida-open-badge" id="ifPlanchaDimensiones">Plancha: 33 × 48 cm</div>
                     </div>
                     <div class="stats-grid">
@@ -710,7 +658,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo">🧾 Desglose de Costos</div>
+                    <div class="seccion-titulo"> Desglose de Costos</div>
                     <div class="desglose" id="ifDesgloseCostos"></div>
                 </div>
                 <div class="precio-final-box">
@@ -735,22 +683,21 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 </div>
                 <div id="listaCapas"><div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div></div>
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
-                    <h3 style="margin-bottom: 8px;">⚙️ Opciones</h3>
+                    <h3 style="margin-bottom: 8px;">️ Opciones</h3>
                     <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="snapGrid" checked><label for="snapGrid" style="font-size: 0.85em;">Snap a grid (0.5cm)</label></div>
                     <div class="checkbox-item" style="margin-bottom: 6px;"><input type="checkbox" id="showGrid" checked onchange="toggleGrid()"><label for="showGrid" style="font-size: 0.85em;">Mostrar grid</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="showRules" checked onchange="toggleRules()"><label for="showRules" style="font-size: 0.85em;">Mostrar reglas</label></div>
                 </div>
             </div>
             <div class="area-trabajo">
                 <div class="toolbar-editor">
-                    <button class="tool-btn" onclick="zoomOut()"></button>
+                    <button class="tool-btn" onclick="zoomOut()">➖</button>
                     <span class="zoom-info" id="zoomInfo">100%</span>
                     <button class="tool-btn" onclick="zoomIn()">➕</button>
                     <button class="tool-btn" onclick="resetZoom()">⊡</button>
                     <div class="separator"></div>
                     <button class="tool-btn" id="btnMano" onclick="toggleModoMano()">✋ Mano</button>
                     <div class="separator"></div>
-                    <button class="tool-btn" onclick="cambiarTamanoArtboard()"> Tamaño</button>
+                    <button class="tool-btn" onclick="cambiarTamanoArtboard()">📐 Tamaño</button>
                     <button class="tool-btn" onclick="resetArtboard()">🔄 Reset</button>
                     <button class="tool-btn" onclick="limpiarEditor()">🗑️</button>
                 </div>
@@ -776,7 +723,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="info-row"><span class="info-label">Nombre:</span><span class="info-value" id="propNombre">-</span></div>
                         <div class="info-row"><span class="info-label">Tipo:</span><span class="info-value" id="propTipo">-</span></div>
                     </div>
-                    <h3 style="margin-top: 15px;">📐 Posición y Tamaño</h3>
+                    <h3 style="margin-top: 15px;"> Posición y Tamaño</h3>
                     <div class="prop-row">
                         <div class="prop-field"><label>X (cm)</label><input type="number" id="propX" step="0.1" onchange="actualizarDesdePropiedades()"></div>
                         <div class="prop-field"><label>Y (cm)</label><input type="number" id="propY" step="0.1" onchange="actualizarDesdePropiedades()"></div>
@@ -798,93 +745,45 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="panel" style="max-width: 1200px; margin: 0 auto;">
             <div class="seccion">
                 <div class="seccion-titulo">✨ Calculadora de Foil, PVC y Plotter</div>
-                
                 <div class="foil-seccion">
                     <h3>🟦 PVC <span style="font-size: 0.8em; color: #6b7280; font-weight: normal;">(Gs. 50/cm²)</span></h3>
-                    <div class="info-precio">Precio fijo: <strong>Gs. 50 por cm²</strong> | Sin mínimo</div>
                     <div class="grid-3">
                         <div class="campo"><label>Ancho (cm):</label><input type="number" id="pvcAncho" value="10" step="0.1" min="0.1" oninput="actualizarPreviewPVC()"></div>
                         <div class="campo"><label>Alto (cm):</label><input type="number" id="pvcAlto" value="10" step="0.1" min="0.1" oninput="actualizarPreviewPVC()"></div>
                         <div class="campo"><label>Cantidad:</label><input type="number" id="pvcCantidad" value="1" min="1" oninput="actualizarPreviewPVC()"></div>
                     </div>
-                    <div class="campo"><label>Descripción (opcional):</label><input type="text" id="pvcDescripcion" placeholder="Ej: Logo empresa"></div>
-                    <div class="alerta info visible" style="margin: 10px 0;">
-                        💡 Área: <strong id="pvcAreaPreview">100 cm²</strong> | Total: <strong id="pvcTotalPreview">Gs. 5.000</strong>
-                    </div>
                     <button class="btn-agregar" onclick="agregarItemPVC()">➕ Agregar PVC</button>
                     <div id="pvcItemsList" style="margin-top: 15px;"></div>
-                    <div class="foil-resumen" id="pvcResumen" style="display:none;">
-                        <div class="resumen-row"><span>Área total PVC:</span><span id="pvcAreaTotal">0 cm²</span></div>
-                        <div class="resumen-total"><span>TOTAL PVC:</span><span id="pvcTotalGeneral">Gs. 0</span></div>
-                    </div>
                 </div>
-
                 <div class="foil-seccion">
                     <h3>✨ Foil <span style="font-size: 0.8em; color: #6b7280; font-weight: normal;">(por área total)</span></h3>
                     <div class="info-precio">
                         <strong>Reglas de cálculo:</strong><br>
                         • Área total &lt; 1.000 cm² → <strong>Foil Chico: Gs. 200/cm²</strong><br>
                         • Área total ≥ 1.000 cm² → <strong>Foil Grande: Gs. 100/cm²</strong><br>
-                        • <strong>Mínimo: Gs. 5.000</strong> (si el cálculo no llega)
+                        • <strong>Mínimo: Gs. 5.000</strong>
                     </div>
                     <div class="grid-3">
                         <div class="campo"><label>Ancho (cm):</label><input type="number" id="foilAncho" value="5" step="0.1" min="0.1" oninput="actualizarPreviewFoil()"></div>
                         <div class="campo"><label>Alto (cm):</label><input type="number" id="foilAlto" value="5" step="0.1" min="0.1" oninput="actualizarPreviewFoil()"></div>
                         <div class="campo"><label>Cantidad:</label><input type="number" id="foilCantidad" value="1" min="1" oninput="actualizarPreviewFoil()"></div>
                     </div>
-                    <div class="campo"><label>Descripción (opcional):</label><input type="text" id="foilDescripcion" placeholder="Ej: Logo dorado"></div>
-                    <div class="alerta info visible" style="margin: 10px 0;">
-                        💡 Área unitaria: <strong id="foilAreaPreview">25 cm²</strong> | Área total con cantidad: <strong id="foilAreaTotalPreview">25 cm²</strong>
-                    </div>
                     <button class="btn-agregar" onclick="agregarItemFoil()">➕ Agregar Foil</button>
                     <div id="foilItemsList" style="margin-top: 15px;"></div>
-                    <div class="foil-resumen" id="foilResumen" style="display:none;">
-                        <div class="resumen-row"><span>Área total foil:</span><span id="foilAreaTotalDisplay">0 cm²</span></div>
-                        <div class="resumen-row"><span>Tipo aplicado:</span><span id="foilTipoAplicado">-</span></div>
-                        <div class="resumen-row"><span>Precio por cm²:</span><span id="foilPrecioCm2">-</span></div>
-                        <div class="resumen-total"><span>TOTAL FOIL:</span><span id="foilTotalGeneral">Gs. 0</span></div>
-                    </div>
                 </div>
-
                 <div class="foil-seccion">
-                    <h3>🔤 Troquel de Plotter (Palabras) <span style="font-size: 0.8em; color: #6b7280; font-weight: normal;">(por unidades)</span></h3>
-                    <div class="info-precio">
-                        <strong>Precios por unidad:</strong><br>
-                        • <strong>Troquel de Plotter A: Gs. 100/unidad</strong><br>
-                        • <strong>Troquel de Plotter B: Gs. 500/unidad</strong><br>
-                        • Sin mínimo (se cobra por cantidad de palabras)
-                    </div>
+                    <h3>🔤 Troquel de Plotter (Palabras)</h3>
                     <div class="grid-3">
-                        <div class="campo">
-                            <label>Tipo:</label>
-                            <select id="plotterPalabraTipo">
-                                <option value="A" data-precio="100">Troquel de Plotter A (Gs. 100/un)</option>
-                                <option value="B" data-precio="500">Troquel de Plotter B (Gs. 500/un)</option>
-                            </select>
-                        </div>
+                        <div class="campo"><label>Tipo:</label><select id="plotterPalabraTipo"><option value="A" data-precio="100">Troquel de Plotter A (Gs. 100/un)</option><option value="B" data-precio="500">Troquel de Plotter B (Gs. 500/un)</option></select></div>
                         <div class="campo"><label>Cantidad de palabras:</label><input type="number" id="plotterPalabraCantidad" value="1" min="1" oninput="actualizarPreviewPlotterPalabra()"></div>
-                        <div class="campo"><label>Descripción (opcional):</label><input type="text" id="plotterPalabraDescripcion" placeholder="Ej: Nombres invitados"></div>
+                        <div class="campo"><label>Descripción:</label><input type="text" id="plotterPalabraDescripcion" placeholder="Ej: Nombres"></div>
                     </div>
-                    <div class="alerta info visible" style="margin: 10px 0;">
-                        💡 Total: <strong id="plotterPalabraTotalPreview">Gs. 100</strong>
-                    </div>
-                    <button class="btn-agregar" onclick="agregarItemPlotterPalabra()">➕ Agregar Plotter Palabra</button>
+                    <button class="btn-agregar" onclick="agregarItemPlotterPalabra()"> Agregar Plotter Palabra</button>
                     <div id="plotterPalabraItemsList" style="margin-top: 15px;"></div>
-                    <div class="foil-resumen" id="plotterPalabraResumen" style="display:none;">
-                        <div class="resumen-row"><span>Total palabras A:</span><span id="plotterPalabraTotalA">0</span></div>
-                        <div class="resumen-row"><span>Total palabras B:</span><span id="plotterPalabraTotalB">0</span></div>
-                        <div class="resumen-total"><span>TOTAL PLOTTER PALABRA:</span><span id="plotterPalabraTotalGeneral">Gs. 0</span></div>
-                    </div>
                 </div>
-
                 <div class="gran-total-box">
                     <div class="label">💵 GRAN TOTAL FOIL/PVC/PLOTTER</div>
                     <div class="precio" id="granTotal">Gs. 0</div>
-                    <div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">
-                        PVC: <strong id="granTotalPVC">Gs. 0</strong> | 
-                        Foil: <strong id="granTotalFoil">Gs. 0</strong> | 
-                        Plotter Palabra: <strong id="granTotalPlotterPalabra">Gs. 0</strong>
-                    </div>
                 </div>
                 <button class="btn-accion" onclick="limpiarTodoFoil()" style="background: #6b7280; margin-top: 15px;">🗑️ Limpiar todos los items</button>
             </div>
@@ -896,10 +795,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="precios-container">
             <div class="precios-header">
                 <h2>💰 Lista de Precios - Pepper Pre</h2>
-                <p>Todos los precios vigentes de impresión, terminación y UV</p>
             </div>
             <div class="precios-buscador">
-                <input type="text" id="buscadorPrecios" placeholder=" Buscar producto..." oninput="filtrarPrecios()">
+                <input type="text" id="buscadorPrecios" placeholder="🔍 Buscar producto..." oninput="filtrarPrecios()">
             </div>
             <div class="no-resultados" id="noResultados">No se encontraron productos con ese nombre.</div>
             <div id="contenedorPrecios"></div>
@@ -939,19 +837,15 @@ function calcularLibrito() {
     const usaLaminado1 = document.getElementById('libLaminado1').checked;
     const usaLaminado2 = document.getElementById('libLaminado2').checked;
 
-    const alertaErr = document.getElementById('libAlertaPaginas');
-    alertaErr.style.display = (totalPaginas % 4 !== 0 || totalPaginas < 4) ? 'block' : 'none';
-
     const anchoAbierto = anchoCerrado * 2;
-    document.getElementById('lblTamanoAbierto').textContent = `${anchoAbierto} × ${altoCerrado} cm`;
     document.getElementById('medidaOpenBadge').textContent = `Abierto: ${anchoAbierto} × ${altoCerrado} cm`;
 
     const normal = Math.floor(33 / anchoCerrado) * Math.floor(48 / altoCerrado);
     const rotado = Math.floor(33 / altoCerrado) * Math.floor(48 / anchoCerrado);
     const pagsCerradasPorCara = Math.max(normal, rotado);
+    const pagsPorPlanchaFisica = pagsCerradasPorCara * 2;
 
     if (pagsCerradasPorCara > 0 && totalPaginas > 0) {
-        const pagsPorPlanchaFisica = pagsCerradasPorCara * 2;
         const planchasFisicasPorEjemplar = Math.ceil(totalPaginas / pagsPorPlanchaFisica);
         const totalPlanchasFisicas = planchasFisicasPorEjemplar * cantidad;
         const costoImpFrenteTotal = totalPlanchasFisicas * costoImpFrente;
@@ -993,7 +887,7 @@ function calcularLibrito() {
 
 function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez, normal, rotado) {
     const viz = document.getElementById('planchaViz');
-    viz.querySelectorAll('.pagina-viz, .linea-doblez-v, .linea-doblez-h').forEach(p => p.remove());
+    viz.querySelectorAll('.pagina-viz').forEach(p => p.remove());
     const escala = 8;
     const usaRotado = rotado > normal;
     const wPag = (usaRotado ? altoCerrado : anchoCerrado) * escala;
@@ -1006,49 +900,13 @@ function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez,
             if (paginaCounter <= pagsPorCara) {
                 const div = document.createElement('div');
                 div.className = 'pagina-viz';
-                div.style.cssText = `width:${wPag}px; height:${hPag}px; left:${j*wPag}px; top:${i*hPag}px;`;
+                div.style.cssText = `position:absolute;width:${wPag}px;height:${hPag}px;left:${j*wPag}px;top:${i*hPag}px;border:1px dashed #3b82f6;background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7em;color:#1e3a8a;font-weight:600;`;
                 div.textContent = `Pág ${paginaCounter}`;
                 viz.appendChild(div);
                 paginaCounter++;
             }
         }
     }
-    if (usaDoblez && pagsPorCara >= 2) {
-        if (cols >= 2) {
-            for (let j = 1; j < cols; j += 2) {
-                const linea = document.createElement('div');
-                linea.className = 'linea-doblez-v';
-                linea.style.left = (j * wPag - 1.5) + 'px';
-                linea.style.height = (rows * hPag) + 'px';
-                viz.appendChild(linea);
-            }
-        } else if (rows >= 2) {
-            for (let i = 1; i < rows; i += 2) {
-                const linea = document.createElement('div');
-                linea.className = 'linea-doblez-h';
-                linea.style.top = (i * hPag - 1.5) + 'px';
-                linea.style.width = (cols * wPag) + 'px';
-                viz.appendChild(linea);
-            }
-        }
-        document.getElementById('leyendaDoblez').style.display = 'flex';
-    } else {
-        document.getElementById('leyendaDoblez').style.display = 'none';
-    }
-}
-
-function generarPDFLibrito() {
-    const anchoC = document.getElementById('libAnchoCerrado').value;
-    const altoC = document.getElementById('libAltoCerrado').value;
-    const paginas = document.getElementById('libPaginas').value;
-    const cantidad = document.getElementById('libCantidad').value;
-    const precioTotal = document.getElementById('libPrecioTotal').textContent;
-    const fecha = new Date().toLocaleDateString('es-PY');
-    const contenido = `<div style="padding: 40px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;"><h1 style="color: #1e3a8a; border-bottom: 3px solid #1e3a8a; padding-bottom: 10px;">🖨️ Pepper Pre - Presupuesto</h1><p style="color: #6b7280;">Fecha: ${fecha}</p><table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #d1d5db;"><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Tamaño CERRADO:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${anchoC} × ${altoC} cm</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Total de Páginas:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${paginas} caras</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Cantidad:</td><td style="padding: 10px; border: 1px solid #d1d5db;">${cantidad} ejemplares</td></tr><tr><td style="padding: 10px; border: 1px solid #d1d5db; font-weight: bold;">Encuadernación:</td><td style="padding: 10px; border: 1px solid #d1d5db;">A caballo (presillado)</td></tr></table><div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #059669;"><div style="display: flex; justify-content: space-between; font-size: 1.8em; color: #059669;"><span><strong>TOTAL:</strong></span><strong>${precioTotal}</strong></div></div></div>`;
-    const ventana = window.open('', '_blank');
-    ventana.document.write(contenido);
-    ventana.document.close();
-    setTimeout(() => ventana.print(), 500);
 }
 
 // ==========================================
@@ -1113,10 +971,8 @@ function calcularPlanchas() {
     const total2 = cols2 * rows2;
     const mejorTotal = Math.max(total1, total2);
     
-    const alerta = document.getElementById('calcAlerta');
     const base = document.getElementById('calcPlanchaBase');
     if (mejorTotal === 0) {
-        alerta.style.display = 'block';
         document.getElementById('calcDisenosPorPlancha').textContent = '0';
         document.getElementById('calcPlanchasTotales').textContent = '0';
         document.getElementById('calcSobrantes').textContent = '0';
@@ -1126,7 +982,6 @@ function calcularPlanchas() {
         base.style.width = '330px'; base.style.height = '480px';
         return;
     } else { 
-        alerta.style.display = 'none'; 
         base.innerHTML = '';
         base.style.width = '330px'; base.style.height = '480px';
         const escala = 10;
@@ -1140,12 +995,7 @@ function calcularPlanchas() {
             for (let c = 0; c < renderCols; c++) {
                 if (contador >= mejorTotal) break;
                 const div = document.createElement('div');
-                div.style.position = 'absolute';
-                div.style.width = itemW + 'px'; div.style.height = itemH + 'px';
-                div.style.left = (c * itemW) + 'px'; div.style.top = (r * itemH) + 'px';
-                div.style.border = '1px dashed #3b82f6'; div.style.background = 'rgba(59,130,246,0.08)';
-                div.style.display = 'flex'; div.style.alignItems = 'center'; div.style.justifyContent = 'center';
-                div.style.fontSize = '0.7em'; div.style.color = '#1e3a8a'; div.style.fontWeight = '600';
+                div.style.cssText = `position:absolute;width:${itemW}px;height:${itemH}px;left:${c*itemW}px;top:${r*itemH}px;border:1px dashed #3b82f6;background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7em;color:#1e3a8a;font-weight:600;`;
                 div.textContent = `${dAncho}×${dAlto}`;
                 base.appendChild(div);
                 contador++;
@@ -1182,20 +1032,14 @@ function calcularPlanchas() {
     if (usaCintaPlancha) {
         costoCintaPlancha = planchasTotales * precioCintaPlancha;
         document.getElementById('calcRowCintaPlancha').style.display = 'flex';
-        const cintaPlanchaSelect = document.getElementById('calcCintaPlanchaTipo');
-        const cintaPlanchaNombre = cintaPlanchaSelect.options[cintaPlanchaSelect.selectedIndex].text;
-        document.getElementById('calcRowCintaPlancha').querySelector('.label').textContent = `🔗 ${cintaPlanchaNombre.split('(')[0]} (plancha):`;
-        document.getElementById('calcCostoCintaPlancha').innerHTML = `${formatearPYG(costoCintaPlancha)} <small style="color: #6b7280;">(${planchasTotales} planchas × ${formatearPYG(precioCintaPlancha)})</small>`;
+        document.getElementById('calcCostoCintaPlancha').innerHTML = `${formatearPYG(costoCintaPlancha)} <small style="color: #6b7280;">(${planchasTotales} planchas)</small>`;
     } else { document.getElementById('calcRowCintaPlancha').style.display = 'none'; }
     
     let costoCintaUnidad = 0;
     if (usaCintaUnidad) {
         costoCintaUnidad = totalUnidades * precioCintaUnidad;
         document.getElementById('calcRowCintaUnidad').style.display = 'flex';
-        const cintaUnidadSelect = document.getElementById('calcCintaUnidadTipo');
-        const cintaUnidadNombre = cintaUnidadSelect.options[cintaUnidadSelect.selectedIndex].text;
-        document.getElementById('calcRowCintaUnidad').querySelector('.label').textContent = `🔗 ${cintaUnidadNombre.split('(')[0]} (unidad):`;
-        document.getElementById('calcCostoCintaUnidad').innerHTML = `${formatearPYG(costoCintaUnidad)} <small style="color: #6b7280;">(${totalUnidades} un. × ${formatearPYG(precioCintaUnidad)})</small>`;
+        document.getElementById('calcCostoCintaUnidad').innerHTML = `${formatearPYG(costoCintaUnidad)} <small style="color: #6b7280;">(${totalUnidades} un.)</small>`;
     } else { document.getElementById('calcRowCintaUnidad').style.display = 'none'; }
     
     let costoCortePuntas = 0;
@@ -1210,8 +1054,8 @@ function calcularPlanchas() {
         costoTroquel = totalUnidades * precioTroquel;
         document.getElementById('calcRowTroquel').style.display = 'flex';
         const troquelNombre = document.getElementById('calcTroquel').options[document.getElementById('calcTroquel').selectedIndex].text;
-        document.getElementById('calcRowTroquel').querySelector('.label').textContent = `🎯 ${troquelNombre.split('(')[0]}:`;
-        document.getElementById('calcCostoTroquel').innerHTML = `${formatearPYG(costoTroquel)} <small style="color: #6b7280;">(${totalUnidades} un. × ${formatearPYG(precioTroquel)})</small>`;
+        document.getElementById('calcRowTroquel').querySelector('.label').textContent = ` ${troquelNombre.split('(')[0]}:`;
+        document.getElementById('calcCostoTroquel').innerHTML = `${formatearPYG(costoTroquel)} <small style="color: #6b7280;">(${totalUnidades} un.)</small>`;
     } else { document.getElementById('calcRowTroquel').style.display = 'none'; }
     
     const costoTotal = costoImpresion + costoCorte + costoLaminado + costoCintaPlancha + costoCintaUnidad + costoCortePuntas + costoTroquel;
@@ -1323,8 +1167,8 @@ function renderizarCuerposAdicionales() {
             <div class="cuerpo-titulo">
                 <span>📄 Cuerpo ${index + 1}</span>
                 <div class="cuerpo-acciones-top">
-                    <label class="toggle-habilitar"><input type="checkbox" ${cuerpo.habilitado ? 'checked' : ''} onchange="toggleCuerpoAdicional(${cuerpo.id})">${cuerpo.habilitado ? '✅ Activo' : '⏸️ Inactivo'}</label>
-                    <button class="cuerpo-btn-small eliminar" onclick="eliminarCuerpoAdicional(${cuerpo.id})">️</button>
+                    <label style="display:flex;align-items:center;gap:8px;font-size:0.85em;color:#6b7280;"><input type="checkbox" ${cuerpo.habilitado ? 'checked' : ''} onchange="toggleCuerpoAdicional(${cuerpo.id})">${cuerpo.habilitado ? '✅ Activo' : '⏸️ Inactivo'}</label>
+                    <button class="cuerpo-btn-small eliminar" onclick="eliminarCuerpoAdicional(${cuerpo.id})">🗑️</button>
                 </div>
             </div>
             <div class="grid-2">
@@ -1375,11 +1219,9 @@ function calcularEstampas() {
     
     const pAncho = 33; const pAlto = 48;
     const estampasPorPlancha = Math.floor(pAncho / dAncho) * Math.floor(pAlto / dAlto);
-    const alerta = document.getElementById('estAlerta');
     const baseViz = document.getElementById('estPlanchaBase');
     
     if (estampasPorPlancha === 0) {
-        alerta.style.display = 'block';
         baseViz.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444; font-size: 0.9em;">⚠️ El cuerpo base es más grande que la plancha 33×48</div>';
         baseViz.style.width = '330px'; baseViz.style.height = '480px';
         document.getElementById('estEstampasPorPlancha').textContent = '0';
@@ -1390,7 +1232,7 @@ function calcularEstampas() {
         document.getElementById('estPrecioTotal').textContent = 'Gs. 0';
         document.getElementById('estPrecioUnitario').textContent = 'Gs. 0';
         return;
-    } else { alerta.style.display = 'none'; }
+    }
     
     const planchasTotales = Math.ceil(cantidad / estampasPorPlancha);
     const areaPlancha = pAncho * pAlto;
@@ -1423,62 +1265,18 @@ function calcularEstampas() {
             const cellY = r * itemH;
             
             const baseDiv = document.createElement('div');
-            baseDiv.style.position = 'absolute';
-            baseDiv.style.width = itemW + 'px'; baseDiv.style.height = itemH + 'px';
-            baseDiv.style.left = cellX + 'px'; baseDiv.style.top = cellY + 'px';
-            baseDiv.style.border = formaBase === 'circ' ? '2px solid #3b82f6' : '1px dashed #3b82f6';
-            baseDiv.style.borderRadius = formaBase === 'circ' ? '50%' : '0';
-            baseDiv.style.background = 'rgba(59,130,246,0.08)';
-            baseDiv.style.display = 'flex'; baseDiv.style.alignItems = 'center'; baseDiv.style.justifyContent = 'center';
-            baseDiv.style.fontSize = '0.7em'; baseDiv.style.color = '#1e3a8a'; baseDiv.style.fontWeight = '600';
+            baseDiv.style.cssText = `position:absolute;width:${itemW}px;height:${itemH}px;left:${cellX}px;top:${cellY}px;border:${formaBase === 'circ' ? '2px solid #3b82f6' : '1px dashed #3b82f6'};border-radius:${formaBase === 'circ' ? '50%' : '0'};background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7em;color:#1e3a8a;font-weight:600;`;
             baseDiv.textContent = `${dAncho}×${dAlto}`;
             baseViz.appendChild(baseDiv);
-            
-            if (usaFoilBase && foilAnchoBase > 0 && foilAltoBase > 0) {
-                const foilW = foilAnchoBase * escala; const foilH = foilAltoBase * escala;
-                const foilDiv = document.createElement('div');
-                foilDiv.style.position = 'absolute';
-                foilDiv.style.width = foilW + 'px'; foilDiv.style.height = foilH + 'px';
-                foilDiv.style.left = (cellX + (itemW - foilW) / 2) + 'px';
-                foilDiv.style.top = (cellY + (itemH - foilH) / 2) + 'px';
-                foilDiv.style.background = 'rgba(251, 191, 36, 0.4)';
-                foilDiv.style.border = '2px solid #f59e0b';
-                foilDiv.style.borderRadius = '50%';
-                foilDiv.style.zIndex = '2';
-                baseViz.appendChild(foilDiv);
-            }
             
             cuerposActivos.forEach((cuerpo, idx) => {
                 const cuerpoW = cuerpo.ancho * escala; const cuerpoH = cuerpo.alto * escala;
                 const offsetX = (itemW - cuerpoW) / 2; const offsetY = (itemH - cuerpoH) / 2;
                 const color = coloresCapas[(idx + 1) % coloresCapas.length];
                 const cuerpoDiv = document.createElement('div');
-                cuerpoDiv.style.position = 'absolute';
-                cuerpoDiv.style.width = cuerpoW + 'px'; cuerpoDiv.style.height = cuerpoH + 'px';
-                cuerpoDiv.style.left = (cellX + offsetX) + 'px'; cuerpoDiv.style.top = (cellY + offsetY) + 'px';
-                cuerpoDiv.style.border = cuerpo.forma === 'circ' ? `2px solid ${color}` : `1px dashed ${color}`;
-                cuerpoDiv.style.borderRadius = cuerpo.forma === 'circ' ? '50%' : '0';
-                cuerpoDiv.style.background = color + '15';
-                cuerpoDiv.style.display = 'flex'; cuerpoDiv.style.alignItems = 'center'; cuerpoDiv.style.justifyContent = 'center';
-                cuerpoDiv.style.fontSize = '0.6em'; cuerpoDiv.style.color = color; cuerpoDiv.style.fontWeight = '600';
-                cuerpoDiv.style.zIndex = (idx + 2).toString();
+                cuerpoDiv.style.cssText = `position:absolute;width:${cuerpoW}px;height:${cuerpoH}px;left:${cellX + offsetX}px;top:${cellY + offsetY}px;border:${cuerpo.forma === 'circ' ? '2px solid' : '1px dashed'} ${color};border-radius:${cuerpo.forma === 'circ' ? '50%' : '0'};background:${color}15;display:flex;align-items:center;justify-content:center;font-size:0.6em;color:${color};font-weight:600;z-index:${idx + 2};`;
                 cuerpoDiv.textContent = `C${idx+1}`;
-                cuerpoDiv.title = `Cuerpo ${idx+1}: ${cuerpo.ancho}×${cuerpo.alto} cm`;
                 baseViz.appendChild(cuerpoDiv);
-                
-                if (cuerpo.tieneFoil && cuerpo.foilAncho > 0 && cuerpo.foilAlto > 0) {
-                    const foilW = cuerpo.foilAncho * escala; const foilH = cuerpo.foilAlto * escala;
-                    const foilDiv = document.createElement('div');
-                    foilDiv.style.position = 'absolute';
-                    foilDiv.style.width = foilW + 'px'; foilDiv.style.height = foilH + 'px';
-                    foilDiv.style.left = (cellX + offsetX + (cuerpoW - foilW) / 2) + 'px';
-                    foilDiv.style.top = (cellY + offsetY + (cuerpoH - foilH) / 2) + 'px';
-                    foilDiv.style.background = 'rgba(251, 191, 36, 0.5)';
-                    foilDiv.style.border = '2px solid #f59e0b';
-                    foilDiv.style.borderRadius = '50%';
-                    foilDiv.style.zIndex = (idx + 10).toString();
-                    baseViz.appendChild(foilDiv);
-                }
             });
             contador++;
         }
@@ -1487,31 +1285,29 @@ function calcularEstampas() {
     let html = ''; let costoTotal = 0;
     const matBase = MATERIALES_ESTAMPA.find(m => m.value === String(precioMaterialBase));
     const costoMaterialBase = planchasTotales * precioMaterialBase;
-    html += `<div class="desglose-row"><span class="label" style="color: #1e3a8a; font-weight: 600;">🎯 Cuerpo Base (${matBase ? matBase.label : 'Material'}):</span><span class="valor">${formatearPYG(costoMaterialBase)} <small style="color: #6b7280;">(${planchasTotales} planchas × ${formatearPYG(precioMaterialBase)})</small></span></div>`;
+    html += `<div class="desglose-row"><span class="label" style="color: #1e3a8a; font-weight: 600;">🎯 Cuerpo Base (${matBase ? matBase.label : 'Material'}):</span><span class="valor">${formatearPYG(costoMaterialBase)} <small style="color: #6b7280;">(${planchasTotales} planchas)</small></span></div>`;
     costoTotal += costoMaterialBase;
     
     if (usaDobleImpresion) {
         const costoDoble = planchasTotales * 7000;
-        html += `<div class="desglose-row"><span class="label">🔄 Doble Impresión (Dorso):</span><span class="valor">${formatearPYG(costoDoble)} <small style="color: #6b7280;">(${planchasTotales} planchas × Gs. 7.000)</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label">🔄 Doble Impresión (Dorso):</span><span class="valor">${formatearPYG(costoDoble)}</span></div>`;
         costoTotal += costoDoble;
     }
     if (precioCorteBase > 0) {
         const costoCorte = planchasTotales * precioCorteBase;
         const corteSelect = document.getElementById('estBaseCorte');
         const corteNombre = corteSelect.options[corteSelect.selectedIndex].text;
-        html += `<div class="desglose-row"><span class="label">✂️ ${corteNombre}:</span><span class="valor">${formatearPYG(costoCorte)} <small style="color: #6b7280;">(${planchasTotales} planchas)</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label">✂️ ${corteNombre}:</span><span class="valor">${formatearPYG(costoCorte)}</span></div>`;
         costoTotal += costoCorte;
     }
     if (usaPuntas) {
         const costoPuntas = cantidad * 500;
-        html += `<div class="desglose-row"><span class="label">✂️ Puntas redondeadas:</span><span class="valor">${formatearPYG(costoPuntas)} <small style="color: #6b7280;">(${cantidad} un. × Gs. 500)</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label">✂️ Puntas redondeadas:</span><span class="valor">${formatearPYG(costoPuntas)}</span></div>`;
         costoTotal += costoPuntas;
     }
     if (precioTroquelBase > 0) {
         const costoTroquelBase = cantidad * precioTroquelBase;
-        const troquelSelect = document.getElementById('estBaseTroquel');
-        const troquelNombre = troquelSelect.options[troquelSelect.selectedIndex].text;
-        html += `<div class="desglose-row"><span class="label">🎯 Troquel Base (${troquelNombre.split('(')[0].trim()}):</span><span class="valor">${formatearPYG(costoTroquelBase)} <small style="color: #6b7280;">(${cantidad} un. × ${formatearPYG(precioTroquelBase)})</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label"> Troquel Base:</span><span class="valor">${formatearPYG(costoTroquelBase)}</span></div>`;
         costoTotal += costoTroquelBase;
     }
     if (usaFoilBase) {
@@ -1519,20 +1315,19 @@ function calcularEstampas() {
         const areaFoilBaseTotal = cantidad * areaFoilBaseUnit;
         const PRECIO_FOIL_CHICO = 200; const PRECIO_FOIL_GRANDE = 100; const UMBRAL_FOIL = 1000; const MINIMO_FOIL = 5000;
         let precioFoilCm2 = areaFoilBaseTotal >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO;
-        let tipoFoil = areaFoilBaseTotal >= UMBRAL_FOIL ? 'Foil Grande' : 'Foil Chico';
         let costoFoilBase = areaFoilBaseTotal * precioFoilCm2;
         if (costoFoilBase < MINIMO_FOIL) costoFoilBase = MINIMO_FOIL;
-        html += `<div class="desglose-row sub-total"><span class="label">✨ Foil Base (${areaFoilBaseTotal.toFixed(2)} cm² × ${formatearPYG(precioFoilCm2)}) - ${tipoFoil}:</span><span class="valor">${formatearPYG(costoFoilBase)}</span></div>`;
+        html += `<div class="desglose-row sub-total"><span class="label">✨ Foil Base (${areaFoilBaseTotal.toFixed(2)} cm²):</span><span class="valor">${formatearPYG(costoFoilBase)}</span></div>`;
         costoTotal += costoFoilBase;
     }
     if (usaOjal) {
         const costoOjal = cantidad * 800;
-        html += `<div class="desglose-row"><span class="label">⭕ Ojal:</span><span class="valor">${formatearPYG(costoOjal)} <small style="color: #6b7280;">(${cantidad} un. × Gs. 800)</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label">⭕ Ojal:</span><span class="valor">${formatearPYG(costoOjal)}</span></div>`;
         costoTotal += costoOjal;
     }
     if (usaPerforado) {
         const costoPerf = cantidad * 100;
-        html += `<div class="desglose-row"><span class="label">️ Perforado:</span><span class="valor">${formatearPYG(costoPerf)} <small style="color: #6b7280;">(${cantidad} un. × Gs. 100)</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label">🕳️ Perforado:</span><span class="valor">${formatearPYG(costoPerf)}</span></div>`;
         costoTotal += costoPerf;
     }
     
@@ -1541,7 +1336,7 @@ function calcularEstampas() {
         const precioMat = mat ? mat.precio : 0;
         const nombreMat = mat ? mat.label : 'Material';
         const costoMatCuerpo = planchasTotales * precioMat;
-        html += `<div class="desglose-row"><span class="label" style="color: ${coloresCapas[(idx+1) % coloresCapas.length]}; font-weight: 600;">📄 Cuerpo ${idx+1} (${nombreMat}):</span><span class="valor">${formatearPYG(costoMatCuerpo)} <small style="color: #6b7280;">(${planchasTotales} planchas × ${formatearPYG(precioMat)})</small></span></div>`;
+        html += `<div class="desglose-row"><span class="label" style="color: ${coloresCapas[(idx+1) % coloresCapas.length]}; font-weight: 600;">📄 Cuerpo ${idx+1} (${nombreMat}):</span><span class="valor">${formatearPYG(costoMatCuerpo)}</span></div>`;
         costoTotal += costoMatCuerpo;
         
         const precioCorteCuerpo = parseInt(cuerpo.tipoCorte) || 0;
@@ -1549,7 +1344,7 @@ function calcularEstampas() {
             const costoCorteCuerpo = planchasTotales * precioCorteCuerpo;
             const corteLabels = { '1000': 'Corte Recto A', '2500': 'Corte Recto B', '5500': 'Corte Recto C', '10000': 'Corte D' };
             const corteNombre = corteLabels[cuerpo.tipoCorte] || 'Corte';
-            html += `<div class="desglose-row"><span class="label">✂️ Corte Cuerpo ${idx+1} (${corteNombre}):</span><span class="valor">${formatearPYG(costoCorteCuerpo)} <small style="color: #6b7280;">(${planchasTotales} planchas × ${formatearPYG(precioCorteCuerpo)})</small></span></div>`;
+            html += `<div class="desglose-row"><span class="label">✂️ Corte Cuerpo ${idx+1} (${corteNombre}):</span><span class="valor">${formatearPYG(costoCorteCuerpo)}</span></div>`;
             costoTotal += costoCorteCuerpo;
         }
         
@@ -1557,15 +1352,14 @@ function calcularEstampas() {
             const union = UNIONES.find(u => u.value === cuerpo.union);
             if (union) {
                 const costoUnion = cantidad * union.precio;
-                html += `<div class="desglose-row"><span class="label">🔗 Unión Cuerpo ${idx+1} (${union.label}):</span><span class="valor">${formatearPYG(costoUnion)} <small style="color: #6b7280;">(${cantidad} un. × ${formatearPYG(union.precio)})</small></span></div>`;
+                html += `<div class="desglose-row"><span class="label">🔗 Unión Cuerpo ${idx+1}:</span><span class="valor">${formatearPYG(costoUnion)}</span></div>`;
                 costoTotal += costoUnion;
             }
         }
         const precioTroquelCuerpo = parseInt(cuerpo.tipoTroquel) || 0;
         if (precioTroquelCuerpo > 0) {
             const costoTroquelCuerpo = cantidad * precioTroquelCuerpo;
-            const troquelLabel = cuerpo.tipoTroquel === '800' ? 'Circular' : cuerpo.tipoTroquel === '1000' ? 'Simple' : 'Complejo';
-            html += `<div class="desglose-row"><span class="label">🎯 Troquel Cuerpo ${idx+1} (${troquelLabel}):</span><span class="valor">${formatearPYG(costoTroquelCuerpo)} <small style="color: #6b7280;">(${cantidad} un. × ${formatearPYG(precioTroquelCuerpo)})</small></span></div>`;
+            html += `<div class="desglose-row"><span class="label">🎯 Troquel Cuerpo ${idx+1}:</span><span class="valor">${formatearPYG(costoTroquelCuerpo)}</span></div>`;
             costoTotal += costoTroquelCuerpo;
         }
         if (cuerpo.tieneFoil) {
@@ -1573,10 +1367,9 @@ function calcularEstampas() {
             const areaFoilTotal = cantidad * areaFoilUnit;
             const PRECIO_FOIL_CHICO = 200; const PRECIO_FOIL_GRANDE = 100; const UMBRAL_FOIL = 1000; const MINIMO_FOIL = 5000;
             let precioFoilCm2 = areaFoilTotal >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO;
-            let tipoFoil = areaFoilTotal >= UMBRAL_FOIL ? 'Foil Grande' : 'Foil Chico';
             let costoFoil = areaFoilTotal * precioFoilCm2;
             if (costoFoil < MINIMO_FOIL) costoFoil = MINIMO_FOIL;
-            html += `<div class="desglose-row sub-total"><span class="label">✨ Foil Cuerpo ${idx+1} (${areaFoilTotal.toFixed(2)} cm² × ${formatearPYG(precioFoilCm2)}) - ${tipoFoil}:</span><span class="valor">${formatearPYG(costoFoil)}</span></div>`;
+            html += `<div class="desglose-row sub-total"><span class="label">✨ Foil Cuerpo ${idx+1}:</span><span class="valor">${formatearPYG(costoFoil)}</span></div>`;
             costoTotal += costoFoil;
         }
     });
@@ -1592,163 +1385,181 @@ function calcularEstampas() {
 }
 
 // ==========================================
-// IMPRESIÓN + FOIL (CORREGIDO)
+// IMPRESIÓN + FOIL
 // ==========================================
 function calcularImpresionFoil() {
-    const formaDiseno = document.querySelector('input[name="formaDiseno"]:checked').value;
-    const formaFoil = document.querySelector('input[name="formaFoil"]:checked').value;
-    const tipoProduccion = document.getElementById('ifTipoProduccion').value;
-    document.getElementById('disenoRectDims').style.display = formaDiseno === 'rect' ? 'grid' : 'none';
-    document.getElementById('disenoCircDim').style.display = formaDiseno === 'circ' ? 'block' : 'none';
-    document.getElementById('foilRectDims').style.display = formaFoil === 'rect' ? 'grid' : 'none';
-    document.getElementById('foilCircDim').style.display = formaFoil === 'circ' ? 'block' : 'none';
-    let pasadas, conLaminado;
-    switch(tipoProduccion) {
-        case '1pasada-sinlam': pasadas = 1; conLaminado = false; break;
-        case '1pasada-conlam': pasadas = 1; conLaminado = true; break;
-        case '2pasadas-sinlam': pasadas = 2; conLaminado = false; break;
-        case '2pasadas-conlam': default: pasadas = 2; conLaminado = true; break;
-    }
-    let disenoAncho, disenoAlto, foilAncho, foilAlto;
-    if (formaDiseno === 'rect') { disenoAncho = parseFloat(document.getElementById('ifDisenoAncho').value) || 0; disenoAlto = parseFloat(document.getElementById('ifDisenoAlto').value) || 0; }
-    else { const d = parseFloat(document.getElementById('ifDisenoDiametro').value) || 0; disenoAncho = d; disenoAlto = d; }
-    if (formaFoil === 'rect') { foilAncho = parseFloat(document.getElementById('ifFoilAncho').value) || 0; foilAlto = parseFloat(document.getElementById('ifFoilAlto').value) || 0; }
-    else { const d = parseFloat(document.getElementById('ifFoilDiametro').value) || 0; foilAncho = d; foilAlto = d; }
-    const precioImpresion = parseInt(document.getElementById('ifTipoImpresion').value) || 0;
-    const precioCorte = parseInt(document.getElementById('ifTipoCorte').value) || 0;
-    const cantidad = parseInt(document.getElementById('ifCantidad').value) || 1;
-    const margen = parseFloat(document.getElementById('ifMargen').value) || 0;
-    const pAncho = 33; const pAlto = 48;
-    const diseñosPorPlancha = Math.floor(pAncho / disenoAncho) * Math.floor(pAlto / disenoAlto);
-    const alerta = document.getElementById('ifAlerta');
-    const base = document.getElementById('ifPlanchaBase');
-    
-    if (diseñosPorPlancha === 0) {
-        alerta.style.display = 'block';
-        base.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444;">️ El diseño es más grande que la plancha</div>';
-        document.getElementById('ifDisenosPorPlancha').textContent = '0';
-        document.getElementById('ifPlanchasTotales').textContent = '0';
-        document.getElementById('ifTotalImpresiones').textContent = '0';
-        document.getElementById('ifAreaFoilTotal').textContent = '0 cm²';
-        document.getElementById('ifDesgloseCostos').innerHTML = '';
-        document.getElementById('ifPrecioTotal').textContent = 'Gs. 0';
-        document.getElementById('ifPrecioUnitario').textContent = 'Gs. 0';
-        return;
-    } else { alerta.style.display = 'none'; }
-    const planchasTotales = Math.ceil(cantidad / diseñosPorPlancha);
-    const totalImpresiones = planchasTotales * pasadas;
-    const totalDisenos = planchasTotales * diseñosPorPlancha;
-    const areaFoilUnit = foilAncho * foilAlto;
-    const areaFoilTotal = totalDisenos * areaFoilUnit;
-    const PRECIO_FOIL_CHICO = 200; const PRECIO_FOIL_GRANDE = 100; const UMBRAL_FOIL = 1000;
-    let precioFoilCm2, tipoFoil;
-    if (areaFoilTotal >= UMBRAL_FOIL) { precioFoilCm2 = PRECIO_FOIL_GRANDE; tipoFoil = 'Foil Grande'; }
-    else { precioFoilCm2 = PRECIO_FOIL_CHICO; tipoFoil = 'Foil Chico'; }
-    const costoFoil = areaFoilTotal * precioFoilCm2;
-    document.getElementById('ifDisenosPorPlancha').textContent = diseñosPorPlancha;
-    document.getElementById('ifPlanchasTotales').textContent = planchasTotales;
-    document.getElementById('ifTotalImpresiones').textContent = totalImpresiones;
-    document.getElementById('ifAreaFoilTotal').textContent = areaFoilTotal.toFixed(2) + ' cm²';
-    
-    // PREVIEW VISUAL
-    base.innerHTML = '';
-    const escala = 10;
-    base.style.width = '330px';
-    base.style.height = '480px';
-    base.style.overflow = 'visible';
-    const cols = Math.floor(pAncho / disenoAncho);
-    const rows = Math.floor(pAlto / disenoAlto);
-    const itemW = disenoAncho * escala;
-    const itemH = disenoAlto * escala;
-    const foilW = foilAncho * escala;
-    const foilH = foilAlto * escala;
-    let contador = 0;
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            if (contador >= diseñosPorPlancha) break;
-            const div = document.createElement('div');
-            div.style.position = 'absolute';
-            div.style.width = itemW + 'px'; div.style.height = itemH + 'px';
-            div.style.left = (c * itemW) + 'px'; div.style.top = (r * itemH) + 'px';
-            div.style.border = formaDiseno === 'circ' ? '2px dashed #3b82f6' : '1px dashed #3b82f6';
-            div.style.borderRadius = formaDiseno === 'circ' ? '50%' : '0';
-            div.style.background = 'rgba(59,130,246,0.08)';
-            div.style.display = 'flex'; div.style.alignItems = 'center'; div.style.justifyContent = 'center';
-            div.style.fontSize = '0.7em'; div.style.color = '#1e3a8a'; div.style.fontWeight = '600';
-            div.textContent = `${disenoAncho}×${disenoAlto}`;
-            base.appendChild(div);
-            const foilDiv = document.createElement('div');
-            foilDiv.style.position = 'absolute';
-            foilDiv.style.width = foilW + 'px'; foilDiv.style.height = foilH + 'px';
-            foilDiv.style.left = (c * itemW + (itemW - foilW) / 2) + 'px';
-            foilDiv.style.top = (r * itemH + (itemH - foilH) / 2) + 'px';
-            foilDiv.style.background = 'rgba(251, 191, 36, 0.3)';
-            foilDiv.style.border = '2px solid #f59e0b';
-            foilDiv.style.borderRadius = formaFoil === 'circ' ? '50%' : '0';
-            base.appendChild(foilDiv);
-            contador++;
+    try {
+        const formaDiseno = document.querySelector('input[name="formaDiseno"]:checked').value;
+        const formaFoil = document.querySelector('input[name="formaFoil"]:checked').value;
+        const tipoProduccion = document.getElementById('ifTipoProduccion').value;
+        document.getElementById('disenoRectDims').style.display = formaDiseno === 'rect' ? 'grid' : 'none';
+        document.getElementById('disenoCircDim').style.display = formaDiseno === 'circ' ? 'block' : 'none';
+        document.getElementById('foilRectDims').style.display = formaFoil === 'rect' ? 'grid' : 'none';
+        document.getElementById('foilCircDim').style.display = formaFoil === 'circ' ? 'block' : 'none';
+        let pasadas, conLaminado;
+        switch(tipoProduccion) {
+            case '1pasada-sinlam': pasadas = 1; conLaminado = false; break;
+            case '1pasada-conlam': pasadas = 1; conLaminado = true; break;
+            case '2pasadas-sinlam': pasadas = 2; conLaminado = false; break;
+            case '2pasadas-conlam': default: pasadas = 2; conLaminado = true; break;
         }
+        let disenoAncho, disenoAlto, foilAncho, foilAlto;
+        if (formaDiseno === 'rect') { 
+            disenoAncho = parseFloat(document.getElementById('ifDisenoAncho').value) || 0; 
+            disenoAlto = parseFloat(document.getElementById('ifDisenoAlto').value) || 0; 
+        } else { 
+            const diametroInput = document.getElementById('ifDisenoDiametro');
+            disenoAncho = (diametroInput && diametroInput.offsetParent !== null) ? (parseFloat(diametroInput.value) || 0) : (parseFloat(document.getElementById('ifDisenoAncho').value) || 0);
+            disenoAlto = disenoAncho;
+        }
+        if (formaFoil === 'rect') { 
+            foilAncho = parseFloat(document.getElementById('ifFoilAncho').value) || 0; 
+            foilAlto = parseFloat(document.getElementById('ifFoilAlto').value) || 0; 
+        } else { 
+            const diametroFoilInput = document.getElementById('ifFoilDiametro');
+            foilAncho = (diametroFoilInput && diametroFoilInput.offsetParent !== null) ? (parseFloat(diametroFoilInput.value) || 0) : (parseFloat(document.getElementById('ifFoilAncho').value) || 0);
+            foilAlto = foilAncho;
+        }
+        const precioImpresion = parseInt(document.getElementById('ifTipoImpresion').value) || 0;
+        const precioCorte = parseInt(document.getElementById('ifTipoCorte').value) || 0;
+        const cantidad = parseInt(document.getElementById('ifCantidad').value) || 1;
+        const margen = parseFloat(document.getElementById('ifMargen').value) || 0;
+        const pAncho = 33; const pAlto = 48;
+        
+        if (disenoAncho <= 0 || disenoAlto <= 0) {
+            document.getElementById('ifDisenosPorPlancha').textContent = '0';
+            document.getElementById('ifPlanchasTotales').textContent = '0';
+            document.getElementById('ifTotalImpresiones').textContent = '0';
+            document.getElementById('ifAreaFoilTotal').textContent = '0 cm²';
+            document.getElementById('ifDesgloseCostos').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">⚠️ Ingresá medidas válidas</div>';
+            document.getElementById('ifPrecioTotal').textContent = 'Gs. 0';
+            document.getElementById('ifPrecioUnitario').textContent = 'Gs. 0';
+            return;
+        }
+        
+        const diseñosPorPlancha = Math.floor(pAncho / disenoAncho) * Math.floor(pAlto / disenoAlto);
+        const alerta = document.getElementById('ifAlerta');
+        const base = document.getElementById('ifPlanchaBase');
+        
+        if (diseñosPorPlancha === 0) {
+            alerta.style.display = 'block';
+            base.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444;">⚠️ El diseño es más grande que la plancha</div>';
+            document.getElementById('ifDisenosPorPlancha').textContent = '0';
+            document.getElementById('ifPlanchasTotales').textContent = '0';
+            document.getElementById('ifTotalImpresiones').textContent = '0';
+            document.getElementById('ifAreaFoilTotal').textContent = '0 cm²';
+            document.getElementById('ifDesgloseCostos').innerHTML = '';
+            document.getElementById('ifPrecioTotal').textContent = 'Gs. 0';
+            document.getElementById('ifPrecioUnitario').textContent = 'Gs. 0';
+            return;
+        } else { alerta.style.display = 'none'; }
+        
+        const planchasTotales = Math.ceil(cantidad / diseñosPorPlancha);
+        const totalImpresiones = planchasTotales * pasadas;
+        const totalDisenos = planchasTotales * diseñosPorPlancha;
+        const areaFoilUnit = foilAncho * foilAlto;
+        const areaFoilTotal = totalDisenos * areaFoilUnit;
+        const PRECIO_FOIL_CHICO = 200; const PRECIO_FOIL_GRANDE = 100; const UMBRAL_FOIL = 1000;
+        let precioFoilCm2, tipoFoil;
+        if (areaFoilTotal >= UMBRAL_FOIL) { precioFoilCm2 = PRECIO_FOIL_GRANDE; tipoFoil = 'Foil Grande'; }
+        else { precioFoilCm2 = PRECIO_FOIL_CHICO; tipoFoil = 'Foil Chico'; }
+        const costoFoil = areaFoilTotal * precioFoilCm2;
+        
+        document.getElementById('ifDisenosPorPlancha').textContent = diseñosPorPlancha;
+        document.getElementById('ifPlanchasTotales').textContent = planchasTotales;
+        document.getElementById('ifTotalImpresiones').textContent = totalImpresiones;
+        document.getElementById('ifAreaFoilTotal').textContent = areaFoilTotal.toFixed(2) + ' cm²';
+        document.getElementById('ifPlanchaDimensiones').textContent = `Plancha: ${pAncho} × ${pAlto} cm | Diseño: ${disenoAncho} × ${disenoAlto} cm`;
+        
+        base.innerHTML = '';
+        const escala = 10;
+        base.style.width = '330px';
+        base.style.height = '480px';
+        base.style.overflow = 'visible';
+        const cols = Math.floor(pAncho / disenoAncho);
+        const rows = Math.floor(pAlto / disenoAlto);
+        const itemW = disenoAncho * escala;
+        const itemH = disenoAlto * escala;
+        const foilW = foilAncho * escala;
+        const foilH = foilAlto * escala;
+        let contador = 0;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                if (contador >= diseñosPorPlancha) break;
+                const div = document.createElement('div');
+                div.style.cssText = `position:absolute;width:${itemW}px;height:${itemH}px;left:${c*itemW}px;top:${r*itemH}px;border:${formaDiseno === 'circ' ? '2px dashed #3b82f6' : '1px dashed #3b82f6'};border-radius:${formaDiseno === 'circ' ? '50%' : '0'};background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7em;color:#1e3a8a;font-weight:600;`;
+                div.textContent = `${disenoAncho}×${disenoAlto}`;
+                base.appendChild(div);
+                if (foilAncho > 0 && foilAlto > 0) {
+                    const foilDiv = document.createElement('div');
+                    foilDiv.style.cssText = `position:absolute;width:${foilW}px;height:${foilH}px;left:${c*itemW + (itemW-foilW)/2}px;top:${r*itemH + (itemH-foilH)/2}px;background:rgba(251,191,36,0.4);border:2px solid #f59e0b;border-radius:${formaFoil === 'circ' ? '50%' : '0'};display:flex;align-items:center;justify-content:center;font-size:0.6em;color:#92400e;font-weight:600;`;
+                    foilDiv.textContent = 'Foil';
+                    base.appendChild(foilDiv);
+                }
+                contador++;
+            }
+        }
+        
+        let html = ''; let costoTotal = 0;
+        if (pasadas === 2) {
+            const c1 = planchasTotales * precioImpresion; const c2 = planchasTotales * precioImpresion;
+            html += `<div class="desglose-row"><span class="label">🎨 Impresión 1ª pasada:</span><span class="valor">${formatearPYG(c1)}</span></div>`;
+            html += `<div class="desglose-row"><span class="label">🎨 Impresión 2ª pasada:</span><span class="valor">${formatearPYG(c2)}</span></div>`;
+            costoTotal += c1 + c2;
+        } else {
+            const c = planchasTotales * precioImpresion;
+            html += `<div class="desglose-row"><span class="label">🎨 Impresión (1 pasada):</span><span class="valor">${formatearPYG(c)}</span></div>`;
+            costoTotal += c;
+        }
+        if (conLaminado) {
+            const cLam = planchasTotales * 3000;
+            html += `<div class="desglose-row"><span class="label">✨ Laminado entre pasadas:</span><span class="valor">${formatearPYG(cLam)}</span></div>`;
+            costoTotal += cLam;
+        }
+        html += `<div class="desglose-row"><span class="label">✨ Foil (${areaFoilTotal.toFixed(2)} cm² × ${formatearPYG(precioFoilCm2)}):</span><span class="valor">${formatearPYG(costoFoil)}</span></div>`;
+        costoTotal += costoFoil;
+        if (precioCorte > 0) {
+            const corteSelect = document.getElementById('ifTipoCorte');
+            const corteNombre = corteSelect.options[corteSelect.selectedIndex].text;
+            const esTroquelCircular = corteSelect.value === '800';
+            let costoCorte, detalleCorte;
+            if (esTroquelCircular) { costoCorte = totalDisenos * precioCorte; detalleCorte = `${totalDisenos} círculos`; }
+            else { costoCorte = planchasTotales * precioCorte; detalleCorte = `${planchasTotales} planchas`; }
+            html += `<div class="desglose-row"><span class="label">✂️ ${corteNombre}:</span><span class="valor">${formatearPYG(costoCorte)} <small style="color: #6b7280;">(${detalleCorte})</small></span></div>`;
+            costoTotal += costoCorte;
+        }
+        const utilidad = costoTotal * (margen / 100);
+        const precioTotal = costoTotal + utilidad;
+        const precioUnitario = precioTotal / cantidad;
+        html += `<div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor">${formatearPYG(costoTotal)}</span></div>`;
+        html += `<div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor">${formatearPYG(utilidad)}</span></div>`;
+        document.getElementById('ifDesgloseCostos').innerHTML = html;
+        document.getElementById('ifPrecioTotal').textContent = formatearPYG(precioTotal);
+        document.getElementById('ifPrecioUnitario').textContent = formatearPYG(precioUnitario);
+    } catch (error) {
+        console.error('Error en calcularImpresionFoil:', error);
     }
-    
-    let html = ''; let costoTotal = 0;
-    if (pasadas === 2) {
-        const c1 = planchasTotales * precioImpresion; const c2 = planchasTotales * precioImpresion;
-        html += `<div class="desglose-row"><span class="label">🎨 Impresión 1ª pasada:</span><span class="valor">${formatearPYG(c1)}</span></div>`;
-        html += `<div class="desglose-row"><span class="label">🎨 Impresión 2ª pasada:</span><span class="valor">${formatearPYG(c2)}</span></div>`;
-        costoTotal += c1 + c2;
-    } else {
-        const c = planchasTotales * precioImpresion;
-        html += `<div class="desglose-row"><span class="label">🎨 Impresión (1 pasada):</span><span class="valor">${formatearPYG(c)}</span></div>`;
-        costoTotal += c;
-    }
-    if (conLaminado) {
-        const cLam = planchasTotales * 3000;
-        html += `<div class="desglose-row"><span class="label">✨ Laminado entre pasadas:</span><span class="valor">${formatearPYG(cLam)}</span></div>`;
-        costoTotal += cLam;
-    }
-    html += `<div class="desglose-row"><span class="label">✨ Foil (${areaFoilTotal.toFixed(2)} cm² × ${formatearPYG(precioFoilCm2)}):</span><span class="valor">${formatearPYG(costoFoil)}</span></div>`;
-    costoTotal += costoFoil;
-    if (precioCorte > 0) {
-        const corteSelect = document.getElementById('ifTipoCorte');
-        const corteNombre = corteSelect.options[corteSelect.selectedIndex].text;
-        const esTroquelCircular = corteSelect.value === '800';
-        let costoCorte, detalleCorte;
-        if (esTroquelCircular) { costoCorte = totalDisenos * precioCorte; detalleCorte = `${totalDisenos} círculos × ${formatearPYG(precioCorte)}`; }
-        else { costoCorte = planchasTotales * precioCorte; detalleCorte = `${planchasTotales} planchas × ${formatearPYG(precioCorte)}`; }
-        html += `<div class="desglose-row"><span class="label">✂️ ${corteNombre} <small style="color: #6b7280;">(${detalleCorte})</small>:</span><span class="valor">${formatearPYG(costoCorte)}</span></div>`;
-        costoTotal += costoCorte;
-    }
-    const utilidad = costoTotal * (margen / 100);
-    const precioTotal = costoTotal + utilidad;
-    const precioUnitario = precioTotal / cantidad;
-    html += `<div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor">${formatearPYG(costoTotal)}</span></div>`;
-    html += `<div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor">${formatearPYG(utilidad)}</span></div>`;
-    document.getElementById('ifDesgloseCostos').innerHTML = html;
-    document.getElementById('ifPrecioTotal').textContent = formatearPYG(precioTotal);
-    document.getElementById('ifPrecioUnitario').textContent = formatearPYG(precioUnitario);
 }
 
 // ==========================================
-// EDITOR VISUAL (COMPLETO)
+// EDITOR VISUAL - COMPLETO
 // ==========================================
-let editorState = { artboardAncho: 33, artboardAlto: 48, zoom: 1, elementos: [], seleccionado: null, nextId: 1, dragging: false, dragStart: { x: 0, y: 0 }, dragElement: null, dragOriginal: null, modoMano: false, panning: false, panStart: { x: 0, y: 0 }, scrollStart: { x: 0, y: 0 }, espacioPresionado: false };
+let editorState = { 
+    artboardAncho: 33, artboardAlto: 48, zoom: 1, 
+    elementos: [], seleccionado: null, nextId: 1,
+    dragging: false, dragStart: { x: 0, y: 0 }, 
+    dragElement: null, dragOriginal: null,
+    modoMano: false, panning: false, 
+    panStart: { x: 0, y: 0 }, scrollStart: { x: 0, y: 0 },
+    espacioPresionado: false
+};
 const CM_TO_PX = 37.795275591;
 
-function inicializarEditor() { actualizarReglas(); renderizarElementos(); actualizarInfoEditor(); configurarModoMano(); }
-
-function toggleModoMano() { 
-    editorState.modoMano = !editorState.modoMano; 
-    const btn = document.getElementById('btnMano'); 
-    if (editorState.modoMano) btn.classList.add('activo'); else btn.classList.remove('activo'); 
-    actualizarUIMano(); 
-}
-function activarModoMano() { editorState.modoMano = true; actualizarUIMano(); }
-function desactivarModoMano() { editorState.modoMano = false; actualizarUIMano(); }
-function actualizarUIMano() { 
-    const container = document.getElementById('canvasContainer'); 
-    const btn = document.getElementById('btnMano'); 
-    if (editorState.modoMano) { container.classList.add('modo-mano'); btn.classList.add('activo'); } 
-    else { container.classList.remove('modo-mano'); btn.classList.remove('activo'); } 
+function inicializarEditor() { 
+    actualizarReglas(); 
+    renderizarElementos(); 
+    actualizarInfoEditor(); 
+    configurarModoMano(); 
 }
 
 function configurarModoMano() { 
@@ -1800,6 +1611,21 @@ document.addEventListener('keydown', (e) => {
 });
 document.addEventListener('keyup', (e) => { if (e.key === ' ') { editorState.espacioPresionado = false; if (editorState.modoMano) desactivarModoMano(); } });
 
+function toggleModoMano() { 
+    editorState.modoMano = !editorState.modoMano; 
+    const btn = document.getElementById('btnMano'); 
+    if (editorState.modoMano) btn.classList.add('activo'); else btn.classList.remove('activo'); 
+    actualizarUIMano(); 
+}
+function activarModoMano() { editorState.modoMano = true; actualizarUIMano(); }
+function desactivarModoMano() { editorState.modoMano = false; actualizarUIMano(); }
+function actualizarUIMano() { 
+    const container = document.getElementById('canvasContainer'); 
+    const btn = document.getElementById('btnMano'); 
+    if (editorState.modoMano) { container.classList.add('modo-mano'); btn.classList.add('activo'); } 
+    else { container.classList.remove('modo-mano'); btn.classList.remove('activo'); } 
+}
+
 function cambiarTamanoArtboard() { 
     const nuevoAncho = prompt('Ancho del artboard (cm):', editorState.artboardAncho); 
     const nuevoAlto = prompt('Alto del artboard (cm):', editorState.artboardAlto); 
@@ -1818,6 +1644,7 @@ function ajustarArtboard(ancho, alto) {
 }
 function actualizarReglas() { 
     const reglaH = document.getElementById('reglaH'); const reglaV = document.getElementById('reglaV'); 
+    if (!reglaH || !reglaV) return;
     reglaH.innerHTML = ''; reglaV.innerHTML = ''; 
     for (let i = 1; i <= editorState.artboardAncho; i++) { 
         const marca = document.createElement('div'); 
@@ -1834,8 +1661,10 @@ function actualizarReglas() {
         reglaV.appendChild(marca); 
     } 
 }
-function toggleGrid() { document.getElementById('artboardBg').style.display = document.getElementById('showGrid').checked ? 'block' : 'none'; }
-function toggleRules() { const show = document.getElementById('showRules').checked; document.getElementById('reglaH').style.display = show ? 'block' : 'none'; document.getElementById('reglaV').style.display = show ? 'block' : 'none'; }
+function toggleGrid() { 
+    const bg = document.getElementById('artboardBg');
+    if (bg) bg.style.display = document.getElementById('showGrid').checked ? 'block' : 'none'; 
+}
 function zoomIn() { editorState.zoom = Math.min(3, editorState.zoom + 0.1); aplicarZoom(); }
 function zoomOut() { editorState.zoom = Math.max(0.3, editorState.zoom - 0.1); aplicarZoom(); }
 function resetZoom() { editorState.zoom = 1; aplicarZoom(); }
@@ -1847,6 +1676,7 @@ function aplicarZoom() {
 }
 
 async function subirImagenesEditor(files) { 
+    if (!files || files.length === 0) return;
     for (let file of files) { 
         try { 
             const ext = file.name.split('.').pop().toLowerCase(); 
@@ -1913,13 +1743,12 @@ async function procesarSVG(file) {
     const anchoCm = w * factor; const altoCm = h * factor; 
     const blob = new Blob([texto], { type: 'image/svg+xml' }); 
     const dataUrl = URL.createObjectURL(blob); 
-    ajustarArtboard(anchoCm, altoCm); 
     editorState.elementos.push({ 
         id: editorState.nextId++, nombre: file.name.substring(0, 20), tipo: 'SVG', 
         x: 0, y: 0, ancho: anchoCm, alto: altoCm, 
         rotacion: 0, opacidad: 100, dataUrl: dataUrl, bloqueado: false, z: editorState.elementos.length 
     }); 
-    renderizarElementos(); actualizarListaCapas(); actualizarInfoEditor(); resetZoom(); 
+    renderizarElementos(); actualizarListaCapas(); actualizarInfoEditor(); 
 }
 
 async function procesarImagenRaster(file) { 
@@ -1951,6 +1780,7 @@ async function procesarImagenRaster(file) {
 
 function renderizarElementos() { 
     const container = document.getElementById('elementosContainer'); 
+    if (!container) return;
     container.innerHTML = ''; 
     editorState.elementos.forEach((el) => { 
         const div = document.createElement('div'); 
@@ -1965,9 +1795,12 @@ function renderizarElementos() {
         const img = document.createElement('img'); 
         img.src = el.dataUrl; 
         img.style.pointerEvents = 'none'; 
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'contain';
         div.appendChild(img); 
         const dimLabel = document.createElement('div'); 
-        dimLabel.className = 'dim-label top'; 
+        dimLabel.className = 'dim-label'; 
         dimLabel.textContent = `${el.ancho.toFixed(1)} × ${el.alto.toFixed(1)} cm`; 
         dimLabel.style.pointerEvents = 'none'; 
         div.appendChild(dimLabel); 
@@ -1994,7 +1827,9 @@ function onDrag(e) {
     const el = editorState.dragElement; 
     const orig = editorState.dragOriginal; 
     let newX = orig.x + dx; let newY = orig.y + dy; 
-    if (document.getElementById('snapGrid').checked) { newX = Math.round(newX * 2) / 2; newY = Math.round(newY * 2) / 2; } 
+    if (document.getElementById('snapGrid') && document.getElementById('snapGrid').checked) { 
+        newX = Math.round(newX * 2) / 2; newY = Math.round(newY * 2) / 2; 
+    } 
     el.x = Math.max(0, newX); el.y = Math.max(0, newY); 
     renderizarElementos(); actualizarPropiedadesPanel(); 
 }
@@ -2015,6 +1850,7 @@ function seleccionarElemento(id) {
 
 function actualizarListaCapas() { 
     const lista = document.getElementById('listaCapas'); 
+    if (!lista) return;
     if (editorState.elementos.length === 0) { 
         lista.innerHTML = '<div class="empty-state"><div class="icono">🖼️</div><div style="font-size: 0.85em;">No hay elementos</div></div>'; 
         return; 
@@ -2024,7 +1860,7 @@ function actualizarListaCapas() {
         const item = document.createElement('div'); 
         item.className = 'capa-item' + (editorState.seleccionado === el.id ? ' seleccionado' : ''); 
         item.onclick = () => seleccionarElemento(el.id); 
-        item.innerHTML = `<div class="capa-thumb">${el.tipo.startsWith('AI') || el.tipo === 'PDF' ? '📄' : '🖼️'}</div><div class="capa-nombre" title="${el.nombre}">${el.nombre}</div><div class="capa-acciones"><button class="capa-btn" onclick="event.stopPropagation(); eliminarElementoId(${el.id})">️</button></div>`; 
+        item.innerHTML = `<div class="capa-thumb">${el.tipo.startsWith('AI') || el.tipo === 'PDF' ? '📄' : '️'}</div><div class="capa-nombre" title="${el.nombre}">${el.nombre}</div><div class="capa-acciones"><button class="capa-btn" onclick="event.stopPropagation(); eliminarElementoId(${el.id})">🗑️</button></div>`; 
         lista.appendChild(item); 
     }); 
 }
@@ -2088,28 +1924,21 @@ const MINIMO_FOIL = 5000;
 const PRECIO_PLOTTER_PALABRA_A = 100; const PRECIO_PLOTTER_PALABRA_B = 500;
 
 function actualizarPreviewPVC() { const a = parseFloat(document.getElementById('pvcAncho').value) || 0; const h = parseFloat(document.getElementById('pvcAlto').value) || 0; const c = parseInt(document.getElementById('pvcCantidad').value) || 1; document.getElementById('pvcAreaPreview').textContent = `${(a*h).toFixed(2)} cm²`; document.getElementById('pvcTotalPreview').textContent = formatearPYG(a*h*PRECIO_PVC*c); }
-function agregarItemPVC() { const a = parseFloat(document.getElementById('pvcAncho').value) || 0; const h = parseFloat(document.getElementById('pvcAlto').value) || 0; const c = parseInt(document.getElementById('pvcCantidad').value) || 1; const descripcion = document.getElementById('pvcDescripcion').value || 'PVC'; if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } pvcItems.push({ id: Date.now(), a, h, c, descripcion, total: a*h*PRECIO_PVC*c }); document.getElementById('pvcDescripcion').value = ''; renderizarPVC(); }
-function renderizarPVC() { const lista = document.getElementById('pvcItemsList'); const resumen = document.getElementById('pvcResumen'); if (pvcItems.length === 0) { lista.innerHTML = ''; resumen.style.display = 'none'; actualizarGranTotal(); return; } lista.innerHTML = ''; let areaTotal = 0; let totalGeneral = 0; pvcItems.forEach(item => { areaTotal += item.a * item.h * item.c; totalGeneral += item.total; const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">${item.descripcion}</div><div class="detalle">${item.a} × ${item.h} cm | ${item.c} un | ${(item.a*item.h*item.c).toFixed(2)} cm²</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPVC(${item.id})">🗑️</button>`; lista.appendChild(div); }); resumen.style.display = 'block'; document.getElementById('pvcAreaTotal').textContent = `${areaTotal.toFixed(2)} cm²`; document.getElementById('pvcTotalGeneral').textContent = formatearPYG(totalGeneral); actualizarGranTotal(); }
+function agregarItemPVC() { const a = parseFloat(document.getElementById('pvcAncho').value) || 0; const h = parseFloat(document.getElementById('pvcAlto').value) || 0; const c = parseInt(document.getElementById('pvcCantidad').value) || 1; if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } pvcItems.push({ id: Date.now(), a, h, c, total: a*h*PRECIO_PVC*c }); renderizarPVC(); }
+function renderizarPVC() { const lista = document.getElementById('pvcItemsList'); if (pvcItems.length === 0) { lista.innerHTML = ''; return; } lista.innerHTML = ''; let total = 0; pvcItems.forEach(item => { total += item.total; const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">PVC ${item.a}×${item.h} cm</div><div class="detalle">${item.c} un</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPVC(${item.id})">️</button>`; lista.appendChild(div); }); document.getElementById('granTotal').textContent = formatearPYG(total + calcularTotalFoil() + calcularTotalPlotter()); }
 function eliminarPVC(id) { pvcItems = pvcItems.filter(i => i.id !== id); renderizarPVC(); }
-function actualizarPreviewFoil() { const a = parseFloat(document.getElementById('foilAncho').value) || 0; const h = parseFloat(document.getElementById('foilAlto').value) || 0; const c = parseInt(document.getElementById('foilCantidad').value) || 1; document.getElementById('foilAreaPreview').textContent = `${(a*h).toFixed(2)} cm²`; document.getElementById('foilAreaTotalPreview').textContent = `${(a*h*c).toFixed(2)} cm²`; }
-function agregarItemFoil() { const a = parseFloat(document.getElementById('foilAncho').value) || 0; const h = parseFloat(document.getElementById('foilAlto').value) || 0; const c = parseInt(document.getElementById('foilCantidad').value) || 1; const descripcion = document.getElementById('foilDescripcion').value || 'Foil'; if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } foilItems.push({ id: Date.now(), a, h, c, descripcion }); document.getElementById('foilDescripcion').value = ''; renderizarFoil(); }
+function actualizarPreviewFoil() { const a = parseFloat(document.getElementById('foilAncho').value) || 0; const h = parseFloat(document.getElementById('foilAlto').value) || 0; const c = parseInt(document.getElementById('foilCantidad').value) || 1; document.getElementById('foilAreaPreview').textContent = `${(a*h).toFixed(2)} cm²`; }
+function agregarItemFoil() { const a = parseFloat(document.getElementById('foilAncho').value) || 0; const h = parseFloat(document.getElementById('foilAlto').value) || 0; const c = parseInt(document.getElementById('foilCantidad').value) || 1; if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } foilItems.push({ id: Date.now(), a, h, c }); renderizarFoil(); }
+function renderizarFoil() { const lista = document.getElementById('foilItemsList'); if (foilItems.length === 0) { lista.innerHTML = ''; return; } lista.innerHTML = ''; let areaTotal = 0; foilItems.forEach(item => { areaTotal += item.a * item.h * item.c; }); let precioCm2 = areaTotal >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO; let total = Math.max(areaTotal * precioCm2, MINIMO_FOIL); foilItems.forEach(item => { const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">Foil ${item.a}×${item.h} cm</div><div class="detalle">${item.c} un</div></div><div class="foil-item-total">${formatearPYG(item.a*item.h*item.c*precioCm2)}</div><button class="btn-eliminar-item" onclick="eliminarFoil(${item.id})">🗑️</button>`; lista.appendChild(div); }); document.getElementById('granTotal').textContent = formatearPYG(calcularTotalPVC() + total + calcularTotalPlotter()); }
 function eliminarFoil(id) { foilItems = foilItems.filter(i => i.id !== id); renderizarFoil(); }
-function renderizarFoil() { const lista = document.getElementById('foilItemsList'); const resumen = document.getElementById('foilResumen'); if (foilItems.length === 0) { lista.innerHTML = ''; resumen.style.display = 'none'; actualizarGranTotal(); return; } lista.innerHTML = ''; let areaTotal = 0; foilItems.forEach(item => { areaTotal += item.a * item.h * item.c; }); let tipo, precioCm2, badgeClass; if (areaTotal >= UMBRAL_FOIL) { tipo = 'Foil Grande'; precioCm2 = PRECIO_FOIL_GRANDE; badgeClass = 'foil-grande'; } else { tipo = 'Foil Chico'; precioCm2 = PRECIO_FOIL_CHICO; badgeClass = 'foil-chico'; } let totalCalculado = areaTotal * precioCm2; let aplicadoMinimo = false; if (totalCalculado < MINIMO_FOIL) { totalCalculado = MINIMO_FOIL; aplicadoMinimo = true; } foilItems.forEach(item => { const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">${item.descripcion} <span class="tipo-badge ${badgeClass}">${tipo}</span></div><div class="detalle">${item.a} × ${item.h} cm | ${item.c} un | ${(item.a*item.h*item.c).toFixed(2)} cm²</div></div><div class="foil-item-total">${formatearPYG(item.a*item.h*item.c*precioCm2)}</div><button class="btn-eliminar-item" onclick="eliminarFoil(${item.id})">🗑️</button>`; lista.appendChild(div); }); resumen.style.display = 'block'; document.getElementById('foilAreaTotalDisplay').textContent = `${areaTotal.toFixed(2)} cm²`; document.getElementById('foilTipoAplicado').innerHTML = `${tipo} <span class="tipo-badge ${aplicadoMinimo ? 'minimo' : badgeClass}">${aplicadoMinimo ? 'Mínimo aplicado' : ''}</span>`; document.getElementById('foilPrecioCm2').textContent = formatearPYG(precioCm2) + '/cm²'; document.getElementById('foilTotalGeneral').textContent = formatearPYG(totalCalculado); actualizarGranTotal(); }
-function actualizarPreviewPlotterPalabra() { const tipoSelect = document.getElementById('plotterPalabraTipo'); const precio = parseInt(tipoSelect.options[tipoSelect.selectedIndex].dataset.precio); const cantidad = parseInt(document.getElementById('plotterPalabraCantidad').value) || 1; document.getElementById('plotterPalabraTotalPreview').textContent = formatearPYG(precio * cantidad); }
-function agregarItemPlotterPalabra() { const tipoSelect = document.getElementById('plotterPalabraTipo'); const tipo = tipoSelect.value; const precio = parseInt(tipoSelect.options[tipoSelect.selectedIndex].dataset.precio); const cantidad = parseInt(document.getElementById('plotterPalabraCantidad').value) || 1; const descripcion = document.getElementById('plotterPalabraDescripcion').value || `Troquel de Plotter ${tipo}`; if (cantidad <= 0) { alert('La cantidad debe ser mayor a 0'); return; } plotterPalabraItems.push({ id: Date.now(), tipo, precio, cantidad, descripcion, total: precio * cantidad }); document.getElementById('plotterPalabraDescripcion').value = ''; renderizarPlotterPalabra(); }
+function calcularTotalPVC() { return pvcItems.reduce((sum, i) => sum + i.total, 0); }
+function calcularTotalFoil() { let area = foilItems.reduce((sum, i) => sum + i.a*i.h*i.c, 0); if (area === 0) return 0; let precio = area >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO; return Math.max(area * precio, MINIMO_FOIL); }
+function calcularTotalPlotter() { return plotterPalabraItems.reduce((sum, i) => sum + i.total, 0); }
+function actualizarPreviewPlotterPalabra() { const tipoSelect = document.getElementById('plotterPalabraTipo'); const precio = parseInt(tipoSelect.options[tipoSelect.selectedIndex].dataset.precio); const cantidad = parseInt(document.getElementById('plotterPalabraCantidad').value) || 1; }
+function agregarItemPlotterPalabra() { const tipoSelect = document.getElementById('plotterPalabraTipo'); const tipo = tipoSelect.value; const precio = parseInt(tipoSelect.options[tipoSelect.selectedIndex].dataset.precio); const cantidad = parseInt(document.getElementById('plotterPalabraCantidad').value) || 1; if (cantidad <= 0) { alert('La cantidad debe ser mayor a 0'); return; } plotterPalabraItems.push({ id: Date.now(), tipo, precio, cantidad, total: precio * cantidad }); renderizarPlotterPalabra(); }
+function renderizarPlotterPalabra() { const lista = document.getElementById('plotterPalabraItemsList'); if (plotterPalabraItems.length === 0) { lista.innerHTML = ''; return; } lista.innerHTML = ''; let total = 0; plotterPalabraItems.forEach(item => { total += item.total; const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">Plotter ${item.tipo}</div><div class="detalle">${item.cantidad} palabras</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPlotterPalabra(${item.id})">🗑️</button>`; lista.appendChild(div); }); document.getElementById('granTotal').textContent = formatearPYG(calcularTotalPVC() + calcularTotalFoil() + total); }
 function eliminarPlotterPalabra(id) { plotterPalabraItems = plotterPalabraItems.filter(i => i.id !== id); renderizarPlotterPalabra(); }
-function renderizarPlotterPalabra() { const lista = document.getElementById('plotterPalabraItemsList'); const resumen = document.getElementById('plotterPalabraResumen'); if (plotterPalabraItems.length === 0) { lista.innerHTML = ''; resumen.style.display = 'none'; actualizarGranTotal(); return; } lista.innerHTML = ''; let totalA = 0, totalB = 0, totalGeneral = 0; plotterPalabraItems.forEach(item => { if (item.tipo === 'A') totalA += item.cantidad; else totalB += item.cantidad; totalGeneral += item.total; const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">${item.descripcion} <span class="tipo-badge ${item.tipo === 'A' ? 'plotter-a' : 'plotter-b'}">Tipo ${item.tipo}</span></div><div class="detalle">${item.cantidad} palabras × ${formatearPYG(item.precio)}/un</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPlotterPalabra(${item.id})">🗑️</button>`; lista.appendChild(div); }); resumen.style.display = 'block'; document.getElementById('plotterPalabraTotalA').textContent = `${totalA} palabras (Gs. ${formatearPYG(totalA * PRECIO_PLOTTER_PALABRA_A)})`; document.getElementById('plotterPalabraTotalB').textContent = `${totalB} palabras (Gs. ${formatearPYG(totalB * PRECIO_PLOTTER_PALABRA_B)})`; document.getElementById('plotterPalabraTotalGeneral').textContent = formatearPYG(totalGeneral); actualizarGranTotal(); }
-function actualizarGranTotal() {
-    let totalPVC = 0; pvcItems.forEach(i => totalPVC += i.total);
-    let totalFoil = 0; if (foilItems.length > 0) { let areaTotal = 0; foilItems.forEach(i => areaTotal += i.a*i.h*i.c); const precioCm2 = areaTotal >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO; totalFoil = Math.max(areaTotal * precioCm2, MINIMO_FOIL); }
-    let totalPlotterPalabra = 0; plotterPalabraItems.forEach(i => totalPlotterPalabra += i.total);
-    const granTotal = totalPVC + totalFoil + totalPlotterPalabra;
-    document.getElementById('granTotalPVC').textContent = formatearPYG(totalPVC);
-    document.getElementById('granTotalFoil').textContent = formatearPYG(totalFoil);
-    document.getElementById('granTotalPlotterPalabra').textContent = formatearPYG(totalPlotterPalabra);
-    document.getElementById('granTotal').textContent = formatearPYG(granTotal);
-}
-function limpiarTodoFoil() { if (pvcItems.length === 0 && foilItems.length === 0 && plotterPalabraItems.length === 0) return; if (confirm('¿Eliminar todos los items de Foil/PVC/Plotter?')) { pvcItems = []; foilItems = []; plotterPalabraItems = []; renderizarPVC(); renderizarFoil(); renderizarPlotterPalabra(); } }
+function limpiarTodoFoil() { if (confirm('¿Eliminar todos los items?')) { pvcItems = []; foilItems = []; plotterPalabraItems = []; renderizarPVC(); renderizarFoil(); renderizarPlotterPalabra(); document.getElementById('granTotal').textContent = 'Gs. 0'; } }
 
 // ==========================================
 // LISTA DE PRECIOS
@@ -2270,7 +2099,6 @@ calcularLibrito();
 inicializarEstampas();
 actualizarPreviewPVC();
 actualizarPreviewFoil();
-actualizarPreviewPlotterPalabra();
 </script>
 </body>
 </html>
