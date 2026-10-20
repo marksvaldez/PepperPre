@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pepper Pre - Sistema de Cotización</title>
+<title>Pepper Pre - Sistema de Cotización v3</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,15 +47,12 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .stat-box .stat-value { font-size: 1.2em; font-weight: 700; color: #1e3a8a; margin-top: 4px; }
 .stat-box.destacado { border-left-color: #059669; background: #ecfdf5; }
 .stat-box.destacado .stat-value { color: #059669; }
-.stat-box.tapa { border-left-color: #f59e0b; background: #fffbeb; }
-.stat-box.tapa .stat-value { color: #92400e; }
 .desglose { background: #f9fafb; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
 .desglose-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb; font-size: 0.9em; }
 .desglose-row:last-child { border-bottom: none; }
 .desglose-row .label { color: #4b5563; }
 .desglose-row .valor { font-weight: 600; color: #1f2937; }
 .desglose-row.total { font-size: 1.1em; font-weight: 700; color: #1e3a8a; border-top: 2px solid #d1d5db; padding-top: 12px; margin-top: 8px; }
-.desglose-row.sub-total { font-size: 0.95em; font-weight: 600; color: #f59e0b; background: #fffbeb; padding: 10px; border-radius: 4px; margin: 5px 0; }
 .precio-final-box { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; }
 .precio-final-box .label { font-size: 0.9em; opacity: 0.9; }
 .precio-final-box .precio { font-size: 2.2em; font-weight: 700; margin: 8px 0; }
@@ -66,8 +63,6 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
 .alerta { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 6px; font-size: 0.85em; color: #92400e; margin-bottom: 15px; display: none; }
 .alerta.visible { display: block; }
 .alerta.error { background: #fee2e2; border-left-color: #ef4444; color: #991b1b; }
-.alerta.success { background: #d1fae5; border-left-color: #10b981; color: #065f46; }
-.alerta.info { background: #dbeafe; border-left-color: #3b82f6; color: #1e40af; }
 .imposicion-preview { background: #f3f4f6; border: 2px dashed #9ca3af; border-radius: 8px; padding: 30px 20px 40px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; min-height: 320px; position: relative; }
 .plancha-viz { background: white; border: 2px solid #1e3a8a; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: visible; }
 .pagina-viz { position: absolute; border: 1px dashed #3b82f6; background: rgba(59,130,246,0.08); display: flex; align-items: center; justify-content: center; font-size: 0.7em; color: #1e3a8a; font-weight: 600; }
@@ -205,7 +200,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <button class="tab" onclick="cambiarTab('estampas', this)">✉️ Estampas</button>
         <button class="tab" onclick="cambiarTab('impresion-foil', this)">🎯 Impresión + Foil</button>
         <button class="tab" onclick="cambiarTab('editor', this)">🖌️ Editor</button>
-        <button class="tab" onclick="cambiarTab('foil', this)">✨ Foil/PVC/Plotter</button>
+        <button class="tab" onclick="cambiarTab('foil', this)">✨ Foil/PVC/UV/Plotter</button>
         <button class="tab" onclick="cambiarTab('precios', this)">💰 Lista de Precios</button>
     </div>
 
@@ -226,15 +221,76 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">🎨 Impresión</div>
-                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 FRENTE</div><div class="campo"><select id="libImpFrente" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="11000">Color A3 Grueso (Gs. 11.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="7000">ByN A3 Grueso (Gs. 7.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option></select></div></div>
-                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 DORSO</div><div class="campo"><select id="libImpDorso" onchange="calcularLibrito()"><option value="8000">Color A3 Ilustración (Gs. 8.000)</option><option value="11000">Color A3 Grueso (Gs. 11.000)</option><option value="13000">Color A3 Especial 1 (Gs. 13.000)</option><option value="14000">Color A3 Especial 2 (Gs. 14.000)</option><option value="15000">Color A3 Especial 3 (Gs. 15.000)</option><option value="16000">Color A3 Especial 4 (Gs. 16.000)</option><option value="4000">ByN A3 Ilustración (Gs. 4.000)</option><option value="7000">ByN A3 Grueso (Gs. 7.000)</option><option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option><option value="7000">Impresión Dorso (Gs. 7.000)</option></select></div></div>
+                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 FRENTE</div><div class="campo"><select id="libImpFrente" onchange="calcularLibrito()">
+                        <option value="8000">Color A3 Ilustración (Gs. 8.000)</option>
+                        <option value="11000">Color A3 Grueso (Gs. 11.000)</option>
+                        <option value="13000">Color A3 Especial 1 (Gs. 13.000)</option>
+                        <option value="14000">Color A3 Especial 2 (Gs. 14.000)</option>
+                        <option value="15000">Color A3 Especial 3 (Gs. 15.000)</option>
+                        <option value="16000">Color A3 Especial 4 (Gs. 16.000)</option>
+                        <option value="4000">ByN A3 Ilustración (Gs. 4.000)</option>
+                        <option value="7000">ByN A3 Grueso (Gs. 7.000)</option>
+                        <option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option>
+                        <option value="9000">ByN A3 Especial 2 (Gs. 9.000)</option>
+                        <option value="10000">ByN A3 Especial 3 (Gs. 10.000)</option>
+                        <option value="11000">ByN A3 Especial 4 (Gs. 11.000)</option>
+                        <option value="15000">Papel Fotográfico A3 (Gs. 15.000)</option>
+                        <option value="9000">Opalina Lisa 240 grs (Gs. 9.000)</option>
+                        <option value="10000">Color A3 Adhesivo (Gs. 10.000)</option>
+                        <option value="6000">ByN A3 Adhesivo (Gs. 6.000)</option>
+                        <option value="20000">Adhesivo con Medio Corte Circular A3 (Gs. 20.000)</option>
+                        <option value="35000">Adhesivo Vinílico con Medio Corte Circular A3 (Gs. 35.000)</option>
+                        <option value="15000">Impresión Digital Adhesivo Holográfico A3 (Gs. 15.000)</option>
+                        <option value="12000">Color Largo Ilustración (Gs. 12.000)</option>
+                        <option value="13000">Color Largo Triplex (Gs. 13.000)</option>
+                    </select></div></div>
+                    <div class="sub-seccion"><div class="sub-seccion-titulo">📄 DORSO</div><div class="campo"><select id="libImpDorso" onchange="calcularLibrito()">
+                        <option value="8000">Color A3 Ilustración (Gs. 8.000)</option>
+                        <option value="11000">Color A3 Grueso (Gs. 11.000)</option>
+                        <option value="13000">Color A3 Especial 1 (Gs. 13.000)</option>
+                        <option value="14000">Color A3 Especial 2 (Gs. 14.000)</option>
+                        <option value="15000">Color A3 Especial 3 (Gs. 15.000)</option>
+                        <option value="16000">Color A3 Especial 4 (Gs. 16.000)</option>
+                        <option value="4000">ByN A3 Ilustración (Gs. 4.000)</option>
+                        <option value="7000">ByN A3 Grueso (Gs. 7.000)</option>
+                        <option value="8000">ByN A3 Especial 1 (Gs. 8.000)</option>
+                        <option value="9000">ByN A3 Especial 2 (Gs. 9.000)</option>
+                        <option value="10000">ByN A3 Especial 3 (Gs. 10.000)</option>
+                        <option value="11000">ByN A3 Especial 4 (Gs. 11.000)</option>
+                        <option value="15000">Papel Fotográfico A3 (Gs. 15.000)</option>
+                        <option value="9000">Opalina Lisa 240 grs (Gs. 9.000)</option>
+                        <option value="10000">Color A3 Adhesivo (Gs. 10.000)</option>
+                        <option value="6000">ByN A3 Adhesivo (Gs. 6.000)</option>
+                        <option value="20000">Adhesivo con Medio Corte Circular A3 (Gs. 20.000)</option>
+                        <option value="35000">Adhesivo Vinílico con Medio Corte Circular A3 (Gs. 35.000)</option>
+                        <option value="15000">Impresión Digital Adhesivo Holográfico A3 (Gs. 15.000)</option>
+                        <option value="12000">Color Largo Ilustración (Gs. 12.000)</option>
+                        <option value="13000">Color Largo Triplex (Gs. 13.000)</option>
+                        <option value="7000">Solo Dorso Básico (Gs. 7.000)</option>
+                    </select></div></div>
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">✂️ Acabados</div>
                     <div class="checkbox-group">
-                        <div class="checkbox-item"><input type="checkbox" id="libGrapas" checked disabled><label for="libGrapas">Presillado para revista</label><span class="precio-check">Gs. 2.000 / ejemplar</span></div>
-                        <div class="checkbox-item"><input type="checkbox" id="libCorte" checked onchange="calcularLibrito()"><label for="libCorte">Corte Recto A</label><span class="precio-check">Gs. 1.000 / plancha</span></div>
-                        <div class="checkbox-item"><input type="checkbox" id="libDoblez" checked onchange="calcularLibrito()"><label for="libDoblez">Doblez</label><span class="precio-check">Gs. 1.000 / doblez</span></div>
+                        <div class="checkbox-item"><input type="checkbox" id="libPresillado" checked onchange="calcularLibrito()"><label for="libPresillado">Presillado para revista</label><span class="precio-check">Gs. 2.000 / ejemplar</span></div>
+                        
+                        <div class="campo" style="margin-top: 10px;">
+                            <label>Tipo de Corte:</label>
+                            <select id="libTipoCorte" onchange="calcularLibrito()">
+                                <option value="0">Sin corte</option>
+                                <option value="1000">Corte Recto A (Gs. 1.000/plancha)</option>
+                                <option value="2500">Corte Recto B (Gs. 2.500/plancha)</option>
+                                <option value="5500">Corte Recto C (Gs. 5.500/plancha)</option>
+                                <option value="10000">Corte D (Gs. 10.000/plancha)</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label>Cantidad de Doblez por Plancha:</label>
+                            <input type="number" id="libCantidadDoblez" value="1" min="0" onchange="calcularLibrito()">
+                            <small style="color: #6b7280; font-size: 0.8em;">Costo unitario: Gs. 1.000 por doblez</small>
+                        </div>
+
                         <div class="checkbox-item"><input type="checkbox" id="libLaminado1" onchange="calcularLibrito()"><label for="libLaminado1">Laminado Prolam A3 (1 cara)</label><span class="precio-check">Gs. 3.000 / plancha</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="libLaminado2" onchange="calcularLibrito()"><label for="libLaminado2">Laminado Prolam A3 (ambas caras)</label><span class="precio-check">Gs. 5.000 / plancha</span></div>
                     </div>
@@ -273,7 +329,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="desglose-row" id="libRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="libCostoCorte">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowDoblez" style="display:none;"><span class="label">📑 Doblez:</span><span class="valor" id="libCostoDoblez">Gs. 0</span></div>
                         <div class="desglose-row" id="libRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="libCostoLaminado">Gs. 0</span></div>
-                        <div class="desglose-row"><span class="label">📚 Presillado:</span><span class="valor" id="libCostoGrapas">Gs. 0</span></div>
+                        <div class="desglose-row" id="libRowPresilla" style="display:none;"><span class="label">📚 Presillado:</span><span class="valor" id="libCostoGrapas">Gs. 0</span></div>
                         <div class="desglose-row total"><span class="label">🏭 COSTO TOTAL:</span><span class="valor" id="libCostoTotal">Gs. 0</span></div>
                         <div class="desglose-row"><span class="label">📈 Utilidad:</span><span class="valor" id="libCostoUtilidad">Gs. 0</span></div>
                     </div>
@@ -325,7 +381,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                 <div class="seccion">
                     <div class="seccion-titulo">🎨 Material e Impresión</div>
                     <div class="campo">
-                        <label>Tipo de impresión / Material:</label>
+                        <label>Tipo de impresión Frente:</label>
                         <select id="calcMaterial" onchange="calcularPlanchas()">
                             <optgroup label="📄 Materiales A3 (33×48 cm)" id="grupoA3">
                                 <option value="6000">A3 Papel Historias Ricoh (Gs. 6.000)</option>
@@ -372,6 +428,11 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                             </optgroup>
                         </select>
                     </div>
+                    <div class="checkbox-item" style="margin-top: 10px;">
+                        <input type="checkbox" id="calcDorso" onchange="calcularPlanchas()">
+                        <label for="calcDorso"><strong>Incluir Impresión Dorso</strong></label>
+                        <span class="precio-check">Mismo precio que frente</span>
+                    </div>
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">✂️ Acabados</div>
@@ -381,6 +442,13 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <div class="checkbox-item"><input type="checkbox" id="calcCorteC" onchange="calcularPlanchas()"><label for="calcCorteC">Corte Recto C</label><span class="precio-check">Gs. 5.500 / plancha</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="calcCorteD" onchange="calcularPlanchas()"><label for="calcCorteD">Corte D</label><span class="precio-check">Gs. 10.000 / plancha</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="calcCortePuntas" onchange="calcularPlanchas()"><label for="calcCortePuntas">Corte de Puntas</label><span class="precio-check">Gs. 500 / unidad</span></div>
+                        
+                        <div class="campo" style="margin-top: 10px;">
+                            <label>Cantidad de Doblez por Plancha:</label>
+                            <input type="number" id="calcCantidadDoblez" value="0" min="0" onchange="calcularPlanchas()">
+                            <small style="color: #6b7280; font-size: 0.8em;">Costo: Gs. 1.000 por doblez</small>
+                        </div>
+
                         <div class="checkbox-item"><input type="checkbox" id="calcLaminado1" onchange="calcularPlanchas()"><label for="calcLaminado1">Laminado Prolam (1 cara)</label><span class="precio-check">Gs. 3.000 / plancha</span></div>
                         <div class="checkbox-item"><input type="checkbox" id="calcLaminado2" onchange="calcularPlanchas()"><label for="calcLaminado2">Laminado Prolam (ambas caras)</label><span class="precio-check">Gs. 5.000 / plancha</span></div>
                     </div>
@@ -413,15 +481,22 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                 </div>
                 <div class="seccion">
-                    <div class="seccion-titulo">🎯 Troquel (por unidad)</div>
+                    <div class="seccion-titulo">🎯 Troquel (Automático)</div>
                     <div class="campo">
                         <label>Tipo de troquel:</label>
-                        <select id="calcTroquel" onchange="calcularPlanchas()">
-                            <option value="0">Sin troquel</option>
+                        <select id="calcTroquel" onchange="manejarTroquelAuto()">
+                            <option value="0">Sin troquel (usar dimensiones manuales)</option>
                             <option value="800">Troquel Circular (Gs. 800/unidad)</option>
-                            <option value="1000">Troquel Simple (Gs. 1.000/unidad)</option>
+                            <option value="1000">Troquel Simple Cuadrado (Gs. 1.000/unidad)</option>
                             <option value="1500">Troquel Complejo (Gs. 1.500/unidad)</option>
                         </select>
+                    </div>
+                    <div id="troquelDimsBox" style="display:none;" class="foil-dims-box">
+                        <p style="font-size: 0.85em; color: #92400e; margin-bottom: 8px;">⚠️ El tamaño del diseño se ajusta automáticamente según el troquel.</p>
+                        <div class="grid-2">
+                            <div class="campo"><label>Diámetro/Lado Troquel (cm):</label><input type="number" id="calcTroquelDim" value="5" step="0.1" min="0.1" onchange="calcularPlanchas()"></div>
+                            <div class="campo"><label>Margen extra (cm):</label><input type="number" id="calcTroquelMargin" value="0.2" step="0.1" min="0" onchange="calcularPlanchas()"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="seccion">
@@ -448,7 +523,9 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     <div class="seccion-titulo">🧾 Desglose de Costos</div>
                     <div class="desglose">
                         <div class="desglose-row"><span class="label">🎨 Impresión Frente:</span><span class="valor" id="calcCostoImpresion">Gs. 0</span></div>
+                        <div class="desglose-row" id="calcRowDorso" style="display:none;"><span class="label">🔄 Impresión Dorso:</span><span class="valor" id="calcCostoDorso">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCorte" style="display:none;"><span class="label">✂️ Corte:</span><span class="valor" id="calcCostoCorte">Gs. 0</span></div>
+                        <div class="desglose-row" id="calcRowDoblez" style="display:none;"><span class="label">📑 Doblez:</span><span class="valor" id="calcCostoDoblez">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCortePuntas" style="display:none;"><span class="label">✂️ Corte de Puntas:</span><span class="valor" id="calcCostoCortePuntas">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowLaminado" style="display:none;"><span class="label">✨ Laminado:</span><span class="valor" id="calcCostoLaminado">Gs. 0</span></div>
                         <div class="desglose-row" id="calcRowCintaPlancha" style="display:none;"><span class="label">🔗 Cinta Doble Faz (plancha):</span><span class="valor" id="calcCostoCintaPlancha">Gs. 0</span></div>
@@ -570,37 +647,35 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         <div class="grid-principal">
             <div class="panel panel-config">
                 <div class="seccion">
-                    <div class="seccion-titulo">🎯 Diseño y Foil</div>
+                    <div class="seccion-titulo">🎯 Configuración General</div>
                     <div class="sub-seccion">
                         <div class="sub-seccion-titulo">Forma del Diseño</div>
                         <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="radio" name="formaDiseno" id="disenoRect" value="rect" checked onchange="calcularImpresionFoil()"><label for="disenoRect">Rectangular</label></div>
-                            <div class="checkbox-item"><input type="radio" name="formaDiseno" id="disenoCirc" value="circ" onchange="calcularImpresionFoil()"><label for="disenoCirc">Circular</label></div>
+                            <div class="checkbox-item"><input type="radio" name="formaDisenoIF" id="disenoRectIF" value="rect" checked onchange="renderizarFoilsAddons()"><label for="disenoRectIF">Rectangular</label></div>
+                            <div class="checkbox-item"><input type="radio" name="formaDisenoIF" id="disenoCircIF" value="circ" onchange="renderizarFoilsAddons()"><label for="disenoCircIF">Circular</label></div>
                         </div>
                     </div>
                     <div class="sub-seccion">
                         <div class="sub-seccion-titulo">Tamaño del Diseño</div>
-                        <div class="grid-2" id="disenoRectDims">
+                        <div class="grid-2" id="disenoRectDimsIF">
                             <div class="campo"><label>Ancho (cm):</label><input type="number" id="ifDisenoAncho" value="9" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
                             <div class="campo"><label>Alto (cm):</label><input type="number" id="ifDisenoAlto" value="20" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
                         </div>
-                        <div class="campo" id="disenoCircDim" style="display:none;"><label>Diámetro (cm):</label><input type="number" id="ifDisenoDiametro" value="10" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
+                        <div class="campo" id="disenoCircDimIF" style="display:none;"><label>Diámetro (cm):</label><input type="number" id="ifDisenoDiametro" value="10" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
                     </div>
-                    <div class="sub-seccion">
-                        <div class="sub-seccion-titulo">Forma del Foil</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="radio" name="formaFoil" id="foilRect" value="rect" checked onchange="calcularImpresionFoil()"><label for="foilRect">Rectangular</label></div>
-                            <div class="checkbox-item"><input type="radio" name="formaFoil" id="foilCirc" value="circ" onchange="calcularImpresionFoil()"><label for="foilCirc">Circular</label></div>
+                    
+                    <div class="sub-seccion" style="background: #fffbeb; border-color: #fbbf24;">
+                        <div class="sub-seccion-titulo" style="color: #92400e;">✨ Foils Adicionales (Multi-foiling)</div>
+                        <p style="font-size: 0.8em; color: #6b7280; margin-bottom: 10px;">Agregá múltiples áreas de foil con distintos tamaños.</p>
+                        <div class="grid-3">
+                            <div class="campo"><label>Ancho (cm):</label><input type="number" id="addFoilAncho" value="5" step="0.1" min="0.1"></div>
+                            <div class="campo"><label>Alto (cm):</label><input type="number" id="addFoilAlto" value="5" step="0.1" min="0.1"></div>
+                            <div class="campo"><label>Forma:</label><select id="addFoilForma"><option value="rect">Rect</option><option value="circ">Circ</option></select></div>
                         </div>
+                        <button class="btn-secundario" style="padding: 8px; font-size: 0.9em;" onclick="agregarFoilAddon()">➕ Agregar Foil</button>
+                        <div id="listaFoilsAddons" style="margin-top: 10px;"></div>
                     </div>
-                    <div class="sub-seccion">
-                        <div class="sub-seccion-titulo">Tamaño del Foil</div>
-                        <div class="grid-2" id="foilRectDims">
-                            <div class="campo"><label>Ancho (cm):</label><input type="number" id="ifFoilAncho" value="8.5" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
-                            <div class="campo"><label>Alto (cm):</label><input type="number" id="ifFoilAlto" value="5" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
-                        </div>
-                        <div class="campo" id="foilCircDim" style="display:none;"><label>Diámetro (cm):</label><input type="number" id="ifFoilDiametro" value="5" step="0.1" min="0.1" onchange="calcularImpresionFoil()"></div>
-                    </div>
+
                 </div>
                 <div class="seccion">
                     <div class="seccion-titulo">🎨 Tipo de Producción</div>
@@ -617,7 +692,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     <div class="seccion-titulo">📄 Tipo de Impresión</div>
                     <div class="campo">
                         <select id="ifTipoImpresion" onchange="calcularImpresionFoil()">
-                            <option value="8000">Color A3 Ilustración (Gs. 8.000/plancha)</option>
+                             <option value="8000">Color A3 Ilustración (Gs. 8.000/plancha)</option>
                             <option value="11000">Color A3 Grueso (Gs. 11.000/plancha)</option>
                             <option value="13000">Color A3 Especial 1 (Gs. 13.000/plancha)</option>
                             <option value="14000">Color A3 Especial 2 (Gs. 14.000/plancha)</option>
@@ -626,8 +701,18 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                             <option value="4000">ByN A3 Ilustración (Gs. 4.000/plancha)</option>
                             <option value="7000">ByN A3 Grueso (Gs. 7.000/plancha)</option>
                             <option value="8000">ByN A3 Especial 1 (Gs. 8.000/plancha)</option>
+                            <option value="9000">ByN A3 Especial 2 (Gs. 9.000/plancha)</option>
+                            <option value="10000">ByN A3 Especial 3 (Gs. 10.000/plancha)</option>
+                            <option value="11000">ByN A3 Especial 4 (Gs. 11.000/plancha)</option>
                             <option value="15000">Papel Fotográfico A3 (Gs. 15.000/plancha)</option>
                             <option value="9000">Opalina Lisa 240 grs (Gs. 9.000/plancha)</option>
+                            <option value="10000">Color A3 Adhesivo (Gs. 10.000/plancha)</option>
+                            <option value="6000">ByN A3 Adhesivo (Gs. 6.000/plancha)</option>
+                            <option value="20000">Adhesivo con Medio Corte Circular A3 (Gs. 20.000/plancha)</option>
+                            <option value="35000">Adhesivo Vinílico con Medio Corte Circular A3 (Gs. 35.000/plancha)</option>
+                            <option value="15000">Impresión Digital Adhesivo Holográfico A3 (Gs. 15.000/plancha)</option>
+                            <option value="12000">Color Largo Ilustración (Gs. 12.000/plancha)</option>
+                            <option value="13000">Color Largo Triplex (Gs. 13.000/plancha)</option>
                         </select>
                     </div>
                 </div>
@@ -749,11 +834,13 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         </div>
     </div>
 
-    <!-- TAB 6: FOIL/PVC/PLOTTER -->
+    <!-- TAB 6: FOIL/PVC/UV/PLOTTER -->
     <div class="tab-content" id="tab-foil">
         <div class="panel" style="max-width: 1200px; margin: 0 auto;">
             <div class="seccion">
-                <div class="seccion-titulo">✨ Calculadora de Foil, PVC y Plotter</div>
+                <div class="seccion-titulo">✨ Calculadora de Terminaciones Especiales</div>
+                
+                <!-- SECCIÓN PVC -->
                 <div class="foil-seccion">
                     <h3>🟦 PVC <span style="font-size: 0.8em; color: #6b7280; font-weight: normal;">(Gs. 50/cm²)</span></h3>
                     <div class="grid-3">
@@ -764,6 +851,8 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     <button class="btn-agregar" onclick="agregarItemPVC()">➕ Agregar PVC</button>
                     <div id="pvcItemsList" style="margin-top: 15px;"></div>
                 </div>
+
+                <!-- SECCIÓN FOIL -->
                 <div class="foil-seccion">
                     <h3>✨ Foil <span style="font-size: 0.8em; color: #6b7280; font-weight: normal;">(por área total)</span></h3>
                     <div class="info-precio">
@@ -780,6 +869,59 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     <button class="btn-agregar" onclick="agregarItemFoil()">➕ Agregar Foil</button>
                     <div id="foilItemsList" style="margin-top: 15px;"></div>
                 </div>
+
+                <!-- NUEVA SECCIÓN UV -->
+                <div class="foil-seccion" style="border-color: #7c3aed;">
+                    <h3 style="color: #7c3aed;">💜 UV Selectivo / Barniz <span style="font-size: 0.8em; color: #6b7280; font-weight: normal;">(por cm² o plancha)</span></h3>
+                    <div class="info-precio" style="background: #f5f3ff; border: 1px solid #ddd6fe;">
+                        <strong>Opciones:</strong><br>
+                        1. Por cm²: Gs. 60/cm² (Mínimo Gs. 10.000)<br>
+                        2. Plancha Cerrada A3: Gs. 25.000 (Barniz) / Gs. 70.000 (Full UV)<br>
+                        <strong>Sustrato:</strong> Define si lleva corte adicional.
+                    </div>
+                    <div class="grid-3">
+                        <div class="campo">
+                            <label>Modo:</label>
+                            <select id="uvModo" onchange="toggleUvCampos()">
+                                <option value="area">Por Área (cm²)</option>
+                                <option value="plancha">Por Plancha Entera</option>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label>Tipo UV:</label>
+                            <select id="uvTipo">
+                                <option value="barniz">Barniz UV (Gs. 60/cm² o 25k/plancha)</option>
+                                <option value="full">Full UV (Gs. 100/cm² o 70k/plancha)</option>
+                            </select>
+                        </div>
+                         <div class="campo">
+                            <label>Sustrato:</label>
+                            <select id="uvSustrato">
+                                <option value="papel">Papel (Sin corte especial)</option>
+                                <option value="adhesivo">Adhesivo (Con corte medio/full)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="uvAreaFields" class="grid-2" style="margin-top: 10px;">
+                        <div class="campo"><label>Ancho Área UV (cm):</label><input type="number" id="uvAncho" value="10" step="0.1" min="0.1"></div>
+                        <div class="campo"><label>Alto Área UV (cm):</label><input type="number" id="uvAlto" value="10" step="0.1" min="0.1"></div>
+                    </div>
+                     <div id="uvPlanchaField" class="campo" style="display:none; margin-top: 10px;">
+                        <label>Cantidad de Planchas:</label>
+                        <input type="number" id="uvCantidadPlanchas" value="1" min="1">
+                    </div>
+
+                    <div class="campo">
+                        <label>Cantidad de piezas finales:</label>
+                        <input type="number" id="uvPiezas" value="1" min="1">
+                    </div>
+
+                    <button class="btn-agregar" style="background: #7c3aed;" onclick="agregarItemUV()">➕ Agregar UV</button>
+                    <div id="uvItemsList" style="margin-top: 15px;"></div>
+                </div>
+
+                <!-- SECCIÓN PLOTTER -->
                 <div class="foil-seccion">
                     <h3>🔤 Troquel de Plotter (Palabras)</h3>
                     <div class="grid-3">
@@ -790,9 +932,16 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     <button class="btn-agregar" onclick="agregarItemPlotterPalabra()">➕ Agregar Plotter Palabra</button>
                     <div id="plotterPalabraItemsList" style="margin-top: 15px;"></div>
                 </div>
+
                 <div class="gran-total-box">
-                    <div class="label">💵 GRAN TOTAL FOIL/PVC/PLOTTER</div>
+                    <div class="label">💵 GRAN TOTAL TERMINACIONES ESPECIALES</div>
                     <div class="precio" id="granTotal">Gs. 0</div>
+                    <div style="font-size: 0.9em; opacity: 0.9; margin-top: 8px;">
+                        PVC: <strong id="granTotalPVC">Gs. 0</strong> | 
+                        Foil: <strong id="granTotalFoil">Gs. 0</strong> | 
+                        UV: <strong id="granTotalUV">Gs. 0</strong> |
+                        Plotter: <strong id="granTotalPlotter">Gs. 0</strong>
+                    </div>
                 </div>
                 <button class="btn-accion" onclick="limpiarTodoFoil()" style="background: #6b7280; margin-top: 15px;">🗑️ Limpiar todos los items</button>
             </div>
@@ -825,13 +974,14 @@ function cambiarTab(tabId, btn) {
     if (tabId === 'editor') setTimeout(inicializarEditor, 100); 
     if (tabId === 'planchas') setTimeout(calcularPlanchas, 100); 
     if (tabId === 'estampas') { setTimeout(inicializarEstampas, 100); setTimeout(calcularEstampas, 150); }
-    if (tabId === 'impresion-foil') setTimeout(calcularImpresionFoil, 100); 
+    if (tabId === 'impresion-foil') { renderizarFoilsAddons(); setTimeout(calcularImpresionFoil, 100); } 
     if (tabId === 'precios') renderizarListaPrecios(); 
     if (tabId === 'libritos') setTimeout(calcularLibrito, 100);
+    if (tabId === 'foil') { toggleUvCampos(); }
 }
 
 // ==========================================
-// LIBRITOS (CON IMPOSICIÓN CORREGIDA)
+// LIBRITOS (ACTUALIZADO)
 // ==========================================
 function calcularLibrito() {
     const anchoCerrado = parseFloat(document.getElementById('libAnchoCerrado').value) || 0;
@@ -841,8 +991,11 @@ function calcularLibrito() {
     const costoImpFrente = parseInt(document.getElementById('libImpFrente').value) || 0;
     const costoImpDorso = parseInt(document.getElementById('libImpDorso').value) || 0;
     const margen = parseFloat(document.getElementById('libMargen').value) || 0;
-    const usaCorte = document.getElementById('libCorte').checked;
-    const usaDoblez = document.getElementById('libDoblez').checked;
+    
+    // Nuevos campos
+    const usaPresillado = document.getElementById('libPresillado').checked;
+    const tipoCorteVal = parseInt(document.getElementById('libTipoCorte').value) || 0;
+    const cantDoblezPorPlancha = parseInt(document.getElementById('libCantidadDoblez').value) || 0;
     const usaLaminado1 = document.getElementById('libLaminado1').checked;
     const usaLaminado2 = document.getElementById('libLaminado2').checked;
 
@@ -857,14 +1010,29 @@ function calcularLibrito() {
     if (pagsCerradasPorCara > 0 && totalPaginas > 0) {
         const planchasFisicasPorEjemplar = Math.ceil(totalPaginas / pagsPorPlanchaFisica);
         const totalPlanchasFisicas = planchasFisicasPorEjemplar * cantidad;
+        
         const costoImpFrenteTotal = totalPlanchasFisicas * costoImpFrente;
         const costoImpDorsoTotal = totalPlanchasFisicas * costoImpDorso;
-        let costoCorteTotal = usaCorte ? totalPlanchasFisicas * 1000 : 0;
-        let costoDoblezTotal = usaDoblez ? (totalPaginas / pagsCerradasPorCara) * cantidad * 1000 : 0;
+        
+        let costoCorteTotal = 0;
+        if (tipoCorteVal > 0) {
+            costoCorteTotal = totalPlanchasFisicas * tipoCorteVal;
+        }
+
+        let costoDoblezTotal = 0;
+        if (cantDoblezPorPlancha > 0) {
+            // Cada plancha física tiene 'cantDoblezPorPlancha' dobleces
+            costoDoblezTotal = totalPlanchasFisicas * cantDoblezPorPlancha * 1000;
+        }
+
         let costoLaminadoTotal = 0;
         if (usaLaminado1) costoLaminadoTotal = totalPlanchasFisicas * 3000;
         else if (usaLaminado2) costoLaminadoTotal = totalPlanchasFisicas * 5000;
-        const costoGrapasTotal = cantidad * 2000;
+
+        let costoGrapasTotal = 0;
+        if (usaPresillado) {
+            costoGrapasTotal = cantidad * 2000;
+        }
         
         const costoTotalProd = costoImpFrenteTotal + costoImpDorsoTotal + costoCorteTotal + costoDoblezTotal + costoLaminadoTotal + costoGrapasTotal;
         const utilidad = costoTotalProd * (margen / 100);
@@ -876,25 +1044,32 @@ function calcularLibrito() {
         document.getElementById('libTotalPlanchas').textContent = totalPlanchasFisicas;
         document.getElementById('libTotalImpresiones').textContent = totalPlanchasFisicas * 2;
         document.getElementById('libTotalEjemplares').textContent = cantidad;
+        
         document.getElementById('libCostoImpFrente').textContent = formatearPYG(costoImpFrenteTotal);
         document.getElementById('libCostoImpDorso').textContent = formatearPYG(costoImpDorsoTotal);
-        document.getElementById('libCostoCorte').textContent = formatearPYG(costoCorteTotal);
-        document.getElementById('libCostoDoblez').textContent = formatearPYG(costoDoblezTotal);
-        document.getElementById('libCostoLaminado').textContent = formatearPYG(costoLaminadoTotal);
-        document.getElementById('libCostoGrapas').textContent = formatearPYG(costoGrapasTotal);
+        
+        document.getElementById('libRowCorte').style.display = tipoCorteVal > 0 ? 'flex' : 'none';
+        if (tipoCorteVal > 0) document.getElementById('libCostoCorte').textContent = formatearPYG(costoCorteTotal);
+        
+        document.getElementById('libRowDoblez').style.display = cantDoblezPorPlancha > 0 ? 'flex' : 'none';
+        if (cantDoblezPorPlancha > 0) document.getElementById('libCostoDoblez').textContent = formatearPYG(costoDoblezTotal);
+        
+        document.getElementById('libRowLaminado').style.display = (usaLaminado1 || usaLaminado2) ? 'flex' : 'none';
+        if (usaLaminado1 || usaLaminado2) document.getElementById('libCostoLaminado').textContent = formatearPYG(costoLaminadoTotal);
+        
+        document.getElementById('libRowPresilla').style.display = usaPresillado ? 'flex' : 'none';
+        if (usaPresillado) document.getElementById('libCostoGrapas').textContent = formatearPYG(costoGrapasTotal);
+
         document.getElementById('libCostoTotal').textContent = formatearPYG(costoTotalProd);
         document.getElementById('libCostoUtilidad').textContent = formatearPYG(utilidad);
         document.getElementById('libPrecioTotal').textContent = formatearPYG(precioTotal);
         document.getElementById('libPrecioUnitario').textContent = formatearPYG(precioTotal / cantidad);
-        document.getElementById('libRowCorte').style.display = usaCorte ? 'flex' : 'none';
-        document.getElementById('libRowDoblez').style.display = usaDoblez ? 'flex' : 'none';
-        document.getElementById('libRowLaminado').style.display = (usaLaminado1 || usaLaminado2) ? 'flex' : 'none';
         
-        renderizarImposicion(anchoCerrado, altoCerrado, pagsCerradasPorCara, usaDoblez, normal, rotado);
+        renderizarImposicion(anchoCerrado, altoCerrado, pagsCerradasPorCara, cantDoblezPorPlancha > 0, normal, rotado);
     }
 }
 
-function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez, normal, rotado) {
+function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblezVisual, normal, rotado) {
     const viz = document.getElementById('planchaViz');
     viz.querySelectorAll('.pagina-viz, .linea-doblez-v, .linea-corte-h').forEach(p => p.remove());
     const escala = 8;
@@ -905,7 +1080,6 @@ function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez,
     const rows = Math.floor(48 / (usaRotado ? anchoCerrado : altoCerrado));
     let paginaCounter = 1;
     
-    // Dibujar páginas
     for(let i = 0; i < rows; i++) {
         for(let j = 0; j < cols; j++) {
             if (paginaCounter <= pagsPorCara) {
@@ -919,8 +1093,7 @@ function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez,
         }
     }
     
-    // ✅ Líneas de DOBLEZ VERTICALES (rojas) - entre columnas (donde se pliega el lomo)
-    if (usaDoblez && cols >= 2) {
+    if (usaDoblezVisual && cols >= 2) {
         for (let j = 1; j < cols; j++) {
             const linea = document.createElement('div');
             linea.className = 'linea-doblez-v';
@@ -929,7 +1102,6 @@ function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez,
         }
     }
     
-    // ✅ Líneas de CORTE HORIZONTALES (grises) - entre filas (donde se corta la plancha)
     if (rows >= 2) {
         for (let i = 1; i < rows; i++) {
             const linea = document.createElement('div');
@@ -941,7 +1113,7 @@ function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblez,
 }
 
 // ==========================================
-// CALCULADORA DE PLANCHAS
+// CALCULADORA DE PLANCHAS (ACTUALIZADA)
 // ==========================================
 function actualizarPlanchaCustom() {
     const val = document.getElementById('calcPlanchaFormato').value;
@@ -973,14 +1145,25 @@ function actualizarPlanchaCustom() {
     calcularPlanchas();
 }
 
+function manejarTroquelAuto() {
+    const tipo = document.getElementById('calcTroquel').value;
+    const box = document.getElementById('troquelDimsBox');
+    if (tipo !== '0') {
+        box.style.display = 'block';
+        // Forzar recálculo para usar dims del troquel
+        calcularPlanchas();
+    } else {
+        box.style.display = 'none';
+        calcularPlanchas();
+    }
+}
+
 function calcularPlanchas() {
     const pAncho = parseFloat(document.getElementById('calcPlanchaAncho').value) || 33;
     const pAlto = parseFloat(document.getElementById('calcPlanchaAlto').value) || 48;
-    const dAncho = parseFloat(document.getElementById('calcDisenoAncho').value) || 10;
-    const dAlto = parseFloat(document.getElementById('calcDisenoAlto').value) || 15;
-    const margen = parseFloat(document.getElementById('calcMargen').value) || 0;
     const cantidad = parseInt(document.getElementById('calcCantidad').value) || 1;
     const precioImp = parseInt(document.getElementById('calcMaterial').value) || 0;
+    const usaDorso = document.getElementById('calcDorso').checked;
     const margenUtil = parseFloat(document.getElementById('calcMargenUtilidad').value) || 0;
     const precioTroquel = parseInt(document.getElementById('calcTroquel').value) || 0;
     const usaCortePuntas = document.getElementById('calcCortePuntas').checked;
@@ -988,9 +1171,30 @@ function calcularPlanchas() {
     const precioCintaPlancha = usaCintaPlancha ? (parseInt(document.getElementById('calcCintaPlanchaTipo').value) || 0) : 0;
     const usaCintaUnidad = document.getElementById('calcCintaUnidad').checked;
     const precioCintaUnidad = usaCintaUnidad ? (parseInt(document.getElementById('calcCintaUnidadTipo').value) || 0) : 0;
+    const cantDoblez = parseInt(document.getElementById('calcCantidadDoblez').value) || 0;
     
     document.getElementById('calcCintaPlanchaTipoCampo').style.display = usaCintaPlancha ? 'block' : 'none';
     document.getElementById('calcCintaUnidadTipoCampo').style.display = usaCintaUnidad ? 'block' : 'none';
+    document.getElementById('calcRowDorso').style.display = usaDorso ? 'flex' : 'none';
+    document.getElementById('calcRowDoblez').style.display = cantDoblez > 0 ? 'flex' : 'none';
+
+    // LÓGICA DE DIMENSIONES DEL DISEÑO
+    let dAncho, dAlto;
+    const tipoTroquel = document.getElementById('calcTroquel').value;
+    
+    if (tipoTroquel !== '0') {
+        // Modo Automático por Troquel
+        const dimTroquel = parseFloat(document.getElementById('calcTroquelDim').value) || 5;
+        const margExtra = parseFloat(document.getElementById('calcTroquelMargin').value) || 0.2;
+        dAncho = dimTroquel + margExtra;
+        dAlto = dimTroquel + margExtra;
+    } else {
+        // Modo Manual
+        dAncho = parseFloat(document.getElementById('calcDisenoAncho').value) || 10;
+        dAlto = parseFloat(document.getElementById('calcDisenoAlto').value) || 15;
+    }
+
+    const margen = parseFloat(document.getElementById('calcMargen').value) || 0;
     
     const effAncho = dAncho + margen;
     const effAlto = dAlto + margen;
@@ -1027,13 +1231,13 @@ function calcularPlanchas() {
                 if (contador >= mejorTotal) break;
                 const div = document.createElement('div');
                 div.style.cssText = `position:absolute;width:${itemW}px;height:${itemH}px;left:${c*itemW}px;top:${r*itemH}px;border:1px dashed #3b82f6;background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7em;color:#1e3a8a;font-weight:600;`;
-                div.textContent = `${dAncho}×${dAlto}`;
+                div.textContent = `${dAncho.toFixed(1)}×${dAlto.toFixed(1)}`;
                 base.appendChild(div);
                 contador++;
             }
         }
     }
-    document.getElementById('calcPlanchaDimensiones').textContent = `Plancha: ${pAncho} × ${pAlto} cm | Diseño: ${dAncho} × ${dAlto} cm`;
+    document.getElementById('calcPlanchaDimensiones').textContent = `Plancha: ${pAncho} × ${pAlto} cm | Diseño: ${dAncho.toFixed(1)} × ${dAlto.toFixed(1)} cm`;
     
     const planchasTotales = Math.ceil(cantidad / mejorTotal);
     const sobrantes = (planchasTotales * mejorTotal) - cantidad;
@@ -1049,6 +1253,8 @@ function calcularPlanchas() {
     document.getElementById('calcDesperdicio').textContent = desperdicio + '%';
     
     const costoImpresion = planchasTotales * precioImp;
+    const costoDorso = usaDorso ? planchasTotales * precioImp : 0;
+    
     let costoCorte = 0; 
     if (document.getElementById('calcCorteA').checked) costoCorte = planchasTotales * 1000;
     else if (document.getElementById('calcCorteB').checked) costoCorte = planchasTotales * 2500;
@@ -1080,6 +1286,12 @@ function calcularPlanchas() {
         document.getElementById('calcCostoCortePuntas').innerHTML = `${formatearPYG(costoCortePuntas)} <small style="color: #6b7280;">(${cantidad} unidades × Gs. 500)</small>`;
     } else { document.getElementById('calcRowCortePuntas').style.display = 'none'; }
     
+    let costoDoblezTotal = 0;
+    if (cantDoblez > 0) {
+        costoDoblezTotal = planchasTotales * cantDoblez * 1000;
+        document.getElementById('calcCostoDoblez').innerHTML = `${formatearPYG(costoDoblezTotal)} <small style="color: #6b7280;">(${planchasTotales} planchas × ${cantDoblez} dobleces)</small>`;
+    } else { document.getElementById('calcRowDoblez').style.display = 'none'; }
+    
     let costoTroquel = 0;
     if (precioTroquel > 0) {
         costoTroquel = totalUnidades * precioTroquel;
@@ -1089,12 +1301,14 @@ function calcularPlanchas() {
         document.getElementById('calcCostoTroquel').innerHTML = `${formatearPYG(costoTroquel)} <small style="color: #6b7280;">(${totalUnidades} un.)</small>`;
     } else { document.getElementById('calcRowTroquel').style.display = 'none'; }
     
-    const costoTotal = costoImpresion + costoCorte + costoLaminado + costoCintaPlancha + costoCintaUnidad + costoCortePuntas + costoTroquel;
+    const costoTotal = costoImpresion + costoDorso + costoCorte + costoLaminado + costoCintaPlancha + costoCintaUnidad + costoCortePuntas + costoDoblezTotal + costoTroquel;
     const utilidad = costoTotal * (margenUtil / 100);
     const precioTotal = costoTotal + utilidad;
     const precioUnitario = precioTotal / cantidad;
     
     document.getElementById('calcCostoImpresion').textContent = formatearPYG(costoImpresion);
+    if (usaDorso) document.getElementById('calcCostoDorso').textContent = formatearPYG(costoDorso);
+    
     document.getElementById('calcRowCorte').style.display = costoCorte > 0 ? 'flex' : 'none';
     if (costoCorte > 0) document.getElementById('calcCostoCorte').textContent = formatearPYG(costoCorte);
     document.getElementById('calcRowLaminado').style.display = costoLaminado > 0 ? 'flex' : 'none';
@@ -1106,7 +1320,7 @@ function calcularPlanchas() {
 }
 
 // ==========================================
-// ESTAMPAS
+// ESTAMPAS (IGUAL QUE ANTES, SOLO PARA NO ROMPER)
 // ==========================================
 let estampaState = { cuerposAdicionales: [] };
 const UNIONES = [
@@ -1416,17 +1630,53 @@ function calcularEstampas() {
 }
 
 // ==========================================
-// IMPRESIÓN + FOIL
+// IMPRESIÓN + FOIL (MULTI-FOIL)
 // ==========================================
+let foilsAddons = [];
+
+function renderizarFoilsAddons() {
+    const lista = document.getElementById('listaFoilsAddons');
+    lista.innerHTML = '';
+    if (foilsAddons.length === 0) {
+        lista.innerHTML = '<div style="font-size: 0.8em; color: #9ca3af; text-align: center;">Sin foils adicionales</div>';
+        return;
+    }
+    foilsAddons.forEach((foil, idx) => {
+        const div = document.createElement('div');
+        div.className = 'foil-item';
+        div.innerHTML = `
+            <div class="foil-item-info">
+                <div class="nombre">Foil Extra ${idx + 1}: ${foil.a}x${foil.h} cm (${foil.forma === 'circ' ? 'Circ' : 'Rect'})</div>
+            </div>
+            <button class="btn-eliminar-item" onclick="eliminarFoilAddon(${idx})">🗑️</button>
+        `;
+        lista.appendChild(div);
+    });
+    calcularImpresionFoil();
+}
+
+function agregarFoilAddon() {
+    const a = parseFloat(document.getElementById('addFoilAncho').value) || 0;
+    const h = parseFloat(document.getElementById('addFoilAlto').value) || 0;
+    const forma = document.getElementById('addFoilForma').value;
+    if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; }
+    foilsAddons.push({ a, h, forma });
+    renderizarFoilsAddons();
+}
+
+function eliminarFoilAddon(idx) {
+    foilsAddons.splice(idx, 1);
+    renderizarFoilsAddons();
+}
+
 function calcularImpresionFoil() {
     try {
-        const formaDiseno = document.querySelector('input[name="formaDiseno"]:checked').value;
-        const formaFoil = document.querySelector('input[name="formaFoil"]:checked').value;
+        const formaDiseno = document.querySelector('input[name="formaDisenoIF"]:checked').value;
         const tipoProduccion = document.getElementById('ifTipoProduccion').value;
-        document.getElementById('disenoRectDims').style.display = formaDiseno === 'rect' ? 'grid' : 'none';
-        document.getElementById('disenoCircDim').style.display = formaDiseno === 'circ' ? 'block' : 'none';
-        document.getElementById('foilRectDims').style.display = formaFoil === 'rect' ? 'grid' : 'none';
-        document.getElementById('foilCircDim').style.display = formaFoil === 'circ' ? 'block' : 'none';
+        
+        document.getElementById('disenoRectDimsIF').style.display = formaDiseno === 'rect' ? 'grid' : 'none';
+        document.getElementById('disenoCircDimIF').style.display = formaDiseno === 'circ' ? 'block' : 'none';
+        
         let pasadas, conLaminado;
         switch(tipoProduccion) {
             case '1pasada-sinlam': pasadas = 1; conLaminado = false; break;
@@ -1434,23 +1684,16 @@ function calcularImpresionFoil() {
             case '2pasadas-sinlam': pasadas = 2; conLaminado = false; break;
             case '2pasadas-conlam': default: pasadas = 2; conLaminado = true; break;
         }
-        let disenoAncho, disenoAlto, foilAncho, foilAlto;
+        
+        let disenoAncho, disenoAlto;
         if (formaDiseno === 'rect') { 
             disenoAncho = parseFloat(document.getElementById('ifDisenoAncho').value) || 0; 
             disenoAlto = parseFloat(document.getElementById('ifDisenoAlto').value) || 0; 
         } else { 
-            const diametroInput = document.getElementById('ifDisenoDiametro');
-            disenoAncho = (diametroInput && diametroInput.offsetParent !== null) ? (parseFloat(diametroInput.value) || 0) : (parseFloat(document.getElementById('ifDisenoAncho').value) || 0);
+            disenoAncho = parseFloat(document.getElementById('ifDisenoDiametro').value) || 0; 
             disenoAlto = disenoAncho;
         }
-        if (formaFoil === 'rect') { 
-            foilAncho = parseFloat(document.getElementById('ifFoilAncho').value) || 0; 
-            foilAlto = parseFloat(document.getElementById('ifFoilAlto').value) || 0; 
-        } else { 
-            const diametroFoilInput = document.getElementById('ifFoilDiametro');
-            foilAncho = (diametroFoilInput && diametroFoilInput.offsetParent !== null) ? (parseFloat(diametroFoilInput.value) || 0) : (parseFloat(document.getElementById('ifFoilAncho').value) || 0);
-            foilAlto = foilAncho;
-        }
+        
         const precioImpresion = parseInt(document.getElementById('ifTipoImpresion').value) || 0;
         const precioCorte = parseInt(document.getElementById('ifTipoCorte').value) || 0;
         const cantidad = parseInt(document.getElementById('ifCantidad').value) || 1;
@@ -1488,8 +1731,19 @@ function calcularImpresionFoil() {
         const planchasTotales = Math.ceil(cantidad / diseñosPorPlancha);
         const totalImpresiones = planchasTotales * pasadas;
         const totalDisenos = planchasTotales * diseñosPorPlancha;
-        const areaFoilUnit = foilAncho * foilAlto;
-        const areaFoilTotal = totalDisenos * areaFoilUnit;
+        
+        // Calcular ÁREA FOIL TOTAL (Principal + Addons)
+        // Nota: En esta versión simplificada asumimos que el "Foil Principal" era el único antes.
+        // Ahora sumamos todos los addons definidos en foilsAddons.
+        // Si quieres mantener un foil principal además de los addons, habría que añadir un campo separado.
+        // Por ahora, consideramos que TODOS los foils están en foilsAddons.
+        
+        let areaFoilTotal = 0;
+        foilsAddons.forEach(f => {
+            const areaUnit = f.a * f.h;
+            areaFoilTotal += totalDisenos * areaUnit;
+        });
+
         const PRECIO_FOIL_CHICO = 200; const PRECIO_FOIL_GRANDE = 100; const UMBRAL_FOIL = 1000;
         let precioFoilCm2, tipoFoil;
         if (areaFoilTotal >= UMBRAL_FOIL) { precioFoilCm2 = PRECIO_FOIL_GRANDE; tipoFoil = 'Foil Grande'; }
@@ -1511,8 +1765,7 @@ function calcularImpresionFoil() {
         const rows = Math.floor(pAlto / disenoAlto);
         const itemW = disenoAncho * escala;
         const itemH = disenoAlto * escala;
-        const foilW = foilAncho * escala;
-        const foilH = foilAlto * escala;
+        
         let contador = 0;
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
@@ -1521,12 +1774,18 @@ function calcularImpresionFoil() {
                 div.style.cssText = `position:absolute;width:${itemW}px;height:${itemH}px;left:${c*itemW}px;top:${r*itemH}px;border:${formaDiseno === 'circ' ? '2px dashed #3b82f6' : '1px dashed #3b82f6'};border-radius:${formaDiseno === 'circ' ? '50%' : '0'};background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7em;color:#1e3a8a;font-weight:600;`;
                 div.textContent = `${disenoAncho}×${disenoAlto}`;
                 base.appendChild(div);
-                if (foilAncho > 0 && foilAlto > 0) {
+                
+                // Dibujar foils addons dentro de cada diseño (simulación visual centrada)
+                foilsAddons.forEach((f, idx) => {
+                    const foilW = f.a * escala;
+                    const foilH = f.h * escala;
                     const foilDiv = document.createElement('div');
-                    foilDiv.style.cssText = `position:absolute;width:${foilW}px;height:${foilH}px;left:${c*itemW + (itemW-foilW)/2}px;top:${r*itemH + (itemH-foilH)/2}px;background:rgba(251,191,36,0.4);border:2px solid #f59e0b;border-radius:${formaFoil === 'circ' ? '50%' : '0'};display:flex;align-items:center;justify-content:center;font-size:0.6em;color:#92400e;font-weight:600;`;
-                    foilDiv.textContent = 'Foil';
+                    // Posicionar ligeramente desplazados para ver varios
+                    const offset = (idx * 5); 
+                    foilDiv.style.cssText = `position:absolute;width:${foilW}px;height:${foilH}px;left:${c*itemW + (itemW-foilW)/2 + offset}px;top:${r*itemH + (itemH-foilH)/2 + offset}px;background:rgba(251,191,36,0.4);border:2px solid #f59e0b;border-radius:${f.forma === 'circ' ? '50%' : '0'};z-index:${10+idx};`;
                     base.appendChild(foilDiv);
-                }
+                });
+                
                 contador++;
             }
         }
@@ -1547,8 +1806,10 @@ function calcularImpresionFoil() {
             html += `<div class="desglose-row"><span class="label">✨ Laminado entre pasadas:</span><span class="valor">${formatearPYG(cLam)}</span></div>`;
             costoTotal += cLam;
         }
-        html += `<div class="desglose-row"><span class="label">✨ Foil (${areaFoilTotal.toFixed(2)} cm² × ${formatearPYG(precioFoilCm2)}):</span><span class="valor">${formatearPYG(costoFoil)}</span></div>`;
-        costoTotal += costoFoil;
+        if (areaFoilTotal > 0) {
+             html += `<div class="desglose-row"><span class="label">✨ Foil (${areaFoilTotal.toFixed(2)} cm² × ${formatearPYG(precioFoilCm2)}):</span><span class="valor">${formatearPYG(costoFoil)}</span></div>`;
+             costoTotal += costoFoil;
+        }
         if (precioCorte > 0) {
             const corteSelect = document.getElementById('ifTipoCorte');
             const corteNombre = corteSelect.options[corteSelect.selectedIndex].text;
@@ -1573,7 +1834,7 @@ function calcularImpresionFoil() {
 }
 
 // ==========================================
-// EDITOR VISUAL
+// EDITOR VISUAL (IGUAL QUE ANTES)
 // ==========================================
 let editorState = { 
     artboardAncho: 33, artboardAlto: 48, zoom: 1, 
@@ -1944,29 +2205,194 @@ function limpiarEditor() {
 }
 
 // ==========================================
-// FOIL/PVC/PLOTTER
+// FOIL/PVC/UV/PLOTTER (CON UV)
 // ==========================================
-let pvcItems = []; let foilItems = []; let plotterPalabraItems = [];
+let pvcItems = []; let foilItems = []; let uvItems = []; let plotterPalabraItems = [];
 const PRECIO_PVC = 50; const PRECIO_FOIL_CHICO = 200; const PRECIO_FOIL_GRANDE = 100; const UMBRAL_FOIL = 1000;
 const MINIMO_FOIL = 5000;
+const PRECIO_UV_AREA_BARNIZ = 60; const PRECIO_UV_AREA_FULL = 100;
+const PRECIO_UV_PLANCHABARNIZ = 25000; const PRECIO_UV_PLANCHEFULL = 70000;
+const MINIMO_UV = 10000;
 const PRECIO_PLOTTER_PALABRA_A = 100; const PRECIO_PLOTTER_PALABRA_B = 500;
 
-function actualizarPreviewPVC() { const a = parseFloat(document.getElementById('pvcAncho').value) || 0; const h = parseFloat(document.getElementById('pvcAlto').value) || 0; const c = parseInt(document.getElementById('pvcCantidad').value) || 1; }
-function agregarItemPVC() { const a = parseFloat(document.getElementById('pvcAncho').value) || 0; const h = parseFloat(document.getElementById('pvcAlto').value) || 0; const c = parseInt(document.getElementById('pvcCantidad').value) || 1; if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } pvcItems.push({ id: Date.now(), a, h, c, total: a*h*PRECIO_PVC*c }); renderizarPVC(); }
-function renderizarPVC() { const lista = document.getElementById('pvcItemsList'); if (pvcItems.length === 0) { lista.innerHTML = ''; return; } lista.innerHTML = ''; let total = 0; pvcItems.forEach(item => { total += item.total; const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">PVC ${item.a}×${item.h} cm</div><div class="detalle">${item.c} un</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPVC(${item.id})">🗑️</button>`; lista.appendChild(div); }); document.getElementById('granTotal').textContent = formatearPYG(total + calcularTotalFoil() + calcularTotalPlotter()); }
+function toggleUvCampos() {
+    const modo = document.getElementById('uvModo').value;
+    if (modo === 'area') {
+        document.getElementById('uvAreaFields').style.display = 'grid';
+        document.getElementById('uvPlanchaField').style.display = 'none';
+    } else {
+        document.getElementById('uvAreaFields').style.display = 'none';
+        document.getElementById('uvPlanchaField').style.display = 'block';
+    }
+}
+
+function actualizarPreviewPVC() { }
+function agregarItemPVC() { 
+    const a = parseFloat(document.getElementById('pvcAncho').value) || 0; 
+    const h = parseFloat(document.getElementById('pvcAlto').value) || 0; 
+    const c = parseInt(document.getElementById('pvcCantidad').value) || 1; 
+    if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } 
+    pvcItems.push({ id: Date.now(), a, h, c, total: a*h*PRECIO_PVC*c }); 
+    renderizarPVC(); 
+}
+function renderizarPVC() { 
+    const lista = document.getElementById('pvcItemsList'); 
+    if (pvcItems.length === 0) { lista.innerHTML = ''; return; } 
+    lista.innerHTML = ''; 
+    let total = 0; 
+    pvcItems.forEach(item => { 
+        total += item.total; 
+        const div = document.createElement('div'); 
+        div.className = 'foil-item'; 
+        div.innerHTML = `<div class="foil-item-info"><div class="nombre">PVC ${item.a}×${item.h} cm</div><div class="detalle">${item.c} un</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPVC(${item.id})">🗑️</button>`; 
+        lista.appendChild(div); 
+    }); 
+    actualizarGranTotalTerminaciones();
+}
 function eliminarPVC(id) { pvcItems = pvcItems.filter(i => i.id !== id); renderizarPVC(); }
-function actualizarPreviewFoil() { const a = parseFloat(document.getElementById('foilAncho').value) || 0; const h = parseFloat(document.getElementById('foilAlto').value) || 0; }
-function agregarItemFoil() { const a = parseFloat(document.getElementById('foilAncho').value) || 0; const h = parseFloat(document.getElementById('foilAlto').value) || 0; const c = parseInt(document.getElementById('foilCantidad').value) || 1; if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } foilItems.push({ id: Date.now(), a, h, c }); renderizarFoil(); }
-function renderizarFoil() { const lista = document.getElementById('foilItemsList'); if (foilItems.length === 0) { lista.innerHTML = ''; return; } lista.innerHTML = ''; let areaTotal = 0; foilItems.forEach(item => { areaTotal += item.a * item.h * item.c; }); let precioCm2 = areaTotal >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO; let total = Math.max(areaTotal * precioCm2, MINIMO_FOIL); foilItems.forEach(item => { const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">Foil ${item.a}×${item.h} cm</div><div class="detalle">${item.c} un</div></div><div class="foil-item-total">${formatearPYG(item.a*item.h*item.c*precioCm2)}</div><button class="btn-eliminar-item" onclick="eliminarFoil(${item.id})">🗑️</button>`; lista.appendChild(div); }); document.getElementById('granTotal').textContent = formatearPYG(calcularTotalPVC() + total + calcularTotalPlotter()); }
+
+function actualizarPreviewFoil() { }
+function agregarItemFoil() { 
+    const a = parseFloat(document.getElementById('foilAncho').value) || 0; 
+    const h = parseFloat(document.getElementById('foilAlto').value) || 0; 
+    const c = parseInt(document.getElementById('foilCantidad').value) || 1; 
+    if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; } 
+    foilItems.push({ id: Date.now(), a, h, c }); 
+    renderizarFoil(); 
+}
+function renderizarFoil() { 
+    const lista = document.getElementById('foilItemsList'); 
+    if (foilItems.length === 0) { lista.innerHTML = ''; return; } 
+    lista.innerHTML = ''; 
+    let areaTotal = 0; 
+    foilItems.forEach(item => { areaTotal += item.a * item.h * item.c; }); 
+    let precioCm2 = areaTotal >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO; 
+    let total = Math.max(areaTotal * precioCm2, MINIMO_FOIL); 
+    foilItems.forEach(item => { 
+        const div = document.createElement('div'); 
+        div.className = 'foil-item'; 
+        div.innerHTML = `<div class="foil-item-info"><div class="nombre">Foil ${item.a}×${item.h} cm</div><div class="detalle">${item.c} un</div></div><div class="foil-item-total">${formatearPYG(item.a*item.h*item.c*precioCm2)}</div><button class="btn-eliminar-item" onclick="eliminarFoil(${item.id})">🗑️</button>`; 
+        lista.appendChild(div); 
+    }); 
+    actualizarGranTotalTerminaciones();
+}
 function eliminarFoil(id) { foilItems = foilItems.filter(i => i.id !== id); renderizarFoil(); }
-function calcularTotalPVC() { return pvcItems.reduce((sum, i) => sum + i.total, 0); }
-function calcularTotalFoil() { let area = foilItems.reduce((sum, i) => sum + i.a*i.h*i.c, 0); if (area === 0) return 0; let precio = area >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO; return Math.max(area * precio, MINIMO_FOIL); }
-function calcularTotalPlotter() { return plotterPalabraItems.reduce((sum, i) => sum + i.total, 0); }
+
+function agregarItemUV() {
+    const modo = document.getElementById('uvModo').value;
+    const tipo = document.getElementById('uvTipo').value;
+    const sustrato = document.getElementById('uvSustrato').value;
+    const piezas = parseInt(document.getElementById('uvPiezas').value) || 1;
+    
+    let costoUV = 0;
+    let desc = "";
+    
+    if (modo === 'area') {
+        const a = parseFloat(document.getElementById('uvAncho').value) || 0;
+        const h = parseFloat(document.getElementById('uvAlto').value) || 0;
+        if (a <= 0 || h <= 0) { alert('Medidas inválidas'); return; }
+        const areaUnit = a * h;
+        const areaTotal = areaUnit * piezas;
+        const precioCm2 = tipo === 'full' ? PRECIO_UV_AREA_FULL : PRECIO_UV_AREA_BARNIZ;
+        costoUV = areaTotal * precioCm2;
+        if (costoUV < MINIMO_UV) costoUV = MINIMO_UV;
+        desc = `UV ${tipo === 'full' ? 'Full' : 'Barniz'} Area (${a}x${h}cm)`;
+    } else {
+        const cantPlanchas = parseInt(document.getElementById('uvCantidadPlanchas').value) || 1;
+        const precioPlancha = tipo === 'full' ? PRECIO_UV_PLANCHEFULL : PRECIO_UV_PLANCHABARNIZ;
+        costoUV = cantPlanchas * precioPlancha;
+        desc = `UV ${tipo === 'full' ? 'Full' : 'Barniz'} Plancha (${cantPlanchas} planchas)`;
+    }
+    
+    // Costo extra por sustrato adhesivo (ejemplo simple: +10% o monto fijo)
+    if (sustrato === 'adhesivo') {
+        costoUV *= 1.1; // Ejemplo: 10% extra por manejo de adhesivo
+        desc += " (Adhesivo)";
+    }
+
+    uvItems.push({ id: Date.now(), desc, costo: costoUV, piezas });
+    renderizarUV();
+}
+
+function renderizarUV() {
+    const lista = document.getElementById('uvItemsList');
+    if (uvItems.length === 0) { lista.innerHTML = ''; return; }
+    lista.innerHTML = '';
+    uvItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'foil-item';
+        div.innerHTML = `
+            <div class="foil-item-info">
+                <div class="nombre">${item.desc}</div>
+                <div class="detalle">${item.piezas} piezas</div>
+            </div>
+            <div class="foil-item-total">${formatearPYG(item.costo)}</div>
+            <button class="btn-eliminar-item" onclick="eliminarUV(${item.id})">🗑️</button>
+        `;
+        lista.appendChild(div);
+    });
+    actualizarGranTotalTerminaciones();
+}
+
+function eliminarUV(id) { uvItems = uvItems.filter(i => i.id !== id); renderizarUV(); }
+
 function actualizarPreviewPlotterPalabra() { }
-function agregarItemPlotterPalabra() { const tipoSelect = document.getElementById('plotterPalabraTipo'); const tipo = tipoSelect.value; const precio = parseInt(tipoSelect.options[tipoSelect.selectedIndex].dataset.precio); const cantidad = parseInt(document.getElementById('plotterPalabraCantidad').value) || 1; if (cantidad <= 0) { alert('La cantidad debe ser mayor a 0'); return; } plotterPalabraItems.push({ id: Date.now(), tipo, precio, cantidad, total: precio * cantidad }); renderizarPlotterPalabra(); }
-function renderizarPlotterPalabra() { const lista = document.getElementById('plotterPalabraItemsList'); if (plotterPalabraItems.length === 0) { lista.innerHTML = ''; return; } lista.innerHTML = ''; let total = 0; plotterPalabraItems.forEach(item => { total += item.total; const div = document.createElement('div'); div.className = 'foil-item'; div.innerHTML = `<div class="foil-item-info"><div class="nombre">Plotter ${item.tipo}</div><div class="detalle">${item.cantidad} palabras</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPlotterPalabra(${item.id})">🗑️</button>`; lista.appendChild(div); }); document.getElementById('granTotal').textContent = formatearPYG(calcularTotalPVC() + calcularTotalFoil() + total); }
+function agregarItemPlotterPalabra() { 
+    const tipoSelect = document.getElementById('plotterPalabraTipo'); 
+    const tipo = tipoSelect.value; 
+    const precio = parseInt(tipoSelect.options[tipoSelect.selectedIndex].dataset.precio); 
+    const cantidad = parseInt(document.getElementById('plotterPalabraCantidad').value) || 1; 
+    if (cantidad <= 0) { alert('La cantidad debe ser mayor a 0'); return; } 
+    plotterPalabraItems.push({ id: Date.now(), tipo, precio, cantidad, total: precio * cantidad }); 
+    renderizarPlotterPalabra(); 
+}
+function renderizarPlotterPalabra() { 
+    const lista = document.getElementById('plotterPalabraItemsList'); 
+    if (plotterPalabraItems.length === 0) { lista.innerHTML = ''; return; } 
+    lista.innerHTML = ''; 
+    let total = 0; 
+    plotterPalabraItems.forEach(item => { 
+        total += item.total; 
+        const div = document.createElement('div'); 
+        div.className = 'foil-item'; 
+        div.innerHTML = `<div class="foil-item-info"><div class="nombre">Plotter ${item.tipo}</div><div class="detalle">${item.cantidad} palabras</div></div><div class="foil-item-total">${formatearPYG(item.total)}</div><button class="btn-eliminar-item" onclick="eliminarPlotterPalabra(${item.id})">🗑️</button>`; 
+        lista.appendChild(div); 
+    }); 
+    actualizarGranTotalTerminaciones();
+}
 function eliminarPlotterPalabra(id) { plotterPalabraItems = plotterPalabraItems.filter(i => i.id !== id); renderizarPlotterPalabra(); }
-function limpiarTodoFoil() { if (confirm('¿Eliminar todos los items?')) { pvcItems = []; foilItems = []; plotterPalabraItems = []; renderizarPVC(); renderizarFoil(); renderizarPlotterPalabra(); document.getElementById('granTotal').textContent = 'Gs. 0'; } }
+
+function calcularTotalPVC() { return pvcItems.reduce((sum, i) => sum + i.total, 0); }
+function calcularTotalFoil() { 
+    let area = foilItems.reduce((sum, i) => sum + i.a*i.h*i.c, 0); 
+    if (area === 0) return 0; 
+    let precio = area >= UMBRAL_FOIL ? PRECIO_FOIL_GRANDE : PRECIO_FOIL_CHICO; 
+    return Math.max(area * precio, MINIMO_FOIL); 
+}
+function calcularTotalUV() { return uvItems.reduce((sum, i) => sum + i.costo, 0); }
+function calcularTotalPlotter() { return plotterPalabraItems.reduce((sum, i) => sum + i.total, 0); }
+
+function actualizarGranTotalTerminaciones() {
+    const tPVC = calcularTotalPVC();
+    const tFoil = calcularTotalFoil();
+    const tUV = calcularTotalUV();
+    const tPlotter = calcularTotalPlotter();
+    const granTotal = tPVC + tFoil + tUV + tPlotter;
+    
+    document.getElementById('granTotalPVC').textContent = formatearPYG(tPVC);
+    document.getElementById('granTotalFoil').textContent = formatearPYG(tFoil);
+    document.getElementById('granTotalUV').textContent = formatearPYG(tUV);
+    document.getElementById('granTotalPlotter').textContent = formatearPYG(tPlotter);
+    document.getElementById('granTotal').textContent = formatearPYG(granTotal);
+}
+
+function limpiarTodoFoil() { 
+    if (confirm('¿Eliminar todos los items?')) { 
+        pvcItems = []; foilItems = []; uvItems = []; plotterPalabraItems = []; 
+        renderizarPVC(); renderizarFoil(); renderizarUV(); renderizarPlotterPalabra(); 
+        document.getElementById('granTotal').textContent = 'Gs. 0'; 
+    } 
+}
 
 // ==========================================
 // LISTA DE PRECIOS
