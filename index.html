@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pepper Pre - Sistema de Cotización v3</title>
+<title>Pepper Pre - Sistema de Cotización v4</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -544,7 +544,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         </div>
     </div>
 
-    <!-- TAB 3: ESTAMPAS -->
+    <!-- TAB 3: ESTAMPAS (CORREGIDO PARA MULTICUERPO) -->
     <div class="tab-content" id="tab-estampas">
         <div class="grid-principal">
             <div class="panel panel-config">
@@ -624,7 +624,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                     </div>
                     <div class="stats-grid" style="margin-top: 15px;">
                         <div class="stat-box destacado"><div class="stat-label">Estampas por plancha</div><div class="stat-value" id="estEstampasPorPlancha">0</div></div>
-                        <div class="stat-box"><div class="stat-label">Planchas totales</div><div class="stat-value" id="estPlanchasTotales">0</div></div>
+                        <div class="stat-box"><div class="stat-label">Planchas totales (Todas las capas)</div><div class="stat-value" id="estPlanchasTotales">0</div></div>
                         <div class="stat-box"><div class="stat-label">Cuerpos activos</div><div class="stat-value" id="estCuerposActivos">1</div></div>
                         <div class="stat-box tapa"><div class="stat-label">Desperdicio est.</div><div class="stat-value" id="estDesperdicio">0%</div></div>
                     </div>
@@ -981,7 +981,7 @@ function cambiarTab(tabId, btn) {
 }
 
 // ==========================================
-// LIBRITOS (ACTUALIZADO)
+// LIBRITOS
 // ==========================================
 function calcularLibrito() {
     const anchoCerrado = parseFloat(document.getElementById('libAnchoCerrado').value) || 0;
@@ -1113,7 +1113,7 @@ function renderizarImposicion(anchoCerrado, altoCerrado, pagsPorCara, usaDoblezV
 }
 
 // ==========================================
-// CALCULADORA DE PLANCHAS (ACTUALIZADA)
+// CALCULADORA DE PLANCHAS
 // ==========================================
 function actualizarPlanchaCustom() {
     const val = document.getElementById('calcPlanchaFormato').value;
@@ -1320,7 +1320,7 @@ function calcularPlanchas() {
 }
 
 // ==========================================
-// ESTAMPAS (IGUAL QUE ANTES, SOLO PARA NO ROMPER)
+// ESTAMPAS (CORREGIDO PARA SUMAR PLANCHAS DE TODOS LOS CUERPOS)
 // ==========================================
 let estampaState = { cuerposAdicionales: [] };
 const UNIONES = [
@@ -1449,8 +1449,8 @@ function calcularEstampas() {
     const cantidad = parseInt(document.getElementById('estCantidad').value) || 1;
     const margen = parseFloat(document.getElementById('estMargen').value) || 0;
     const precioMaterialBase = parseInt(document.getElementById('estBaseMaterial').value) || 0;
-    const dAncho = parseFloat(document.getElementById('estBaseAncho').value) || 0;
-    const dAlto = parseFloat(document.getElementById('estBaseAlto').value) || 0;
+    const dAnchoBase = parseFloat(document.getElementById('estBaseAncho').value) || 0;
+    const dAltoBase = parseFloat(document.getElementById('estBaseAlto').value) || 0;
     const formaBase = document.getElementById('estBaseForma').value;
     const precioTroquelBase = parseInt(document.getElementById('estBaseTroquel').value) || 0;
     const precioCorteBase = parseInt(document.getElementById('estBaseCorte').value) || 0;
@@ -1463,10 +1463,28 @@ function calcularEstampas() {
     const foilAltoBase = parseFloat(document.getElementById('estBaseFoilAlto').value) || 0;
     
     const pAncho = 33; const pAlto = 48;
-    const estampasPorPlancha = Math.floor(pAncho / dAncho) * Math.floor(pAlto / dAlto);
+    
+    // --- CÁLCULO DE PLANCHA PARA EL CUERPO BASE ---
+    const estampasPorPlanchaBase = Math.floor(pAncho / dAnchoBase) * Math.floor(pAlto / dAltoBase);
+    const planchasBase = estampasPorPlanchaBase > 0 ? Math.ceil(cantidad / estampasPorPlanchaBase) : 0;
+    
+    // --- CÁLCULO DE PLANCHA PARA CADA CUERPO ADICIONAL ACTIVO ---
+    let planchasAdicionalesTotal = 0;
+    const cuerposActivos = estampaState.cuerposAdicionales.filter(c => c.habilitado);
+    
+    cuerposActivos.forEach(cuerpo => {
+        const estampasPorPlanchaCuerpo = Math.floor(pAncho / cuerpo.ancho) * Math.floor(pAlto / cuerpo.alto);
+        if (estampasPorPlanchaCuerpo > 0) {
+            planchasAdicionalesTotal += Math.ceil(cantidad / estampasPorPlanchaCuerpo);
+        }
+    });
+
+    // --- TOTAL REAL DE PLANCHAS NECESARIAS ---
+    const totalPlanchasReales = planchasBase + planchasAdicionalesTotal;
+    
     const baseViz = document.getElementById('estPlanchaBase');
     
-    if (estampasPorPlancha === 0) {
+    if (totalPlanchasReales === 0 || estampasPorPlanchaBase === 0) {
         baseViz.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444; font-size: 0.9em;">⚠️ El cuerpo base es más grande que la plancha 33×48</div>';
         baseViz.style.width = '330px'; baseViz.style.height = '480px';
         document.getElementById('estEstampasPorPlancha').textContent = '0';
@@ -1479,41 +1497,43 @@ function calcularEstampas() {
         return;
     }
     
-    const planchasTotales = Math.ceil(cantidad / estampasPorPlancha);
+    // Actualizar Stats Visuales
+    document.getElementById('estEstampasPorPlancha').textContent = estampasPorPlanchaBase; // Mostramos densidad del base como referencia principal
+    document.getElementById('estPlanchasTotales').textContent = totalPlanchasReales; // ✅ AHORA SUMA TODAS LAS CAPAS
+    document.getElementById('estCuerposActivos').textContent = cuerposActivos.length + 1;
+    
+    // Desperdicio basado en el cuerpo base (referencia principal)
     const areaPlancha = pAncho * pAlto;
-    const areaUtil = estampasPorPlancha * (dAncho * dAlto);
-    const desperdicio = Math.max(0, ((areaPlancha - areaUtil) / areaPlancha * 100)).toFixed(1);
-    
-    document.getElementById('estEstampasPorPlancha').textContent = estampasPorPlancha;
-    document.getElementById('estPlanchasTotales').textContent = planchasTotales;
+    const areaUtilBase = estampasPorPlanchaBase * (dAnchoBase * dAltoBase);
+    const desperdicio = Math.max(0, ((areaPlancha - areaUtilBase) / areaPlancha * 100)).toFixed(1);
     document.getElementById('estDesperdicio').textContent = desperdicio + '%';
-    document.getElementById('estPlanchaDimensiones').textContent = `Plancha: ${pAncho} × ${pAlto} cm | Base: ${dAncho} × ${dAlto} cm`;
     
+    document.getElementById('estPlanchaDimensiones').textContent = `Plancha: ${pAncho} × ${pAlto} cm | Base: ${dAnchoBase} × ${dAltoBase} cm`;
+    
+    // Renderizar Visualización (solo muestra el layout del cuerpo base para claridad, pero el número de planchas ya está corregido arriba)
     baseViz.innerHTML = '';
     const escala = 10;
     baseViz.style.width = '330px'; baseViz.style.height = '480px';
-    const itemW = dAncho * escala;
-    const itemH = dAlto * escala;
-    const cols = Math.floor(pAncho / dAncho);
-    const rows = Math.floor(pAlto / dAlto);
-    
-    const cuerposActivos = estampaState.cuerposAdicionales.filter(c => c.habilitado);
-    document.getElementById('estCuerposActivos').textContent = cuerposActivos.length + 1;
+    const itemW = dAnchoBase * escala;
+    const itemH = dAltoBase * escala;
+    const cols = Math.floor(pAncho / dAnchoBase);
+    const rows = Math.floor(pAlto / dAltoBase);
     
     const coloresCapas = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
     
     let contador = 0;
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-            if (contador >= estampasPorPlancha) break;
+            if (contador >= estampasPorPlanchaBase) break;
             const cellX = c * itemW;
             const cellY = r * itemH;
             
             const baseDiv = document.createElement('div');
             baseDiv.style.cssText = `position:absolute;width:${itemW}px;height:${itemH}px;left:${cellX}px;top:${cellY}px;border:${formaBase === 'circ' ? '2px solid #3b82f6' : '1px dashed #3b82f6'};border-radius:${formaBase === 'circ' ? '50%' : '0'};background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7em;color:#1e3a8a;font-weight:600;`;
-            baseDiv.textContent = `${dAncho}×${dAlto}`;
+            baseDiv.textContent = `${dAnchoBase}×${dAltoBase}`;
             baseViz.appendChild(baseDiv);
             
+            // Dibujar overlays de cuerpos adicionales sobre el mismo slot visual (para示意)
             cuerposActivos.forEach((cuerpo, idx) => {
                 const cuerpoW = cuerpo.ancho * escala; const cuerpoH = cuerpo.alto * escala;
                 const offsetX = (itemW - cuerpoW) / 2; const offsetY = (itemH - cuerpoH) / 2;
@@ -1527,27 +1547,30 @@ function calcularEstampas() {
         }
     }
     
+    // --- DESGLOSE DE COSTOS ---
     let html = ''; let costoTotal = 0;
+    
+    // 1. Costo Cuerpo Base
     const matBase = MATERIALES_ESTAMPA.find(m => m.value === String(precioMaterialBase));
-    const costoMaterialBase = planchasTotales * precioMaterialBase;
-    html += `<div class="desglose-row"><span class="label" style="color: #1e3a8a; font-weight: 600;">🎯 Cuerpo Base (${matBase ? matBase.label : 'Material'}):</span><span class="valor">${formatearPYG(costoMaterialBase)} <small style="color: #6b7280;">(${planchasTotales} planchas)</small></span></div>`;
+    const costoMaterialBase = planchasBase * precioMaterialBase;
+    html += `<div class="desglose-row"><span class="label" style="color: #1e3a8a; font-weight: 600;">🎯 Cuerpo Base (${matBase ? matBase.label : 'Material'}):</span><span class="valor">${formatearPYG(costoMaterialBase)} <small style="color: #6b7280;">(${planchasBase} planchas)</small></span></div>`;
     costoTotal += costoMaterialBase;
     
     if (usaDobleImpresion) {
-        const costoDoble = planchasTotales * 7000;
-        html += `<div class="desglose-row"><span class="label">🔄 Doble Impresión (Dorso):</span><span class="valor">${formatearPYG(costoDoble)}</span></div>`;
+        const costoDoble = planchasBase * 7000;
+        html += `<div class="desglose-row"><span class="label">🔄 Doble Impresión (Dorso Base):</span><span class="valor">${formatearPYG(costoDoble)}</span></div>`;
         costoTotal += costoDoble;
     }
     if (precioCorteBase > 0) {
-        const costoCorte = planchasTotales * precioCorteBase;
+        const costoCorte = planchasBase * precioCorteBase;
         const corteSelect = document.getElementById('estBaseCorte');
         const corteNombre = corteSelect.options[corteSelect.selectedIndex].text;
-        html += `<div class="desglose-row"><span class="label">✂️ ${corteNombre}:</span><span class="valor">${formatearPYG(costoCorte)}</span></div>`;
+        html += `<div class="desglose-row"><span class="label">✂️ ${corteNombre} (Base):</span><span class="valor">${formatearPYG(costoCorte)}</span></div>`;
         costoTotal += costoCorte;
     }
     if (usaPuntas) {
         const costoPuntas = cantidad * 500;
-        html += `<div class="desglose-row"><span class="label">✂️ Puntas redondeadas:</span><span class="valor">${formatearPYG(costoPuntas)}</span></div>`;
+        html += `<div class="desglose-row"><span class="label">✂️ Puntas redondeadas (todas las capas):</span><span class="valor">${formatearPYG(costoPuntas)}</span></div>`;
         costoTotal += costoPuntas;
     }
     if (precioTroquelBase > 0) {
@@ -1576,17 +1599,23 @@ function calcularEstampas() {
         costoTotal += costoPerf;
     }
     
+    // 2. Costos de Cuerpos Adicionales
     cuerposActivos.forEach((cuerpo, idx) => {
         const mat = MATERIALES_ESTAMPA.find(m => m.value === cuerpo.material);
         const precioMat = mat ? mat.precio : 0;
         const nombreMat = mat ? mat.label : 'Material';
-        const costoMatCuerpo = planchasTotales * precioMat;
-        html += `<div class="desglose-row"><span class="label" style="color: ${coloresCapas[(idx+1) % coloresCapas.length]}; font-weight: 600;">📄 Cuerpo ${idx+1} (${nombreMat}):</span><span class="valor">${formatearPYG(costoMatCuerpo)}</span></div>`;
+        
+        // Recalcular planchas específicas para este cuerpo adicional
+        const estampasPorPlanchaCuerpo = Math.floor(pAncho / cuerpo.ancho) * Math.floor(pAlto / cuerpo.alto);
+        const planchasParaEsteCuerpo = estampasPorPlanchaCuerpo > 0 ? Math.ceil(cantidad / estampasPorPlanchaCuerpo) : 0;
+        
+        const costoMatCuerpo = planchasParaEsteCuerpo * precioMat;
+        html += `<div class="desglose-row"><span class="label" style="color: ${coloresCapas[(idx+1) % coloresCapas.length]}; font-weight: 600;">📄 Cuerpo ${idx+1} (${nombreMat}):</span><span class="valor">${formatearPYG(costoMatCuerpo)} <small style="color: #6b7280;">(${planchasParaEsteCuerpo} planchas)</small></span></div>`;
         costoTotal += costoMatCuerpo;
         
         const precioCorteCuerpo = parseInt(cuerpo.tipoCorte) || 0;
         if (precioCorteCuerpo > 0) {
-            const costoCorteCuerpo = planchasTotales * precioCorteCuerpo;
+            const costoCorteCuerpo = planchasParaEsteCuerpo * precioCorteCuerpo;
             const corteLabels = { '1000': 'Corte Recto A', '2500': 'Corte Recto B', '5500': 'Corte Recto C', '10000': 'Corte D' };
             const corteNombre = corteLabels[cuerpo.tipoCorte] || 'Corte';
             html += `<div class="desglose-row"><span class="label">✂️ Corte Cuerpo ${idx+1} (${corteNombre}):</span><span class="valor">${formatearPYG(costoCorteCuerpo)}</span></div>`;
@@ -1630,7 +1659,7 @@ function calcularEstampas() {
 }
 
 // ==========================================
-// IMPRESIÓN + FOIL (MULTI-FOIL)
+// IMPRESIÓN + FOIL
 // ==========================================
 let foilsAddons = [];
 
@@ -1732,12 +1761,6 @@ function calcularImpresionFoil() {
         const totalImpresiones = planchasTotales * pasadas;
         const totalDisenos = planchasTotales * diseñosPorPlancha;
         
-        // Calcular ÁREA FOIL TOTAL (Principal + Addons)
-        // Nota: En esta versión simplificada asumimos que el "Foil Principal" era el único antes.
-        // Ahora sumamos todos los addons definidos en foilsAddons.
-        // Si quieres mantener un foil principal además de los addons, habría que añadir un campo separado.
-        // Por ahora, consideramos que TODOS los foils están en foilsAddons.
-        
         let areaFoilTotal = 0;
         foilsAddons.forEach(f => {
             const areaUnit = f.a * f.h;
@@ -1775,12 +1798,10 @@ function calcularImpresionFoil() {
                 div.textContent = `${disenoAncho}×${disenoAlto}`;
                 base.appendChild(div);
                 
-                // Dibujar foils addons dentro de cada diseño (simulación visual centrada)
                 foilsAddons.forEach((f, idx) => {
                     const foilW = f.a * escala;
                     const foilH = f.h * escala;
                     const foilDiv = document.createElement('div');
-                    // Posicionar ligeramente desplazados para ver varios
                     const offset = (idx * 5); 
                     foilDiv.style.cssText = `position:absolute;width:${foilW}px;height:${foilH}px;left:${c*itemW + (itemW-foilW)/2 + offset}px;top:${r*itemH + (itemH-foilH)/2 + offset}px;background:rgba(251,191,36,0.4);border:2px solid #f59e0b;border-radius:${f.forma === 'circ' ? '50%' : '0'};z-index:${10+idx};`;
                     base.appendChild(foilDiv);
@@ -1834,7 +1855,7 @@ function calcularImpresionFoil() {
 }
 
 // ==========================================
-// EDITOR VISUAL (IGUAL QUE ANTES)
+// EDITOR VISUAL
 // ==========================================
 let editorState = { 
     artboardAncho: 33, artboardAlto: 48, zoom: 1, 
@@ -2205,7 +2226,7 @@ function limpiarEditor() {
 }
 
 // ==========================================
-// FOIL/PVC/UV/PLOTTER (CON UV)
+// FOIL/PVC/UV/PLOTTER
 // ==========================================
 let pvcItems = []; let foilItems = []; let uvItems = []; let plotterPalabraItems = [];
 const PRECIO_PVC = 50; const PRECIO_FOIL_CHICO = 200; const PRECIO_FOIL_GRANDE = 100; const UMBRAL_FOIL = 1000;
@@ -2304,9 +2325,8 @@ function agregarItemUV() {
         desc = `UV ${tipo === 'full' ? 'Full' : 'Barniz'} Plancha (${cantPlanchas} planchas)`;
     }
     
-    // Costo extra por sustrato adhesivo (ejemplo simple: +10% o monto fijo)
     if (sustrato === 'adhesivo') {
-        costoUV *= 1.1; // Ejemplo: 10% extra por manejo de adhesivo
+        costoUV *= 1.1;
         desc += " (Adhesivo)";
     }
 
