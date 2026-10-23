@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pepper Pre - Sistema de Cotización v4</title>
+<title>Pepper Pre - Sistema de Cotización v4.1</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -487,15 +487,29 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
                         <select id="calcTroquel" onchange="manejarTroquelAuto()">
                             <option value="0">Sin troquel (usar dimensiones manuales)</option>
                             <option value="800">Troquel Circular (Gs. 800/unidad)</option>
-                            <option value="1000">Troquel Simple Cuadrado (Gs. 1.000/unidad)</option>
+                            <option value="1000">Troquel Simple Cuadrado/Rectangular (Gs. 1.000/unidad)</option>
                             <option value="1500">Troquel Complejo (Gs. 1.500/unidad)</option>
                         </select>
                     </div>
                     <div id="troquelDimsBox" style="display:none;" class="foil-dims-box">
-                        <p style="font-size: 0.85em; color: #92400e; margin-bottom: 8px;">⚠️ El tamaño del diseño se ajusta automáticamente según el troquel.</p>
-                        <div class="grid-2">
-                            <div class="campo"><label>Diámetro/Lado Troquel (cm):</label><input type="number" id="calcTroquelDim" value="5" step="0.1" min="0.1" onchange="calcularPlanchas()"></div>
-                            <div class="campo"><label>Margen extra (cm):</label><input type="number" id="calcTroquelMargin" value="0.2" step="0.1" min="0" onchange="calcularPlanchas()"></div>
+                        <p style="font-size: 0.85em; color: #92400e; margin-bottom: 8px;">⚠️ Definir dimensiones exactas del corte.</p>
+                        
+                        <!-- Campo Diámetro (solo para circular) -->
+                        <div id="troquelCircleField" class="campo" style="display:none;">
+                            <label>Diámetro del Troquel (cm):</label>
+                            <input type="number" id="calcTroquelDim" value="5" step="0.1" min="0.1" onchange="calcularPlanchas()">
+                        </div>
+
+                        <!-- Campos Ancho/Alto (para simple/complejo) -->
+                        <div id="troquelRectFields" class="grid-2" style="display:none;">
+                            <div class="campo"><label>Ancho Troquel (cm):</label><input type="number" id="calcTroquelAncho" value="5" step="0.1" min="0.1" onchange="calcularPlanchas()"></div>
+                            <div class="campo"><label>Alto Troquel (cm):</label><input type="number" id="calcTroquelAlto" value="5" step="0.1" min="0.1" onchange="calcularPlanchas()"></div>
+                        </div>
+
+                        <div class="campo">
+                            <label>Margen extra / Sangrado alrededor del troquel (cm):</label>
+                            <input type="number" id="calcTroquelMargin" value="0.2" step="0.1" min="0" onchange="calcularPlanchas()">
+                            <small style="color: #6b7280; font-size: 0.8em;">Se suma al ancho y alto calculado.</small>
                         </div>
                     </div>
                 </div>
@@ -544,7 +558,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e8e8e8; padding
         </div>
     </div>
 
-    <!-- TAB 3: ESTAMPAS (CORREGIDO PARA MULTICUERPO) -->
+    <!-- TAB 3: ESTAMPAS -->
     <div class="tab-content" id="tab-estampas">
         <div class="grid-principal">
             <div class="panel panel-config">
@@ -1148,9 +1162,21 @@ function actualizarPlanchaCustom() {
 function manejarTroquelAuto() {
     const tipo = document.getElementById('calcTroquel').value;
     const box = document.getElementById('troquelDimsBox');
+    const circleField = document.getElementById('troquelCircleField');
+    const rectFields = document.getElementById('troquelRectFields');
+
     if (tipo !== '0') {
         box.style.display = 'block';
-        // Forzar recálculo para usar dims del troquel
+        
+        if (tipo === '800') {
+            // Circular: Mostrar diámetro, ocultar ancho/alto
+            circleField.style.display = 'block';
+            rectFields.style.display = 'none';
+        } else {
+            // Simple o Complejo: Mostrar ancho/alto, ocultar diámetro
+            circleField.style.display = 'none';
+            rectFields.style.display = 'grid';
+        }
         calcularPlanchas();
     } else {
         box.style.display = 'none';
@@ -1183,11 +1209,20 @@ function calcularPlanchas() {
     const tipoTroquel = document.getElementById('calcTroquel').value;
     
     if (tipoTroquel !== '0') {
-        // Modo Automático por Troquel
-        const dimTroquel = parseFloat(document.getElementById('calcTroquelDim').value) || 5;
         const margExtra = parseFloat(document.getElementById('calcTroquelMargin').value) || 0.2;
-        dAncho = dimTroquel + margExtra;
-        dAlto = dimTroquel + margExtra;
+        
+        if (tipoTroquel === '800') {
+            // Circular
+            const dim = parseFloat(document.getElementById('calcTroquelDim').value) || 5;
+            dAncho = dim + margExtra;
+            dAlto = dim + margExtra;
+        } else {
+            // Simple o Complejo (Rectangular base)
+            const anchoT = parseFloat(document.getElementById('calcTroquelAncho').value) || 5;
+            const altoT = parseFloat(document.getElementById('calcTroquelAlto').value) || 5;
+            dAncho = anchoT + margExtra;
+            dAlto = altoT + margExtra;
+        }
     } else {
         // Modo Manual
         dAncho = parseFloat(document.getElementById('calcDisenoAncho').value) || 10;
@@ -1320,7 +1355,7 @@ function calcularPlanchas() {
 }
 
 // ==========================================
-// ESTAMPAS (CORREGIDO PARA SUMAR PLANCHAS DE TODOS LOS CUERPOS)
+// ESTAMPAS
 // ==========================================
 let estampaState = { cuerposAdicionales: [] };
 const UNIONES = [
