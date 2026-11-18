@@ -1,15 +1,3 @@
-Entendido. En lugar de asumir que el dorso cuesta lo mismo que el frente, ahora tendrás un **menú desplegable independiente** para seleccionar el tipo de impresión del dorso (con sus respectivos precios).
-
-Aquí tienes el `index.html` actualizado con esta modificación específica en la sección **"Calculadora de Planchas"**:
-
-### 🔧 Cambios realizados:
-1.  **HTML:** Se reemplazó el checkbox simple por un `<select>` llamado `calcMaterialDorso`. Este select contiene todas las opciones de materiales/impresiones disponibles (A3 y A4), permitiendo elegir una diferente a la del frente si es necesario.
-2.  **JavaScript (`calcularPlanchas`):** 
-    *   Ahora lee el precio del dorso desde `calcMaterialDorso`.
-    *   El costo total incluye `(Planchas × Precio Frente) + (Planchas × Precio Dorso)`.
-    *   Si seleccionas "Sin impresión dorso" (valor 0), no se suma nada.
-
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -2672,4 +2660,3 @@ inicializarEstampas();
 </script>
 </body>
 </html>
-```
